@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Start a PHP server from a directory, optionally specifying the port
+# (Requires PHP 5.4.0+.)
+function phpserver() {
+  local port="${1:-4000}";
+  sleep 1 && open "http://localhost:${port}/" &
+  php -S "localhost:${port}";
+}

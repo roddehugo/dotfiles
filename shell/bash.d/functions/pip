@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Handle pip global installation
+function gpip(){
+  PIP_REQUIRE_VIRTUALENV="" pip "$@"
+}
+
+# For pip3
+function gpip3(){
+  PIP_REQUIRE_VIRTUALENV="" pip3 "$@"
+}

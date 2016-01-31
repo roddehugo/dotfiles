@@ -1,0 +1,163 @@
+#!/bin/bash
+
+# Add completion for marks shortcuts
+_completemarks() {
+  local curw=${COMP_WORDS[COMP_CWORD]}
+  local wordlist=$(find $MARKPATH -type l | awk -F"/" '{printf "%s ",$NF}')
+  COMPREPLY=($(compgen -W '${wordlist[@]}' -- "$curw"))
+  return 0
+}
+complete -F _completemarks jump unmark
+
+# Add completion for `brew`
+source `brew --repository`/Library/Contributions/brew_bash_completion.sh
+
+# Add completion for `brew-cask`
+_caskcomplete()
+{
+  _cask_commands=$(brew cask | cut -d '
+' -f 10-25 | awk '{print $1}')
+
+  local cur prev
+  COMPREPLY=()
+  cur="${COMP_WORDS[COMP_CWORD]}"
+  COMPREPLY=( $(compgen -W "${_cask_commands}" -- ${cur}) )
+
+  return 0
+}
+complete -o default -F _caskcomplete brew-cask
+
+# Enable vagrant command autocompletion for `vg` alias as well
+complete -o default -F _vagrant vg
+
+# Enable pip command autocompletion for `gpip` alias as well
+complete -o default -F _pip gpip
+
+# Enable git command  autocompletion for 'g' as well
+complete -o default -o nospace -F _git g
+
+# Enable Tab completion to select options
+# bind 'set show-all-if-ambiguous on'
+# bind 'TAB:menu-complete'
+
+# Add tab completion for SSH hostnames based on ~/.ssh/config, ignoring wildcards
+[ -e "$HOME/.ssh/config" ] && complete -o "default" -o "nospace" -W "$(grep "^Host" ~/.ssh/config | grep -v "[?*]" | cut -d " " -f2- | tr ' ' '\n')" scp sftp ssh;
+
+# Add tab completion for `defaults read|write NSGlobalDomain`
+# You could just use `-g` instead, but I like being explicit
+complete -W "NSGlobalDomain" defaults;
+
+# Add `killall` tab completion for common apps
+complete -o "nospace" -W "Contacts Calendar Dock Finder Mail Safari iTunes SystemUIServer Terminal Twitter" killall;
+
+# Add `mackup` tab completion
+complete -o "nospace" -W "list backup restore uninstall" mackup;
+
+# Add `macosx` tab completion
+complete -o "nospace" -W "boot backup update" macosx;
+
+# Add `license` tab completion
+complete -o "nospace" -W "mit apache2 gpl2" license;
+
+_django_completion() {
+  COMPREPLY=( $( COMP_WORDS="${COMP_WORDS[*]}" \
+                 COMP_CWORD=$COMP_CWORD \
+                 DJANGO_AUTO_COMPLETE=1 $1 ) )
+}
+complete -F _django_completion -o default django-admin.py manage.py django-admin
+
+_python_django_completion() {
+  if [[ ${COMP_CWORD} -ge 2 ]]; then
+    PYTHON_EXE=${COMP_WORDS[0]##*/}
+    echo $PYTHON_EXE | egrep "python([2-9]\.[0-9])?" >/dev/null 2>&1
+    if [[ $? == 0 ]]; then
+      PYTHON_SCRIPT=${COMP_WORDS[1]##*/}
+      echo $PYTHON_SCRIPT | egrep "manage\.py|django-admin(\.py)?" >/dev/null 2>&1
+      if [[ $? == 0 ]]; then
+        COMPREPLY=( $( COMP_WORDS="${COMP_WORDS[*]:1}" \
+                       COMP_CWORD=$(( COMP_CWORD-1 )) \
+                       DJANGO_AUTO_COMPLETE=1 ${COMP_WORDS[*]} ) )
+      fi
+    fi
+  fi
+}
+
+# Support for multiple interpreters.
+unset pythons
+if command -v whereis &>/dev/null; then
+  python_interpreters=$(whereis python | cut -d " " -f 2-)
+  for python in $python_interpreters; do
+    pythons="${pythons} ${python##*/}"
+  done
+  pythons=$(echo $pythons | tr " " "\n" | sort -u | tr "\n" " ")
+else
+  pythons=python
+fi
+
+complete -F _python_django_completion -o default $pythons
+
+# LUNCHY_DIR=$(dirname `gem which lunchy`)/../extras
+# if [ -f $LUNCH_DIR/lunchy-completion.bash ]; then
+  # . $LUNCHY_DIR/lunchy-completion.bash
+# fi
+
+get_go_pkgs_in() {(
+    IFS=" "
+    gopath="$1"
+    word="$2"
+    for d in "$gopath"/src/"$word"*; do
+        [[ "$d" == *"*" ]] && continue
+        [[ -d "$d" ]] || continue
+        echo -n "${d/$gopath\/src\/} "
+    done
+    for d in "$gopath"/src/"$word"/*; do
+        [[ "$d" == *"*" ]] && continue
+        [[ -d "$d" ]] || continue
+        echo -n "${d/$gopath\/src\/}/ "
+    done
+)}
+
+get_go_pkgs_dup() {(
+    word=$1
+    IFS=":"
+    for g in $GOPATH; do
+        get_go_pkgs_in "$g" "$word"
+    done
+)}
+
+
+get_go_pkgs() {
+    get_go_pkgs_dup $@ | sort | uniq
+}
+
+get_go_cmds() {
+    for i in build clean env fix fmt generate get install list run test tool version vet save vendor; do
+        [[ $i == $1* ]] && echo $i
+    done
+}
+
+go_pkg_complete() {
+    set -- $COMP_LINE
+    shift
+
+    while [[ $1 == -* ]]; do
+          shift
+    done
+
+    local cur=${COMP_WORDS[COMP_CWORD]}
+    if grep -q '^\(install\|build\|list\|get\|test\|generate\|vet\|save\|vendor\)$' <<< $1; then
+        COMPREPLY=( $(compgen -W "$(get_go_pkgs $cur)" -- $cur) )
+        return
+    fi
+
+    [[ $2 ]] && return
+
+    COMPREPLY=( $(compgen -W "$(get_go_cmds $cur)" -- $cur) )
+}
+
+wgo_pkg_complete() {
+    GOPATH=$(wgo env GOPATH) go_pkg_complete $@
+}
+
+complete -o nospace -F go_pkg_complete go
+complete -o nospace -F wgo_pkg_complete wgo

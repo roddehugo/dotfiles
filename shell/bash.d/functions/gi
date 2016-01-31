@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Call the Gitignore.io API
+function gi() {
+  curl -L -s "https://www.gitignore.io/api/$@"
+}

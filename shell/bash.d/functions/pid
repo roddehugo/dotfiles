@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Find a pid given a processus name case isensitive
+function pid() {
+  ps axr -o user,pid,start,command | grep -i "$@"
+}

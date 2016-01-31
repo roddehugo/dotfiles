@@ -1,0 +1,60 @@
+#!/bin/bash
+
+export DOTFILES_DIRECTORY="~/Library/Mobile\ Documents/com~apple~CloudDocs/.dotfiles"
+
+# Make vim the default editor
+export EDITOR="vim"
+
+# Larger bash history (allow 32³ entries; default is 500)
+export HISTSIZE=32768
+export HISTFILESIZE=$HISTSIZE
+export HISTCONTROL=ignoredups
+# Make some commands not show up in history
+export HISTIGNORE="ls:cd:cd -:pwd:exit:date:* --help"
+
+# Prefer US English and use UTF-8
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+
+# Make new shells get the history lines from all previous
+# shells instead of the default "last window closed" history
+export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+
+# Pip should only run if there is a virtualenv currently activated
+export PIP_REQUIRE_VIRTUALENV=true
+
+# Set architecture flags
+export ARCHFLAGS="-arch x86_64"
+
+# Highlight section titles in manual pages
+export LESS_TERMCAP_md="${yellow}";
+
+# Don’t clear the screen after quitting a manual page
+export MANPAGER="less -X"
+
+# Set .marks as the folder for jumping symlinks
+export MARKPATH=$DOTFILES_DIRECTORY/marks
+
+# Set Go Workspace path
+export GOPATH=$HOME/Workspaces/go
+
+# Export Homebrew Cask settings
+export HOMEBREW_CASK_OPTS="--appdir=/Applications --caskroom=/usr/local/Caskroom"
+
+# Use Homebrew folder rather than Home for rbenv
+export RBENV_ROOT=/usr/local/var/rbenv
+
+# Use Homebrew folder rather than Home for jenv
+export JENV_ROOT=/usr/local/var/jenv
+
+# Use Homebrew folder rather than Home for npm packages
+export NPM_ROOT=/usr/local/var/npm
+
+# Use Homebrew folder rather than Home for npm packages
+export COMPOSER_ROOT=/usr/local/var/composer
+
+# Use Homebrew folder for cross compile toolchain
+export GCC_ARM_NONE_EABI_ROOT=/usr/local/gcc-arm-none-eabi
+
+# Define postgres database
+export PGDATA=/usr/local/var/postgres

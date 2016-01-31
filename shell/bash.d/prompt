@@ -1,0 +1,134 @@
+#!/bin/bash
+
+# Set terminal title
+function set_title() {
+  echo -e "\[\033]0;\w\007\]";
+}
+
+# Set a few globals to compute prompt string length
+function prompt_update() {
+  if is_git_repository; then
+    git_status="$(git status 2> /dev/null)";
+    remote_pattern="Your branch is (behind|ahead) of .* by ([0-9]*) commit(s)?";
+    diverge_pattern="and have ([0-9]*) and ([0-9]*) different commits"
+
+    # Ensure the index is up to date.
+    git update-index --really-refresh -q &>/dev/null;
+
+    # Set status according to previous checks
+    if [[ ${git_status}} =~ "working directory clean" ]]; then
+      status=" ✔";
+    else
+      s="";
+      # Check for unstaged changes.
+      if ! $(git diff-files --quiet --ignore-submodules --); then
+        s+="●";
+      fi;
+
+      # Check for uncommitted changes in the index.
+      if ! $(git diff --quiet --ignore-submodules --cached); then
+        s+="+";
+      fi;
+
+      # Check for untracked files.
+      if [ -n "$(git ls-files --others --exclude-standard)" ]; then
+        s+="?";
+      fi;
+
+      # Check for stashed files
+      if $(git rev-parse --verify refs/stash &>/dev/null); then
+        s+="⚑";
+      fi;
+
+      status=" [${s}]";
+    fi;
+
+    # Check for diverged branches and set remote
+    if [[ ${git_status} =~ ${remote_pattern} ]]; then
+      if [[ ${BASH_REMATCH[1]} == "ahead" ]]; then
+        r="↑";
+      else
+        r="↓";
+      fi;
+      remote=" [${r}${BASH_REMATCH[2]}]";
+    elif [[ ${git_status} =~ ${diverge_pattern} ]]; then
+      remote=" [↑${BASH_REMATCH[1]}↓${BASH_REMATCH[2]}]";
+    else
+      remote=""
+    fi;
+
+    branch="$(git symbolic-ref --quiet --short HEAD 2> /dev/null || \
+      git rev-parse --short HEAD 2> /dev/null || \
+      echo '(unknown)')";
+
+    unset git_status;
+  else
+    status="";
+    remote="";
+    branch="";
+  fi;
+
+  gitLength=$((${#branch}+${#status}+${#remote}));
+
+  # Check if we're in a virtualenv
+  if [[ -n "$VIRTUAL_ENV" ]]; then
+    venv="$(basename "${VIRTUAL_ENV}") ";
+  else
+    venv="";
+  fi;
+
+  rightLength=$((${#venv}+${gitLength}));
+
+  shortPWD=${PWD/${HOME}/"~"};
+  if (( $(($(tput cols)-${rightLength}-${#shortPWD})) < 5 )); then
+    shortPWD="$(basename "${PWD}")";
+  fi;
+
+  leftLength=$((${#shortPWD}));
+  totalLength=$((${leftLength}+${rightLength}))
+}
+
+# Prompt virtualenv
+function prompt_venv() {
+  if [[ -n "$VIRTUAL_ENV" ]]; then
+    echo -e "${orange}${venv}${reset}"
+  fi;
+}
+
+# Prompt git
+function prompt_git() {
+  if is_git_repository; then
+    echo -e "${purple}${branch}${tan}${status}${cyan}${remote}${reset}";
+  fi;
+}
+
+# Prompt environment versions
+function prompt_versions() {
+  echo -e "${jaune}${versions}${reset}";
+}
+
+# Prompt command prompt
+function prompt_command() {
+  local p=""
+  if [[ "${user}" == "root" ]]; then
+    p="\[${red}\]▶";
+  else
+    p="\[${violet}\]❯";
+  fi;
+  echo -e "${p} \[${reset}\]";
+}
+
+function prompt_align() {
+  prompt_update;
+  local offset=37;
+
+  PLEFT="\[${blue}\]${shortPWD}\[${reset}\]";
+  PRIGHT="\$(prompt_venv)\$(prompt_git)\[${reset}\]";
+
+  PS1=$(printf "%s%*s\r%s\n%s" "$(set_title)" "$(($(tput cols)+${offset}-${rightLength}))" "$PRIGHT" "$PLEFT" "$(prompt_command)");
+}
+PROMPT_COMMAND=prompt_align
+export PS1;
+
+PS2="\[${cyan}\]→ \[${reset}\]";
+export PS2;

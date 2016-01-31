@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# set 256 color profile where possible
+if [[ $COLORTERM == gnome-* && $TERM == xterm ]] && infocmp gnome-256color >/dev/null 2>&1; then
+    export TERM=gnome-256color
+elif infocmp xterm-256color >/dev/null 2>&1; then
+    export TERM=xterm-256color
+fi
+
+load_dotfiles() {
+    declare -a files=(
+        ~/.bash_profile.private # Local and private settings not under version control
+        ~/.bash.d/colors        # Colors
+        ~/.bash.d/utils         # Utils
+        ~/.bash.d/options       # Options
+        ~/.bash.d/exports       # Exports
+        ~/.bash.d/paths         # Path modifications
+        ~/.bash.d/prompt        # Custom bash prompt
+        ~/.bash.d/aliases       # Aliases
+        ~/.bash.d/functions/*   # Functions
+        ~/.bash.d/autocompletes # Autocompletes
+        $(brew --prefix)/etc/bash_completion # Bash completion (installed via Homebrew)
+    )
+
+    # if these files are readable, source them
+    for index in ${!files[*]}; do
+        if [[ -r ${files[$index]} ]]; then
+            source ${files[$index]}
+        fi
+    done
+}
+
+load_environments() {
+    declare -a environments=(
+        'rbenv'
+        'jenv'
+    )
+
+    # Before loading environments, check that command exists
+    for env_to_init in "${environments[@]}"; do
+        if type_exists "$env_to_init"; then
+            eval "$($env_to_init init -)"
+        fi
+    done;
+
+}
+
+load_dotfiles
+unset load_dotfiles
+
+load_environments
+unset load_environments;

@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Python version
+function python_version() {
+  python -c 'print __import__("sys").version.split(" ")[0]';
+}
+
+# Ruby version
+function ruby_version() {
+  rbenv version 2>/dev/null | awk '{print $1}';
+}
+
+# Node version
+function node_version() {
+  node --version 2>/dev/null | awk '{sub("v","",$0); print}';
+}
+
+# Java version
+function java_version() {
+  jenv version 2>/dev/null | awk '{print $1}';
+}

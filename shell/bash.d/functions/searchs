@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# File search using find
+function f() {
+  find . -iname "*$1*" ${@:2}
+}
+
+# File search using grep
+function r() {
+  grep "$1" ${@:2} -Rn .
+}

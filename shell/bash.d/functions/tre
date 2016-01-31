@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Shorthand for tree with hidden files and color enabled
+function tre() {
+  tree -aC -I '.git|node_modules|bower_components|.svn|venv' --dirsfirst "$@" | less -FRNX;
+}
