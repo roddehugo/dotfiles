@@ -18,7 +18,7 @@ eclipse-ide
 epubquicklook
 filezilla
 flux
-font-open-sans (!)
+font-open-sans
 fritzing
 gephi
 google-chrome
@@ -27,7 +27,7 @@ graphviz
 inkscape
 iterm2
 java
-jdownloader2 (!)
+jdownloader2
 launchrocket
 mactex
 marked
@@ -57,7 +57,7 @@ sketch
 skype
 soundcloud-downloader
 sqlitestudio
-sublime-text3 (!)
+sublime-text3
 suspicious-package
 texmaker
 torbrowser

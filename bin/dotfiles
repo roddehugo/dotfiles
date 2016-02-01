@@ -1,8 +1,8 @@
 #!/bin/bash
 
 DOTFILES_DIRECTORY="${HOME}/.dotfiles"
-DOTFILES_TARBALL_PATH="https://github.com/necolas/dotfiles/tarball/master"
-DOTFILES_GIT_REMOTE="git@github.com:necolas/dotfiles.git"
+DOTFILES_TARBALL_PATH="https://github.com/roddehugo/dotfiles/tarball/master"
+DOTFILES_GIT_REMOTE="git@github.com:roddehugo/dotfiles.git"
 
 # If missing, download and extract the dotfiles repository
 if [[ ! -d ${DOTFILES_DIRECTORY} ]]; then
@@ -19,10 +19,11 @@ fi
 cd ${DOTFILES_DIRECTORY}
 
 source ./lib/help
-source ./lib/list
-source ./lib/utils
 source ./lib/brew
 source ./lib/npm
+
+source ./shell/bash.d/colors
+source ./shell/bash.d/utils
 
 # Help text
 if [[ "$1" == "-h" || "$1" == "--help" ]]; then

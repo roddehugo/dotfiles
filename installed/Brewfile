@@ -134,6 +134,7 @@ readosm
 reattach-to-user-namespace
 redis
 rename
+rsync
 ruby
 ruby-build
 ruby-completion

@@ -4,32 +4,98 @@ run_brew() {
 
     # Check for Homebrew
     if type_exists 'brew'; then
-        e_header "Updating Homebrew..."
+        e_header "Updating Homebrew"
         # Use the latest version of Homebrew
         brew update
         [[ $? ]] && e_success "Done"
 
-        e_header "Updating any existing Homebrew formulae..."
+        e_header "Updating any existing Homebrew formulae"
         # Upgrade any already-installed formulae
         brew upgrade
         [[ $? ]] && e_success "Done"
 
-        e_header "Checking status of desired Homebrew formulae..."
+        e_header "Taping Homebrew"
+
+        while read line; do
+           brew tap "$line"
+        done < "$DOTFILES_DIRECTORY"/installed/Tapfile
+        [[ $? ]] && e_success "Done"
+
+        e_header "Checking status of desired Homebrew formulae"
         local list_formulae
         local -a missing_formulae
         local -a desired_formulae=(
-            'coreutils' # GNU core utilities (those that come with OS X are outdated)
-            'git'
-            'ack'
+            'astyle'
             'bash'
             'bash-completion'
+            'battery'
+            'bundler-completion'
+            'cmake'
+            'colordiff'
+            'composer'
+            'coreutils'
+            'ctags'
+            'django-completion'
+            'dos2unix'
             'ffmpeg'
-            'graphicsmagick'
-            'jpeg'
+            'findutils'
+            'fontconfig'
+            'gcc'
+            'gem-completion'
+            'git'
+            'go'
+            'grunt-completion'
+            'heroku-toolbelt'
+            'rsync'
+            'htop-osx'
+            'imagemagick'
+            'jenv'
+            'latex2html'
+            'libspatialite'
+            'mcrypt'
+            'mongodb'
+            'mysql'
+            'ngrep'
+            'ngrok'
+            'nmap'
             'node'
-            'phantomjs'
+            'open-ocd'
+            'openssl'
+            'pip-completion'
+            'pkg-config'
+            'postgis'
+            'postgresql'
+            'pyqt'
+            'python'
+            'python3'
+            'qemu'
+            'qt5'
+            'rails-completion'
+            'rake-completion'
+            'rbenv'
+            'readline'
+            'reattach-to-user-namespace'
+            'rename'
+            'ruby'
+            'ruby-completion'
+            'sdcc'
+            'spim'
+            'sqlite'
+            'ssh-copy-id'
+            'subversion'
+            'tmux'
+            'tmuxinator-completion'
+            'tor'
+            'torsocks'
             'tree'
+            'unar'
+            'unrar'
+            'v8'
+            'vagrant-completion'
+            'vim'
+            'webkit2png'
             'wget'
+            'wireshark'
         )
 
         for index in ${!desired_formulae[*]}
@@ -44,23 +110,37 @@ run_brew() {
             # Convert the array of missing formula into a list of space-separate strings
             list_formulae=$( printf "%s " "${missing_formulae[@]}" )
 
-            e_header "Installing missing Homebrew formulae..."
+            e_header "Installing missing Homebrew formulae"
             # Install all missing formulae
             brew install $list_formulae
 
             [[ $? ]] && e_success "Done"
         fi
 
-        # use latest rsync rather than out-dated OS X rsync
-        # install separately from the main formulae list to fix gh-19
-        brew install https://raw.github.com/Homebrew/homebrew-dupes/master/rsync.rb
-
         # Remove outdated versions from the Cellar
         brew cleanup
+
+        # Ask before installing Brewfile and Caskfile
+        seek_confirmation "Do you want to install all formulae from Brewfile ?"
+
+        if is_confirmed; then
+            brew install $(cat "$DOTFILES_DIRECTORY"/installed/Brewfile | tr -s '\n' ' ')
+            [[ $? ]] && e_success "Done"
+        else
+            e_underline "Skipped Brewfile"
+        fi
+
+        seek_confirmation "Do you want to install all formulae from Caskfile ?"
+
+        if is_confirmed; then
+            brew cask install $(cat "$DOTFILES_DIRECTORY"/installed/Caskfile | tr -s '\n' ' ')
+            [[ $? ]] && e_success "Done"
+        else
+            e_underline "Skipped Caskfile"
+        fi
     else
-        printf "\n"
         e_error "Error: Homebrew not found."
-        printf "Aborting...\n"
+        e_bold "Aborting"
         exit
     fi
 
