@@ -41,7 +41,7 @@ load_environments() {
         if type_exists "$env_to_init"; then
             eval "$($env_to_init init -)"
         fi
-    done;
+    done
 
 }
 

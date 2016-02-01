@@ -1,0 +1,83 @@
+#!/bin/bash
+
+# Disc backup script
+# Requires rsync 3
+
+# Ask for the administrator password upfront
+sudo -v
+
+# IMPORTANT: Make sure you update the `DST` variable to match the name of the
+# destination backup drive
+
+
+logger -t $PROG "Start dump applications"
+
+# Bakcup list of applications installed
+ls -l /Applications/ | grep .app | sed 's/\.app//g' | sed 's/ \( \)*/ /g' | cut -d' ' -f9- | grep -v Caskroom > "$DOTFILES_DIRECTORY"/installed/AppStorefile
+brew list > "$DOTFILES_DIRECTORY"/installed/Brewfile
+brew cask list > "$DOTFILES_DIRECTORY"/installed/Caskfile
+
+logger -t $PROG "End dump applications"
+
+PROG=$0
+DST="/Volumes/Macintosh\ CR/Backups/"
+EXCLUDE="$DOTFILES_DIRECTORY/bin/.backupignore"
+
+declare -a SRCS=(
+    "$HOME/Desktop"
+    "$HOME/Documents"
+    "$HOME/Downloads"
+    "$HOME/Google Drive"
+    "$HOME/Movies"
+    "$HOME/Music"
+    "$HOME/Pictures"
+    "$HOME/Public"
+    "$HOME/Sites"
+    "$HOME/Vagrant"
+    "$HOME/VirtualBox VMs"
+    "$HOME/Workspaces"
+    "$HOME/Library/Mobile Documents/com~apple~CloudDocs/"
+)
+
+for SRC in "${SRCS[@]}"; do
+  if [[ ! -r "$SRC" ]]; then
+      e_error "Source $SRC not readable - Cannot start the sync process"
+      logger -t $PROG "Source $SRC not readable - Cannot start the sync process"
+      exit
+  fi
+done
+
+if [[ ! -w "$DST" ]]; then
+    e_error "Destination $DST not writeable - Cannot start the sync process"
+    logger -t $PROG "Destination $DST not writeable - Cannot start the sync process"
+    exit
+fi
+
+logger -t $PROG "Start rsync"
+
+# --acls                   update the destination ACLs to be the same as the source ACLs
+# --archive                turn on archive mode (recursive copy + retain attributes)
+# --delete                 delete any files that have been deleted locally
+# --delete-excluded        delete any files (on DST) that are part of the list of excluded files
+# --exclude-from           reference a list of files to exclude
+# --hard-links             preserve hard-links
+# --one-file-system        don't cross device boundaries (ignore mounted volumes)
+# --sparse                 handle sparse files efficiently
+# --verbose                increase verbosity
+# --xattrs                 update the remote extended attributes to be the same as the local ones
+
+sudo rsync --acls \
+           --archive \
+           --delete \
+           --delete-excluded \
+           --exclude-from=$EXCLUDE \
+           --hard-links \
+           --one-file-system \
+           --sparse \
+           --verbose \
+           --xattrs \
+           $(printf "%s " "${SRCS[@]}") "$DST"
+
+logger -t $PROG "End rsync"
+
+exit 0
