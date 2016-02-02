@@ -76,6 +76,8 @@
     fi \
   }; f"
   springcleaning = for-each-ref --sort=-committerdate --format='%(refname:short) %(committerdate:short)'
+  # Runs `git pull` on every directory within the current directory
+  # updateall = "!f() { find . -type d -print -maxdepth 1 -execdir git --git-dir={}/.git --work-tree=$PWD/{} pull \; }; f"
 
 [apply]
   # Detect whitespace errors when applying a patch

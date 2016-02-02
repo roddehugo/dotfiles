@@ -38,7 +38,7 @@ alias up-osx='sudo softwareupdate -i -a;'
 alias up-brew='brew update && brew upgrade && brew cleanup && brew cask cleanup && brew doctor'
 alias up-gem='gem update --system && gem update'
 alias up-nvm='npm install -g npm && npm -g update'
-alias up-pip='gpip install --upgrade pip virtualenv ipython'
+alias up-pip='gpip install --upgrade pip setuptools virtualenv wheel ipython'
 alias up-all='up-osx; up-brew; up-gem; up-npm; up-pip;'
 
 # Detect which `ls` flavor is in use

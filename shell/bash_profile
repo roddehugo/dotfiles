@@ -9,16 +9,16 @@ fi
 
 load_dotfiles() {
     declare -a files=(
-        ~/.bash_profile.private # Local and private settings not under version control
-        ~/.bash.d/colors        # Colors
-        ~/.bash.d/utils         # Utils
-        ~/.bash.d/options       # Options
-        ~/.bash.d/exports       # Exports
-        ~/.bash.d/paths         # Path modifications
-        ~/.bash.d/prompt        # Custom bash prompt
-        ~/.bash.d/aliases       # Aliases
-        ~/.bash.d/functions/*   # Functions
-        ~/.bash.d/autocompletes # Autocompletes
+        ${HOME}/.bash_profile.private # Local and private settings not under version control
+        ${HOME}/.bash.d/colors        # Colors
+        ${HOME}/.bash.d/utils         # Utils
+        ${HOME}/.bash.d/options       # Options
+        ${HOME}/.bash.d/exports       # Exports
+        ${HOME}/.bash.d/paths         # Path modifications
+        ${HOME}/.bash.d/prompt        # Custom bash prompt
+        ${HOME}/.bash.d/aliases       # Aliases
+        ${HOME}/.bash.d/functions/*   # Functions
+        ${HOME}/.bash.d/autocompletes # Autocompletes
         $(brew --prefix)/etc/bash_completion # Bash completion (installed via Homebrew)
     )
 

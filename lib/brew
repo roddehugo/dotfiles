@@ -23,8 +23,7 @@ run_brew() {
 
         e_header "Checking status of desired Homebrew formulae"
         local list_formulae
-        local -a missing_formulae
-        local -a desired_formulae=(
+        local -a missing_formulae=(
             'astyle'
             'bash'
             'bash-completion'
@@ -54,6 +53,7 @@ run_brew() {
             'libspatialite'
             'mcrypt'
             'mongodb'
+            'moreutils'
             'mysql'
             'ngrep'
             'ngrok'
@@ -92,19 +92,11 @@ run_brew() {
             'unrar'
             'v8'
             'vagrant-completion'
-            'vim'
+            'vim --override-system-vi'
             'webkit2png'
-            'wget'
+            'wget --with-iri'
             'wireshark'
         )
-
-        for index in ${!desired_formulae[*]}
-        do
-            if ! formula_exists ${desired_formulae[$index]}; then
-                # Store the name (and options) of every missing formula
-                missing_formulae=("${missing_formulae[@]}" "${desired_formulae[$index]}")
-            fi
-        done
 
         if [[ "$missing_formulae" ]]; then
             # Convert the array of missing formula into a list of space-separate strings
@@ -139,8 +131,9 @@ run_brew() {
             e_underline "Skipped Caskfile"
         fi
     else
+        printf "\n"
         e_error "Error: Homebrew not found."
-        e_bold "Aborting"
+        printf "Aborting...\n"
         exit
     fi
 

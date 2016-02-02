@@ -4,10 +4,10 @@ run_npm() {
 
     # Check for npm
     if type_exists 'npm'; then
-        e_header "Installing Node.js packages..."
+        e_header "Installing Node.js packages"
 
         # List of npm packages
-        local packages="gify jshint yo"
+        local packages=$(cat "$DOTFILES_DIRECTORY"/installed/Npmfile | tr -s '\n' ' ')
 
         # Install packages globally and quietly
         npm install $packages --global --quiet

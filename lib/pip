@@ -1,0 +1,41 @@
+#!/bin/bash
+
+run_pip() {
+
+    # Check for pip
+    if type_exists 'pip'; then
+        e_header "Installing pip modules"
+
+        # List of pip packages
+        local packages=$(cat "$DOTFILES_DIRECTORY"/installed/Pipfile | tr -s '\n' ' ')
+
+        # Install packages globally and quietly
+        gpip install $packages
+
+        [[ $? ]] && e_success "Done"
+    else
+        printf "\n"
+        e_error "Error: pip not found."
+        printf "Aborting...\n"
+        exit
+    fi
+
+    # Check for pip3
+    if type_exists 'pip3'; then
+        e_header "Installing pip3 modules"
+
+        # List of pip3 packages
+        local packages=$(cat "$DOTFILES_DIRECTORY"/installed/Pip3file | tr -s '\n' ' ')
+
+        # Install packages globally and quietly
+        gpip3 install $packages
+
+        [[ $? ]] && e_success "Done"
+    else
+        printf "\n"
+        e_error "Error: pip3 not found."
+        printf "Aborting...\n"
+        exit
+    fi
+
+}
