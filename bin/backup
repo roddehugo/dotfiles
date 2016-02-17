@@ -13,6 +13,9 @@ source ./shell/bash.d/colors
 source ./shell/bash.d/utils
 source ./shell/bash.d/functions/pip
 
+# Ask before potentially overwriting files
+seek_confirmation "Warning: This step may overwrite your existing backup files."
+
 e_header "brew"
 
 # Bakcup list of applications installed
