@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export DOTFILES_DIRECTORY="~/Library/Mobile\ Documents/com~apple~CloudDocs/.dotfiles"
+export DOTFILES_DIRECTORY="${HOME}/.dotfiles"
 
 # Make vim the default editor
 export EDITOR="vim"
@@ -56,5 +56,6 @@ export COMPOSER_ROOT=/usr/local/var/composer
 # Use Homebrew folder for cross compile toolchain
 export GCC_ARM_NONE_EABI_ROOT=/usr/local/gcc-arm-none-eabi
 
-# Define postgres database
+# Define databases
 export PGDATA=/usr/local/var/postgres
+export MONGODATA=/usr/local/var/mongo

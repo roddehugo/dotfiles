@@ -1,0 +1,41 @@
+#!/bin/bash
+
+run_configure() {
+
+    # Check for Homebrew
+    if type_exists 'brew'; then
+        e_header "Updating Homebrew"
+        # Use the latest version of Homebrew
+        brew update
+        [[ $? ]] && e_success "Done"
+
+        e_header "Updating any existing Homebrew formulae"
+        # Upgrade any already-installed formulae
+        brew upgrade
+        [[ $? ]] && e_success "Done"
+
+        if type_exists 'mysql_install_db'; then
+            unset TMPDIR
+            mkdir -p /usr/local/var
+            mysql_install_db --verbose --user=`whoami` --basedir="$(brew --prefix mysql)" --datadir=/usr/local/var/mysql --tmpdir=/tmp
+            mysql_secure_installation
+            brew pin mysql
+        fi
+
+        if type_exists 'initdb'; then
+            initdb /usr/local/var/postgres
+            brew pin postgres
+        fi
+
+        if type_exists 'heroku'; then
+            heroku update
+            heroku login
+        fi
+    else
+        printf "\n"
+        e_error "Error: Homebrew not found."
+        printf "Aborting...\n"
+        exit
+    fi
+
+}

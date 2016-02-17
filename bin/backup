@@ -11,104 +11,48 @@
 
 source ./shell/bash.d/colors
 source ./shell/bash.d/utils
+source ./shell/bash.d/functions/pip
 
-e_header "Start brew"
+e_header "brew"
 
 # Bakcup list of applications installed
-ls -l /Applications/ | grep .app | sed 's/\.app//g' | sed 's/ \( \)*/ /g' | cut -d' ' -f9- | grep -v Caskroom > ${DOTFILES_DIRECTORY}/installed/AppStorefile
-brew tap  | awk '{print $1}' > ${DOTFILES_DIRECTORY}/installed/Tapfile
-brew list  | awk '{print $1}' > ${DOTFILES_DIRECTORY}/installed/Brewfile
-brew cask list  | awk '{print $1}' > ${DOTFILES_DIRECTORY}/installed/Caskfile
+ls -l /Applications/ | grep .app | sed 's/\.app//g' | sed 's/ \( \)*/ /g' | cut -d' ' -f9- | grep -v Caskroom > "${DOTFILES_DIRECTORY}"/installed/AppStorefile
+brew tap  | awk '{print $1}' > "${DOTFILES_DIRECTORY}"/installed/Tapfile
+brew list  | awk '{print $1}' > "${DOTFILES_DIRECTORY}"/installed/Brewfile
+brew cask list  | awk '{print $1}' > "${DOTFILES_DIRECTORY}"/installed/Caskfile
 
-e_header "Start gem"
+e_header "gem"
 
-gem list | awk '{print $1}' > ${DOTFILES_DIRECTORY}/installed/Gemfile
-
-# Backup list of Npm packages
-e_header "Start npm"
+gem list | awk '{print $1}' > "${DOTFILES_DIRECTORY}"/installed/Gemfile
 
 # Backup list of Npm packages
-ls $(npm prefix --global)/lib/node_modules > ${DOTFILES_DIRECTORY}/installed/Npmfile
+e_header "npm"
 
-e_header "Start pip"
+# Backup list of Npm packages
+ls $(npm prefix --global)/lib/node_modules > "${DOTFILES_DIRECTORY}"/installed/Npmfile
+
+e_header "pip"
 
 # Backup list of pip 2.7 and pip 3 packages
-gpip list | awk '{print $1}' > ${DOTFILES_DIRECTORY}/installed/Pipfile
-gpip3 list | awk '{print $1}'> ${DOTFILES_DIRECTORY}/installed/Pip3file
+gpip list | awk '{print $1}' > "${DOTFILES_DIRECTORY}"/installed/Pipfile
+gpip3 list | awk '{print $1}'> "${DOTFILES_DIRECTORY}"/installed/Pip3file
 
-e_bold "End brew, gem, npm, pip"
+# Prepare variables to be used by rsync
+SRC=${HOME}/
+DST=/Volumes/Macintosh\ CR/Backups/
+EXCLUDE=${DOTFILES_DIRECTORY}/bin/.backupignore
 
-PROG=$0
-DST="/Volumes/Macintosh CR/Backups/"
-EXCLUDE="${DOTFILES_DIRECTORY}/bin/.backupignore"
-
-declare -a SRCS=(
-    "$HOME/Desktop"
-    "$HOME/Documents"
-    "$HOME/Downloads"
-    "$HOME/Google Drive"
-    "$HOME/Movies"
-    "$HOME/Music"
-    "$HOME/Pictures"
-    "$HOME/Public"
-    "$HOME/Sites"
-    "$HOME/Vagrant"
-    "$HOME/VirtualBox VMs"
-    "$HOME/Workspaces"
-    "$HOME/Library/Mobile Documents/com~apple~CloudDocs/"
-    "$HOME/Library/Developer/Xcode"
-    "$HOME/Library/Application Support/Alfred 2"
-    "$HOME/Library/Application Support/Dash"
-    "$HOME/Library/Application Support/Many Tricks"
-    "$HOME/Library/Application Support/Sequel Pro"
-    "$HOME/Library/Application Support/Skype"
-    "$HOME/Library/Application Support/Sublime Text 3"
-    "$HOME/Library/Application Support/Transmission"
-    "$HOME/Library/Application Support/Tunnelblick"
-    "$HOME/Library/Application Support/org.videolan.vlc"
-    "$HOME/Library/Preferences/com.apple.dt.Xcode.*"
-    "$HOME/Library/Preferences/com.apple.iChat.*"
-    "$HOME/Library/Preferences/com.apple.symbolichotkeys.*"
-    "$HOME/Library/Preferences/com.qtproject.*"
-    "$HOME/Library/Preferences/com.google.*"
-    "$HOME/Library/Preferences/com.googlecode.*"
-    "$HOME/Library/Preferences/com.kapeli.*"
-    "$HOME/Library/Preferences/com.lightheadsw.*"
-    "$HOME/Library/Preferences/com.oracle.*"
-    "$HOME/Library/Preferences/com.runningwithcrayons.*"
-    "$HOME/Library/Preferences/com.segger.*"
-    "$HOME/Library/Preferences/com.sequelpro.*"
-    "$HOME/Library/Preferences/com.skype.*"
-    "$HOME/Library/Preferences/com.sublimetext.*"
-    "$HOME/Library/Preferences/com.thepeppersstudio.*"
-    "$HOME/Library/Preferences/de.filezilla.*"
-    "$HOME/Library/Preferences/net.tunnelblick.*"
-    "$HOME/Library/Preferences/org.eclipse.*"
-    "$HOME/Library/Preferences/org.fritzing.*"
-    "$HOME/Library/Preferences/org.herf.*"
-    "$HOME/Library/Preferences/org.jdownloader.*"
-    "$HOME/Library/Preferences/org.macosforge.*"
-    "$HOME/Library/Preferences/org.mozilla.tor browser.*"
-    "$HOME/Library/Preferences/org.postgresql.*"
-    "$HOME/Library/Preferences/org.qt-project.*"
-    "$HOME/Library/Preferences/org.virtualbox.*"
-    "$HOME/Library/Preferences/org.videolan.vlc*"
-    "$HOME/Library/Preferences/org.macosforge.*"
-)
-
-for SRC in "${SRCS[@]}"; do
-  if [[ ! -r "${SRC}" ]]; then
-      e_error "Source ${SRC} not readable - Cannot start the sync process"
-      exit
-  fi
-done
+if [[ ! -r "${SRC}" ]]; then
+    e_error "Source ${SRC} not readable - Cannot start the sync process"
+    exit
+fi
 
 if [[ ! -w "${DST}" ]]; then
     e_error "Destination ${DST} not writeable - Cannot start the sync process"
     exit
 fi
 
-e_header "Start rsync"
+e_header "rsync"
 
 # --acls                   update the destination ACLs to be the same as the source ACLs
 # --archive                turn on archive mode (recursive copy + retain attributes)
@@ -125,14 +69,13 @@ rsync  --acls \
        --archive \
        --delete \
        --delete-excluded \
-       --exclude-from=$EXCLUDE \
+       --exclude-from="$EXCLUDE" \
        --hard-links \
        --one-file-system \
        --sparse \
        --verbose \
        --xattrs \
-       $(printf "%s " "${SRCS[@]}") "${DST}"
-
-e_bold "End rsync"
+       --quiet \
+       "${SRC}" "${DST}"
 
 exit 0
