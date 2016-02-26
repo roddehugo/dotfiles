@@ -2,6 +2,7 @@
 
 ssh/
 *.private
+marks/*
 
 ### OSX ###
 .DS_Store
