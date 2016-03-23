@@ -33,7 +33,7 @@ alias vg='vagrant'
 alias activate='source venv/bin/activate'
 
 # Update commands
-alias up-osx='sudo softwareupdate -i -a;'
+alias up-osx='sudo softwareupdate -i -a'
 alias up-brew='brew update && brew upgrade && brew cleanup && brew cask cleanup && brew doctor'
 alias up-gem='gem update --system && gem update'
 alias up-nvm='npm install -g npm && npm -g update'
