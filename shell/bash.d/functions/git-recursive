@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Recursive git command in subfolders
+function git-recursive() {
+  find . -type d -name '.git' | while read dir ; do sh -c "cd $dir/../ && echo \"\ngit status: ${dir//\.git/}\" && git $@" ; done
+}
