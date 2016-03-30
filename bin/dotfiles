@@ -89,7 +89,7 @@ if ! type_exists 'git'; then
 fi
 
 # Initialize the git repository if it's missing
-if ! is_git_repo; then
+if ! is_git_repository; then
     e_header "Initializing git repository"
     git init
     git remote add origin ${DOTFILES_GIT_REMOTE}
