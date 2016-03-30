@@ -1,5 +1,19 @@
 #!/bin/bash
-ln -sfv ~/Library/Mobile\ Documents/com~apple~CloudDocs/.dotfiles ~/.dotfiles
+platform='unknown'
+unamestr=`uname`
+
+if [[ "$unamestr" == 'Linux' ]]; then
+    platform='linux'
+elif [[ "$unamestr" == 'Darwin' ]]; then
+    platform='osx'
+else
+    echo Unknown plateform
+    exit 1
+fi
+
+if [[ $platform == 'osx' && -d ~/Library/Mobile\ Documents/com~apple~CloudDocs/.dotfiles ]]; then
+    ln -sfv ~/Library/Mobile\ Documents/com~apple~CloudDocs/.dotfiles ~/.dotfiles
+fi
 
 DOTFILES_DIRECTORY="${HOME}/.dotfiles"
 DOTFILES_TARBALL_PATH="https://github.com/roddehugo/dotfiles/tarball/master"
@@ -48,24 +62,30 @@ done
 mkdir -p /usr/local
 sudo chown ${USER} /usr/local
 
-# Before relying on Homebrew, check that packages can be compiled
-if ! type_exists 'gcc'; then
-    e_header "Installing the XCode Command Line Tools"
-    xcode-select --install
-fi
+if [[ $platform == 'osx' ]]; then
+    # Before relying on Homebrew, check that packages can be compiled
+    if ! type_exists 'gcc'; then
+        e_header "Installing the XCode Command Line Tools"
+        xcode-select --install
+    fi
 
-# Check for Homebrew
-if ! type_exists 'brew'; then
-    e_header "Installing Homebrew"
-    ruby -e "$(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
-    e_header "Updating Homebrew"
-    brew update
+    # Check for Homebrew
+    if ! type_exists 'brew'; then
+        e_header "Installing Homebrew"
+        ruby -e "$(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
+        e_header "Updating Homebrew"
+        brew update
+    fi
 fi
 
 # Check for git
 if ! type_exists 'git'; then
     e_header "Installing Git"
-    brew install git
+    if [[ $platform == 'osx' ]]; then
+        brew install git
+    else
+        sudo apt-get install git
+    fi
 fi
 
 # Initialize the git repository if it's missing
@@ -176,14 +196,17 @@ else
     exit 1
 fi
 
-# Ask before potentially overwriting OS X defaults
-seek_confirmation "Warning: This step may modify your OS X system defaults."
+if [[ $platform == 'osx' ]]; then
+    # Ask before potentially overwriting OS X defaults
+    seek_confirmation "Warning: This step may modify your OS X system defaults."
 
-if is_confirmed; then
-    bash ./bin/osxdefaults
-    e_success "OS X settings updated! You may need to restart."
-else
-    printf "Skipped OS X settings update.\n"
+    if is_confirmed; then
+        bash ./bin/osxdefaults
+        e_success "OS X settings updated! You may need to restart."
+    else
+        printf "Skipped OS X settings update.\n"
+    fi
+
+    open "http://sourabhbajaj.com/mac-setup/SystemPreferences/README.html"
 fi
 
-open "http://sourabhbajaj.com/mac-setup/SystemPreferences/README.html"
