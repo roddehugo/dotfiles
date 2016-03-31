@@ -2,7 +2,7 @@ set history=700
 
 " Use the Monokai Dark theme
 set background=dark
-colorscheme molokai
+colorscheme Tomorrow-Night
 
 " Make Vim more useful
 set nocompatible
@@ -61,10 +61,12 @@ Plugin 'xolox/vim-easytags'
 " Plugin 'godlygeek/tabular'
 
 " Fuzzy file, buffer, mru, tag, etc finder.
-Plugin 'kien/ctrlp.vim'
+" Plugin 'kien/ctrlp.vim'
 
 " Unite and create user interfaces
-Plugin 'Shougo/unite.vim'
+Plugin 'shougo/unite.vim'
+Plugin 'shougo/neomru.vim'
+Plugin 'shougo/vimproc.vim'
 
 " A code-completion engine for Vim
 " Plugin 'Valloric/YouCompleteMe'
@@ -311,11 +313,11 @@ set scrolloff=3
 
 " Strip trailing whitespace (,ss)
 function! StripWhitespace()
-    let save_cursor = getpos(".")
-    let old_query = getreg('/')
-    :%s/\s\+$//e
-    call setpos('.', save_cursor)
-    call setreg('/', old_query)
+  let save_cursor = getpos(".")
+  let old_query = getreg('/')
+  :%s/\s\+$//e
+  call setpos('.', save_cursor)
+  call setreg('/', old_query)
 endfunction
 noremap <leader>ss :call StripWhitespace()<CR>
 
@@ -328,23 +330,23 @@ endtry
 
 " Return to last edit position when opening files
 autocmd BufReadPost *
-\ if line("'\"") > 0 && line("'\"") <= line("$") |
-\   exe "normal! g`\"" |
-\ endif
+      \ if line("'\"") > 0 && line("'\"") <= line("$") |
+      \   exe "normal! g`\"" |
+      \ endif
 
 " Window movement shortcuts
 " move to the window in the direction shown, or create a new window
 function! WinMove(key)
-    let t:curwin = winnr()
-    exec "wincmd ".a:key
-    if (t:curwin == winnr())
-        if (match(a:key,'[jk]'))
-            wincmd v
-        else
-            wincmd s
-        endif
-        exec "wincmd ".a:key
+  let t:curwin = winnr()
+  exec "wincmd ".a:key
+  if (t:curwin == winnr())
+    if (match(a:key,'[jk]'))
+      wincmd v
+    else
+      wincmd s
     endif
+    exec "wincmd ".a:key
+  endif
 endfunction
 
 " Remember info about open buffers on close
@@ -449,8 +451,7 @@ nmap \s2 :set ts=2 sts=2 sw=2 et<cr>
 " Shortcut to save
 " noremap <leader>, :w<cr>
 
-" Jump to tags using CtrlP
-nnoremap <leader>, :CtrlPTag<cr>
+" Jump to tags
 nnoremap <C-g> <C-]>
 
 " Close the current buffer
