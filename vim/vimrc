@@ -1,4 +1,4 @@
-set history=700
+set history=1000
 
 " Use the Monokai Dark theme
 set background=dark
@@ -128,6 +128,9 @@ Plugin 'tpope/vim-markdown'
 " Vebugger is yet another debugger frontend plugin for Vim
 Plugin 'idanarye/vim-vebugger'
 
+" PHP CodeStyle fixer
+Plugin 'stephpy/vim-php-cs-fixer'
+
 call vundle#end()
 " }}}
 
@@ -140,7 +143,7 @@ set numberwidth=3
 set linebreak
 
 " Wrap-broken line prefix
-set showbreak=>\ 
+set showbreak=>\
 
 " Line wrap (number of cols)
 set textwidth=120
@@ -151,7 +154,7 @@ set formatoptions=crq
 " Set lines wrap
 set wrap
 
-" Highlight matching brace120
+" Highlight matching brace
 set showmatch
 
 " Use visual bell (no beeping)
@@ -244,7 +247,7 @@ syntax on
 
 " Let the filetype plugins do the work.
 filetype plugin on
-filetype indent  on
+filetype indent on
 
 " Optimize for fast terminal connections
 set ttyfast
@@ -398,7 +401,7 @@ let g:pymode_virtualenv = 1
 
 " NERDTree
 let g:NERDSpaceDelims = 1
-let NERDTreeIgnore = ['^\.meteor$', '\.pyc$', '^\.bundle$', '^\.bzr$', '^\.git$', '^\.hg$', '^\.sass-cache$', '^\.svn$', '^\.$', '^\.\.$']
+let NERDTreeIgnore = ['^\vendor$', '^\.meteor$', '\.pyc$', '^\.bundle$', '^\.bzr$', '^\.git$', '^\.hg$', '^\.sass-cache$', '^\.svn$', '^\.$', '^\.\.$']
 nmap <leader><tab> :NERDTreeTabsToggle<cr>
 
 " Snippets
@@ -421,11 +424,26 @@ let g:easytags_file = '~/.vim/tags'
 let g:easytags_by_filetype = 0
 let g:easytags_async = 1
 let g:easytags_autorecurse = 0
+
+" PHP CS Fixer
+" If php-cs-fixer is in $PATH, you don't need to define line below
+" let g:php_cs_fixer_path = "~/php-cs-fixer.phar" " define the path to the php-cs-fixer.phar
+let g:php_cs_fixer_level = "symfony"              " which level ?
+let g:php_cs_fixer_config = "default"             " configuration
+"let g:php_cs_fixer_config_file = '.php_cs'       " configuration file
+let g:php_cs_fixer_php_path = "php"               " Path to PHP
+" If you want to define specific fixers:
+"let g:php_cs_fixer_fixers_list = "linefeed,short_tag,indentation"
+let g:php_cs_fixer_enable_default_mapping = 1     " Enable the mapping by default (<leader>pcd)
+let g:php_cs_fixer_dry_run = 1                    " Call command with dry-run option
+let g:php_cs_fixer_verbose = 1                    " Return the output of command if 1, else an inline information.
 " }}}
 
 " {{{ autocommand
 if has('autocmd') && !exists('autocommands_loaded')
   let autocommands_loaded = 1
+  autocmd FileType php setlocal ts=4 sts=4 sw=4 et
+  autocmd FileType json setlocal ts=4 sts=4 sw=4 et
   autocmd FileType yaml setlocal ts=2 sts=2 sw=2 et
   autocmd FileType make setlocal ts=8 sts=8 sw=8 noet
   autocmd FileType ruby setlocal ts=2 sts=2 sw=2 et
@@ -450,6 +468,9 @@ nmap \s2 :set ts=2 sts=2 sw=2 et<cr>
 
 " Shortcut to save
 " noremap <leader>, :w<cr>
+
+" Word under cursor
+nnoremap * *<C-O>:%s///gn<CR>
 
 " Jump to tags
 nnoremap <C-g> <C-]>
@@ -499,8 +520,6 @@ nnoremap <silent> <leader><C-h> :call WinMove('h')<cr>
 nnoremap <silent> <leader><C-j> :call WinMove('j')<cr>
 nnoremap <silent> <leader><C-k> :call WinMove('k')<cr>
 nnoremap <silent> <leader><C-l> :call WinMove('l')<cr>
-
-let g:tmux_navigator_no_mappings = 1
 
 " search for word under the cursor
 nnoremap <leader>/ "fyiw :/<c-r>f<cr>

@@ -9,24 +9,6 @@ _completemarks() {
 }
 complete -F _completemarks jump unmark
 
-# Add completion for `brew`
-source `brew --repository`/Library/Contributions/brew_bash_completion.sh
-
-# Add completion for `brew-cask`
-_caskcomplete()
-{
-  _cask_commands=$(brew cask | cut -d '
-' -f 10-25 | awk '{print $1}')
-
-  local cur prev
-  COMPREPLY=()
-  cur="${COMP_WORDS[COMP_CWORD]}"
-  COMPREPLY=( $(compgen -W "${_cask_commands}" -- ${cur}) )
-
-  return 0
-}
-complete -o default -F _caskcomplete brew-cask
-
 # Enable vagrant command autocompletion for `vg` alias as well
 complete -o default -F _vagrant vg
 
