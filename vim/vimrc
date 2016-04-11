@@ -568,6 +568,22 @@ map 0 ^
 
 " Tweak ESC to be 'jk' typed fast
 imap jk <ESC>
+
+" Prompt for a command to run
+map <Leader>vp :VimuxPromptCommand<CR>
+
+" Run last command executed by VimuxRunCommand
+map <leader>vl :VimuxRunLastCommand<CR>
+
+" Inspect runner pane map
+map <leader>vi :VimuxInspectRunner<CR>
+
+" Close vim tmux runner opened by VimuxRunCommand
+map <Leader>vq :VimuxCloseRunner<CR>
+
+" Interrupt any command running in the runner pane map
+map <leader>vs :VimuxInterruptRunner<CR>
+
 " }}}
 
 " {{{ misc
