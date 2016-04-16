@@ -19,7 +19,8 @@ seek_confirmation "Warning: This step may overwrite your existing backup files."
 e_header "brew"
 
 # Bakcup list of applications installed
-ls -l /Applications/ | grep .app | sed 's/\.app//g' | sed 's/ \( \)*/ /g' | cut -d' ' -f9- | grep -v Caskroom > "${DOTFILES_DIRECTORY}"/installed/AppStorefile
+ls -l /Applications/ | grep .app | sed 's/\.app//g' | sed 's/ \( \)*/ /g' | cut -d' ' -f9- | grep -v Caskroom > "${DOTFILES_DIRECTORY}"/installed/Applicationsfile
+find /Applications -path '*Contents/_MASReceipt/receipt' -maxdepth 4 -print |\sed 's#.app/Contents/_MASReceipt/receipt#.app#g; s#/Applications/##' > "${DOTFILES_DIRECTORY}"/installed/AppStorefile
 brew tap  | awk '{print $1}' > "${DOTFILES_DIRECTORY}"/installed/Tapfile
 brew list  | awk '{print $1}' > "${DOTFILES_DIRECTORY}"/installed/Brewfile
 brew cask list  | awk '{print $1}' > "${DOTFILES_DIRECTORY}"/installed/Caskfile
