@@ -172,12 +172,6 @@ set ignorecase
 " Searches for strings incrementally
 set incsearch
 
-" Use spaces instead of tabs
-set expandtab
-
-" Number of auto-indent spaces
-set shiftwidth=2
-
 " Enable smart-indent
 set cindent
 
@@ -185,8 +179,14 @@ set cindent
 set smarttab
 
 " Number of spaces per Tab
-set tabstop=2
-set softtabstop=2
+set tabstop=4
+set softtabstop=4
+
+" Number of auto-indent spaces
+set shiftwidth=4
+
+" Use spaces instead of tabs
+set expandtab
 
 " Show row and column ruler information
 set ruler
@@ -449,7 +449,6 @@ if has('autocmd') && !exists('autocommands_loaded')
   autocmd FileType ruby setlocal ts=2 sts=2 sw=2 et
   autocmd FileType html setlocal ts=2 sts=2 sw=2 et indentkeys-=*<return>
   autocmd FileType jade setlocal ts=2 sts=2 sw=2 et
-  autocmd FileType *.md.js :call SyntasticReset<cr>
   autocmd FileType markdown,textile setlocal tw=0 wm=0 wrap spell
   autocmd FileType .xml exe ":silent %!xmllint --format --recover - 2>/dev/null"
   autocmd BufNewFile,BufRead *.svg set filetype=xml
