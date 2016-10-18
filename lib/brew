@@ -15,123 +15,100 @@ run_brew() {
         [[ $? ]] && e_success "Done"
 
         e_header "Taping Homebrew"
+        local -a taps=(
+            'caskroom/cask'
+            'goles/battery'
+            'homebrew/apache'
+            'homebrew/completions'
+            'homebrew/dupes'
+            'homebrew/nginx'
+            'homebrew/php'
+            'homebrew/python'
+            'homebrew/science'
+            'homebrew/services'
+            'homebrew/tex'
+            'homebrew/versions'
+            'homebrew/x11'
+        )
 
-        while read line; do
-           brew tap "$line"
-        done < "$DOTFILES_DIRECTORY"/installed/Tapfile
-        [[ $? ]] && e_success "Done"
+	    # Convert the array of taps into a list of space-separated strings
+	    local -a tap_list = $( printf "%s " "${taps[@]}" )
 
-        e_header "Checking status of desired Homebrew formulae"
-        local list_formulae
-        local -a missing_formulae=(
-            'astyle'
+	    # Install all taps
+	    brew tap $list
+	    [[ $? ]] && e_success "Done"
+
+        e_header "Installing Homebrew formulae"
+        local -a formulae=(
             'bash'
             'bash-completion'
             'battery'
-            'bundler-completion'
-            'cmake'
-            'colordiff'
-            'composer'
-            'coreutils'
-            'ctags'
             'curl'
-            'django-completion'
-            'dos2unix'
             'ffmpeg'
-            'findutils'
-            'fontconfig'
-            'gcc'
-            'gem-completion'
             'git'
-            'go'
-            'grunt-completion'
-            'heroku-toolbelt'
             'rsync'
             'htop-osx'
             'imagemagick'
-            'jenv'
-            'latex2html'
-            'libspatialite'
             'libxml2'
             'mcrypt'
             'openssl'
-            'mongodb --with-openssl'
-            'moreutils'
             'mysql'
             'ngrep'
-            'ngrok'
             'nmap'
-            'node'
-            'open-ocd'
             'pip-completion'
             'pkg-config'
-            'postgis'
             'postgresql'
-            'pyqt'
             'python'
             'python3'
-            'qemu'
-            'qt5'
-            'rails-completion'
-            'rake-completion'
-            'rbenv'
             'readline'
             'reattach-to-user-namespace'
             'rename'
-            'ruby'
-            'ruby-completion'
-            'sdcc'
-            'spim'
             'sqlite'
             'ssh-copy-id'
             'subversion'
             'tmux'
             'tmuxinator-completion'
-            'tor'
-            'torsocks'
             'tree'
-            'unar'
             'unrar'
-            'v8'
             'vagrant-completion'
             'vim --override-system-vi'
-            'webkit2png'
             'wget --with-iri'
-            'wireshark'
+            'heroku-toolbelt'
         )
 
-        if [[ "$missing_formulae" ]]; then
-            # Convert the array of missing formula into a list of space-separate strings
-            list_formulae=$( printf "%s " "${missing_formulae[@]}" )
+	    # Convert the array of formula into a list of space-separated strings
+	    local -a formulae_list = $( printf "%s " "${formulae[@]}" )
 
-            e_header "Installing missing Homebrew formulae"
-            # Install all missing formulae
-            brew install $list_formulae
+	    # Install all formulae
+	    brew install $formulae_list
+	    [[ $? ]] && e_success "Done"
 
-            [[ $? ]] && e_success "Done"
-        fi
+        e_header "Installing Cask formulae"
+        local -a casks=(
+            'qlcolorcode'
+            'qlstephen'
+            'qlmarkdown'
+            'quicklook-json'
+            'qlprettypatch'
+            'quicklook-csv'
+            'betterzipql'
+            'qlimagesize'
+            'webpquicklook'
+            'suspicious-package'
+            'provisionql'
+            'xquartz'
+        )
+
+	    # Convert the array of casks into a list of space-separated strings
+	    local -a cask_list = $( printf "%s " "${casks[@]}" )
+
+	    # Install all casks
+	    brew cask install $formulae_list
+	    [[ $? ]] && e_success "Done"
 
         # Remove outdated versions from the Cellar
         brew cleanup
 
-        # Ask before installing Brewfile and Caskfile
-        seek_confirmation "Do you want to install all formulae from Brewfile ?"
-
-        if is_confirmed; then
-            brew install $(cat "$DOTFILES_DIRECTORY"/installed/Brewfile | tr -s '\n' ' ')
-            [[ $? ]] && e_success "Done"
-        else
-            e_underline "Skipped Brewfile"
-        fi
-
-        seek_confirmation "Do you want to install all formulae from Caskfile ?"
-
-        if is_confirmed; then
-            brew cask install $(cat "$DOTFILES_DIRECTORY"/installed/Caskfile | tr -s '\n' ' ')
-            [[ $? ]] && e_success "Done"
-        else
-            e_underline "Skipped Caskfile"
-        fi
     else
         printf "\n"
         e_error "Error: Homebrew not found."

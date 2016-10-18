@@ -110,7 +110,7 @@ function prompt_versions() {
 # Prompt command prompt
 function prompt_command() {
   local p=""
-  if [[ "${user}" == "root" ]]; then
+  if [[ "$(whoami)" == "root" ]]; then
     p="\[${red}\]▶";
   else
     p="\[${violet}\]❯";

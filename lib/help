@@ -12,7 +12,7 @@ Options:
     --no-packages   Suppress package updates
     --no-sync       Suppress pulling from the remote repository
 
-Documentation can be found at https://github.com/roddehug/dotfiles/
+Documentation can be found at https://github.com/roddehugo/dotfiles/
 
 Copyright (c) Hugo Rodde
 Licensed under the MIT license.

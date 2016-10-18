@@ -35,27 +35,7 @@ export MANPAGER="less -X"
 # Set .marks as the folder for jumping symlinks
 export MARKPATH=$DOTFILES_DIRECTORY/marks
 
-# Set Go Workspace path
-export GOPATH=$HOME/Workspaces/go
-
-# Export Homebrew Cask settings
-export HOMEBREW_CASK_OPTS="--appdir=/Applications --caskroom=/usr/local/Caskroom"
-
-# Use Homebrew folder rather than Home for rbenv
-export RBENV_ROOT=/usr/local/var/rbenv
-
-# Use Homebrew folder rather than Home for jenv
-export JENV_ROOT=/usr/local/var/jenv
-
-# Use Homebrew folder rather than Home for npm packages
-export NPM_ROOT=/usr/local/var/npm
-
-# Use Homebrew folder rather than Home for npm packages
-export COMPOSER_ROOT=/usr/local/var/composer
-
-# Use Homebrew folder for cross compile toolchain
-export GCC_ARM_NONE_EABI_ROOT=/usr/local/gcc-arm-none-eabi
-
 # Define databases
 export PGDATA=/usr/local/var/postgres
+export MYSQLDATA=/usr/local/var/mysql
 export MONGODATA=/usr/local/var/mongo

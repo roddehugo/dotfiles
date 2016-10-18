@@ -7,10 +7,15 @@ run_pip() {
         e_header "Installing pip modules"
 
         # List of pip packages
-        local packages=$(cat "$DOTFILES_DIRECTORY"/installed/Pipfile | tr -s '\n' ' ')
+        local -a packages=(
+            'pip'
+        )
+
+        # Convert the array into a list of space-separated strings
+        local -a list = $( printf "%s " "${packages[@]}" )
 
         # Install packages globally and quietly
-        gpip install $packages
+        gpip install $list
 
         [[ $? ]] && e_success "Done"
     else
@@ -25,10 +30,15 @@ run_pip() {
         e_header "Installing pip3 modules"
 
         # List of pip3 packages
-        local packages=$(cat "$DOTFILES_DIRECTORY"/installed/Pip3file | tr -s '\n' ' ')
+        local -a packages=(
+            'pip'
+        )
+
+        # Convert the array into a list of space-separated strings
+        local -a list = $( printf "%s " "${packages[@]}" )
 
         # Install packages globally and quietly
-        gpip3 install $packages
+        gpip3 install $list
 
         [[ $? ]] && e_success "Done"
     else

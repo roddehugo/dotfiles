@@ -16,14 +16,15 @@ run_configure() {
 
         if type_exists 'mysql_install_db'; then
             unset TMPDIR
-            mkdir -p /usr/local/var
-            mysql_install_db --verbose --user=`whoami` --basedir="$(brew --prefix mysql)" --datadir=/usr/local/var/mysql --tmpdir=/tmp
+            mkdir -p $(dirname $MYSQLDATA)
+            mysql_install_db --verbose --user=`whoami` --basedir="$(brew --prefix mysql)" --datadir=$MYSQLDATA --tmpdir=/tmp
             mysql_secure_installation
             brew pin mysql
         fi
 
         if type_exists 'initdb'; then
-            initdb /usr/local/var/postgres
+            mkdir -p $(dirname $PGDATA)
+            initdb $PGDATA
             brew pin postgres
         fi
 

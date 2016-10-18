@@ -44,7 +44,7 @@ gpip3 list | awk '{print $1}'> "${DOTFILES_DIRECTORY}"/installed/Pip3file
 # Prepare variables to be used by rsync
 SRC=${HOME}/
 DST=/Volumes/Macintosh\ CR/Backups/
-EXCLUDE=${DOTFILES_DIRECTORY}/bin/.backupignore
+EXCLUDE=${DOTFILES_DIRECTORY}/bin/backupignore
 
 if [[ ! -r "${SRC}" ]]; then
     e_error "Source ${SRC} not readable - Cannot start the sync process"

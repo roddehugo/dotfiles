@@ -13,7 +13,7 @@
 # /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
 
 # Always show scrollbars
-defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
+# defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
 
 # Save to disk (not to iCloud) by default
 defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
@@ -49,10 +49,10 @@ defaults write com.apple.dock mru-spaces -bool false
 # defaults write com.apple.dock no-glass -bool true
 
 # Dock: position the Dock on the left
-defaults write com.apple.dock orientation left
+# defaults write com.apple.dock orientation left
 
 # Dock: set the icon size of Dock items to 36 pixels
-defaults write com.apple.dock tilesize -int 36
+# defaults write com.apple.dock tilesize -int 36
 
 # Dock: show indicator lights for open applications
 # defaults write com.apple.dock show-process-indicators -bool true
@@ -74,7 +74,7 @@ defaults write com.apple.dock tilesize -int 36
 # ----------------------------------------------------------------------
 
 # Finder: show all filename extensions
-defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+defaults write NSGlobalDomain AppleShowAllExtensions -bool false
 
 # Finder: disable the warning when changing a file extension
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
@@ -83,7 +83,7 @@ defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 # defaults write com.apple.finder EmptyTrashSecurely -bool true
 
 # Finder: disable window and Get Info animations
-defaults write com.apple.finder DisableAllAnimations -bool true
+# defaults write com.apple.finder DisableAllAnimations -bool true
 
 # Finder: allow quitting via ⌘ + Q; doing so will also hide desktop icons
 # defaults write com.apple.finder QuitMenuItem -bool true
@@ -94,7 +94,7 @@ chflags nohidden ~/Library
 # Finder: show hidden files by default
 # defaults write com.apple.finder AppleShowAllFiles -bool true
 
-# Finder: use list view in all windows by default
+# Finder: use column view in all windows by default
 # Four-letter codes for the other view modes: `icnv`, `clmv`, `Flwv`
 defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
 
@@ -129,7 +129,7 @@ defaults write com.apple.screensaver askForPassword -int 1
 defaults write com.apple.screensaver askForPasswordDelay -int 0
 
 # Screen: save screenshots to the desktop
-defaults write com.apple.screencapture location -string "$HOME/Desktop"
+# defaults write com.apple.screencapture location -string "$HOME/Desktop"
 
 # Screen: disable shadow in screenshots
 defaults write com.apple.screencapture disable-shadow -bool true
@@ -176,10 +176,10 @@ hash tmutil &> /dev/null && sudo tmutil disablelocal
 defaults write com.apple.terminal StringEncodings -array 4
 
 # Misc: disable Dictionary results
-defaults write com.apple.spotlight DictionaryLookupEnabled -bool false
+# defaults write com.apple.spotlight DictionaryLookupEnabled -bool false
 
 # Misc: disable auto-correct
-defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+# defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 
 for app in "Dashboard" "Dock" "Finder" "SystemUIServer" "Terminal" "iTunes"; do
     killall "$app" > /dev/null 2>&1

@@ -8,7 +8,7 @@ elif infocmp xterm-256color >/dev/null 2>&1; then
 fi
 
 load_dotfiles() {
-    declare -a files=(
+    local -a files=(
         ${HOME}/.bash_profile.private # Local and private settings not under version control
         ${HOME}/.bash.d/colors        # Colors
         ${HOME}/.bash.d/utils         # Utils
@@ -31,10 +31,8 @@ load_dotfiles() {
 }
 
 load_environments() {
-    declare -a environments=(
-        'rbenv'
-        'jenv'
-    )
+    # Load environement manager like `rbenv` or `jenv`
+    local -a environments=()
 
     # Before loading environments, check that command exists
     for env_to_init in "${environments[@]}"; do
@@ -49,4 +47,4 @@ load_dotfiles
 unset load_dotfiles
 
 load_environments
-unset load_environments;
+unset load_environments

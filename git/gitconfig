@@ -1,3 +1,7 @@
+[user]
+  email = rodde.hugo@gmail.com
+  name = Hugo Rodde
+
 [alias]
   # View abbreviated SHA, description, and history graph of the latest 20 commits
   l = log --pretty=oneline -n 20 --graph --abbrev-commit
@@ -76,8 +80,6 @@
     fi \
   }; f"
   springcleaning = for-each-ref --sort=-committerdate --format='%(refname:short) %(committerdate:short)'
-  # Runs `git pull` on every directory within the current directory
-  # updateall = "!f() { find . -type d -print -maxdepth 1 -execdir git --git-dir={}/.git --work-tree=$PWD/{} pull \; }; f"
 
 [apply]
   # Detect whitespace errors when applying a patch
@@ -91,9 +93,7 @@
   # attributesfile = ~/.gitattributes
 
   # Treat spaces before tabs and all kinds of trailing whitespace as an error
-  # [default] trailing-space: looks for spaces at the end of a line
-  # [default] space-before-tab: looks for spaces before tabs at the beginning of a line
-  whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+  whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol 
 
   # Make `git rebase` safer on OS X
   # More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
@@ -107,22 +107,24 @@
 
   pager = less -+e
 
-[gc]
-  packrefs = true
-
 [diff]
   # Detect copies as well as renames
   renames = copies
+  tool = vimdiff
+
+[difftool]
+  prompt = false
 
 [merge]
   # Include summaries of merged commits in newly created merge commit messages
   log = true
 
 [push]
+  # PUsh the current branch to update a branch with the same name on the receiving end
   default = current
 
-[difftool]
-  prompt = false
+[grep]
+  lineNumber = true
 
 [color "branch"]
   current = yellow reverse
@@ -134,15 +136,9 @@
   frag = magenta bold # line info
   old = red # deletions
   new = green # additions
+  whitespace = red reverse
 
 [color "status"]
   added = green bold
   changed = yellow bold
   untracked = white
-
-[user]
-  email = rodde.hugo@gmail.com
-  name = Hugo Rodde
-
-[grep]
-  lineNumber = true
