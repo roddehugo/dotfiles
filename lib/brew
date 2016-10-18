@@ -31,12 +31,12 @@ run_brew() {
             'homebrew/x11'
         )
 
-	    # Convert the array of taps into a list of space-separated strings
-	    local -a tap_list = $( printf "%s " "${taps[@]}" )
+	# Convert the array of taps into a list of space-separated strings
+	local tap_list = $( printf "%s " "${taps[@]}" )
 
-	    # Install all taps
-	    brew tap $list
-	    [[ $? ]] && e_success "Done"
+	# Install all taps
+	brew tap $list
+	[[ $? ]] && e_success "Done"
 
         e_header "Installing Homebrew formulae"
         local -a formulae=(
@@ -76,12 +76,12 @@ run_brew() {
             'heroku-toolbelt'
         )
 
-	    # Convert the array of formula into a list of space-separated strings
-	    local -a formulae_list = $( printf "%s " "${formulae[@]}" )
+	# Convert the array of formula into a list of space-separated strings
+	local formulae_list = $( printf "%s " "${formulae[@]}" )
 
-	    # Install all formulae
-	    brew install $formulae_list
-	    [[ $? ]] && e_success "Done"
+	# Install all formulae
+	brew install $formulae_list
+	[[ $? ]] && e_success "Done"
 
         e_header "Installing Cask formulae"
         local -a casks=(
@@ -99,12 +99,12 @@ run_brew() {
             'xquartz'
         )
 
-	    # Convert the array of casks into a list of space-separated strings
-	    local -a cask_list = $( printf "%s " "${casks[@]}" )
+	# Convert the array of casks into a list of space-separated strings
+	local cask_list = $( printf "%s " "${casks[@]}" )
 
-	    # Install all casks
-	    brew cask install $formulae_list
-	    [[ $? ]] && e_success "Done"
+	# Install all casks
+	brew cask install $formulae_list
+	[[ $? ]] && e_success "Done"
 
         # Remove outdated versions from the Cellar
         brew cleanup
