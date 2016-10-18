@@ -73,7 +73,7 @@ defaults write com.apple.dock mru-spaces -bool false
 # Finder
 # ----------------------------------------------------------------------
 
-# Finder: show all filename extensions
+# Finder: do not show all filename extensions
 defaults write NSGlobalDomain AppleShowAllExtensions -bool false
 
 # Finder: disable the warning when changing a file extension
@@ -99,10 +99,10 @@ chflags nohidden ~/Library
 defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
 
 # Show icons for hard drives, servers, and removable media on the desktop
-defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
-defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
-defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
-defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
+# defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
+# defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
+# defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
+# defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
 
 
 # Panels
