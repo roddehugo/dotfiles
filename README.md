@@ -1,8 +1,4 @@
-# dotfiles
-
-[![Build Status](https://travis-ci.org/roddehugo/dotfiles.svg?branch=osx)](https://travis-ci.org/roddehugo/dotfiles)
-
-## Install
+# dotfiles [![Build Status](https://travis-ci.org/roddehugo/dotfiles.svg?branch=osx)](https://travis-ci.org/roddehugo/dotfiles)
 
 ### OS X
 ```bash
