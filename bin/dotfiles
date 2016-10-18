@@ -1,6 +1,6 @@
 #!/bin/bash
 platform='unknown'
-unamestr=`uname`
+unamestr=$(uname)
 
 if [[ "$unamestr" == 'Linux' ]]; then
     platform='linux'
