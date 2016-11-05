@@ -16,7 +16,7 @@ function prompt_update() {
     git update-index --really-refresh -q &>/dev/null;
 
     # Set status according to previous checks
-    if [[ ${git_status}} =~ "working directory clean" ]]; then
+    if [[ ${git_status}} =~ "nothing to commit" ]]; then
       status=" ✔";
     else
       s="";
@@ -100,11 +100,6 @@ function prompt_git() {
   if is_git_repository; then
     echo -e "${purple}${branch}${tan}${status}${cyan}${remote}${reset}";
   fi;
-}
-
-# Prompt environment versions
-function prompt_versions() {
-  echo -e "${jaune}${versions}${reset}";
 }
 
 # Prompt command prompt

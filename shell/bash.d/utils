@@ -7,6 +7,9 @@ function e_header() {
 function e_arrow() {
   printf "➜ $@\n"
 }
+function e_info() {
+  printf "%s\n" "$@"
+}
 function e_success() {
   printf "${green}✔ %s${reset}\n" "$@"
 }

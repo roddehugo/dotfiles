@@ -1,7 +1,9 @@
 #!/bin/bash
 
-# Set colors
-tput sgr0; # reset colors
+# Reset colors
+tput sgr0;
+
+# Define colors
 reset=$(tput sgr0);
 bold=$(tput bold);
 underline=$(tput sgr 0 1);

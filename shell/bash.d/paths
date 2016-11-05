@@ -2,7 +2,7 @@
 
 # Directories to be prepended to PATH
 declare -a dirs_to_prepend=(
-    "$(brew --prefix)/bin" # Add installed Homebrew binaries
+    "$(brew --prefix)/bin"  # Add installed Homebrew binaries
     "$(brew --prefix)/sbin" # Add installed Homebrew binaries
 )
 
@@ -17,6 +17,7 @@ for index in ${!dirs_to_prepend[*]}; do
         PATH="${dirs_to_prepend[$index]}:$PATH"
     fi
 done
+unset dirs_to_prepend
 
 # Append directories to PATH
 for index in ${!dirs_to_append[*]}
@@ -26,7 +27,6 @@ do
         PATH="$PATH:${dirs_to_append[$index]}"
     fi
 done
-
-unset dirs_to_prepend dirs_to_append
+unset dirs_to_append
 
 export PATH

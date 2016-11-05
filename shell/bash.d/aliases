@@ -35,10 +35,8 @@ alias activate='source venv/bin/activate'
 # Update commands
 alias up-osx='sudo softwareupdate -i -a'
 alias up-brew='brew update && brew upgrade && brew cleanup && brew cask cleanup && brew doctor'
-alias up-gem='gem update --system && gem update'
-alias up-nvm='npm install -g npm && npm -g update'
 alias up-pip='gpip install --upgrade pip setuptools virtualenv wheel ipython'
-alias up-all='up-osx; up-brew; up-gem; up-npm; up-pip;'
+alias up-all='up-osx; up-brew; up-pip;'
 
 # Detect which `ls` flavor is in use
 if ls --color > /dev/null 2>&1; then # GNU `ls`
