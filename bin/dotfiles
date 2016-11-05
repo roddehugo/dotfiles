@@ -1,13 +1,21 @@
 #!/bin/bash
+
+# Exit on failure
+set -e
+
 platform='unknown'
 unamestr=$(uname)
+
+# Prepare /usr/local directory
+mkdir -p /usr/local
+sudo chown -R $(whoami) /usr/local
 
 if [[ "$unamestr" == 'Linux' ]]; then
     platform='linux'
 elif [[ "$unamestr" == 'Darwin' ]]; then
     platform='osx'
 else
-    printf "Unknown plateform!"
+    printf "Unknown plateform!\n"
     exit 1
 fi
 
@@ -41,88 +49,89 @@ source ./lib/configure
 source ./shell/bash.d/colors
 source ./shell/bash.d/utils
 
-# Help text
-if [[ "$1" == "-h" || "$1" == "--help" ]]; then
-    run_help
-    exit
-fi
-
-# Test for known flags
-for opt in $@
-do
+# Options
+for opt in $@; do
     case $opt in
         --no-packages) no_packages=true ;;
         --no-sync) no_sync=true ;;
-        -*|--*) e_warning "Warning: invalid option $opt" ;;
+        -h|--help) run_help;;
+        -*|--*) e_warning "Warning: invalid option $opt"; run_help ;;
     esac
 done
 
-mkdir -p /usr/local
-sudo chown -R $(whoami) /usr/local
-
-if [[ $platform == 'osx' ]]; then
-    # Before relying on Homebrew, check that packages can be compiled
-    if ! type_exists 'gcc'; then
-        e_header "Installing the XCode Command Line Tools"
-        xcode-select --install
-    fi
-
-    # Check for Homebrew
-    if ! type_exists 'brew'; then
-        e_header "Installing Homebrew"
-        ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-        e_header "Updating Homebrew"
-        brew update
-        brew doctor
-    fi
-fi
-
-# Check for git
-if ! type_exists 'git'; then
-    e_header "Installing Git"
+install_brew() {
     if [[ $platform == 'osx' ]]; then
-        brew install git
-    else
-        sudo apt-get install git
+        # Before relying on Homebrew, check that packages can be compiled
+        if ! type_exists 'gcc'; then
+            e_header "Installing the XCode Command Line Tools"
+            xcode-select --install
+        fi
+
+        # Check for Homebrew
+        if ! type_exists 'brew'; then
+            e_header "Installing Homebrew"
+            ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+            e_header "Updating Homebrew"
+            brew update
+            brew doctor
+        fi
     fi
-fi
+}
 
-# Initialize the git repository if it's missing
-if ! is_git_repository; then
-    e_header "Initializing git repository"
-    git init
-    git remote add origin $DOTFILES_GIT_REMOTE
-    git fetch origin $platform
-    # Reset the index and working tree to the fetched HEAD
-    # (submodules are cloned in the subsequent sync step)
-    git reset --hard FETCH_HEAD
-    # Remove any untracked files
-    git clean -fd
-fi
+install_git() {
+    # Check for git
+    if ! type_exists 'git'; then
+        e_header "Installing Git"
+        if [[ $platform == 'osx' ]]; then
+            brew install git
+        else
+            sudo apt-get install git --yes
+        fi
+    fi
+}
 
-# Conditionally sync with the remote repository
-if [[ $no_sync ]]; then
-    printf "Skipped dotfiles sync.\n"
-else
-    e_header "Syncing dotfiles"
-    # Pull down the latest changes
-    git pull --rebase origin $platform
-    # Update submodules
-    git submodule update --recursive --init --quiet
-fi
+init_git() {
+    # Initialize the git repository if it's missing
+    if ! is_git_repository; then
+        e_header "Initializing git repository"
+        git init
+        git remote add origin $DOTFILES_GIT_REMOTE
+        git fetch origin $platform
+        # Reset the index and working tree to the fetched HEAD
+        # (submodules are cloned in the subsequent sync step)
+        git reset --hard FETCH_HEAD
+        # Remove any untracked files
+        git clean -fd
+    fi
+}
 
-# Install and update packages
-if [[ $no_packages ]]; then
-    printf "Skipped package installations.\n"
-else
-    printf "Updating packages...\n"
-    # Install Homebrew formulae
-    run_brew
-    # Install Pip packages
-    run_pip
-    # Configure installed packages
-    run_configure
-fi
+sync_remote() {
+    # Conditionally sync with the remote repository
+    if [[ $no_sync ]]; then
+        e_log "Skipped dotfiles sync."
+    else
+        e_header "Syncing dotfiles"
+        # Pull down the latest changes
+        git pull --rebase origin $platform
+        # Update submodules
+        git submodule update --recursive --init --quiet
+    fi
+}
+
+install_packages() {
+    # Install and update packages
+    if [[ $no_packages ]]; then
+        e_info "Skipped package installation."
+    else
+        e_info "Updating packages..."
+        # Install Homebrew formulae
+        run_brew
+        # Install Pip packages
+        run_pip
+        # Configure installed packages
+        run_configure
+    fi
+}
 
 link() {
     # Force create/replace the symlink.
@@ -135,7 +144,11 @@ pre_mirrorfiles() {
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
     # Do the same for vim
-    [[ ! -d ~/.vim/bundle ]] && mkdir -p ~/.vim/bundle
+    [[ ! -d ~/.vim/undo ]]    && mkdir -p ~/.vim/undo
+    [[ ! -d ~/.vim/swaps ]]   && mkdir -p ~/.vim/swaps
+    [[ ! -d ~/.vim/colors ]]  && mkdir -p ~/.vim/colors
+    [[ ! -d ~/.vim/bundle ]]  && mkdir -p ~/.vim/bundle
+    [[ ! -d ~/.vim/backups ]] && mkdir -p ~/.vim/backups
     git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 }
 
@@ -146,7 +159,6 @@ mirrorfiles() {
     link "git/gitconfig"                ".gitconfig"
     link "shell/bash.d"                 ".bash.d"
     link "shell/bash_profile"           ".bash_profile"
-    link "shell/bash_profile.private"   ".bash_profile.private"
     link "shell/bashrc"                 ".bashrc"
     link "shell/curlrc"                 ".curlrc"
     link "shell/gemrc"                  ".gemrc"
@@ -160,11 +172,13 @@ mirrorfiles() {
     link "ssh"                          ".ssh"
     link "tmux/tmux.conf"               ".tmux.conf"
     link "tmux/theme.sh"                ".tmux/theme.sh"
-
-    e_success "Dotfiles update complete!"
 }
 
 post_mirrorfiles() {
+    # Copy colorschemes
+    link "editor/editorthemes/monokai/*"          ".vim/colors/"
+    link "editor/editorthemes/tomorrow-night/*"   ".vim/colors/"
+
     # Source tmux configuration to install plugins
     tmux source ~/.tmux.conf
 
@@ -179,11 +193,17 @@ post_mirrorfiles() {
 seek_confirmation "Warning: This step may overwrite your existing dotfiles."
 
 if is_confirmed; then
+    install_brew
+    install_git
+    init_git
+    sync_remote
+    install_packages
     pre_mirrorfiles
     mirrorfiles
     post_mirrorfiles
+    e_success "Dotfiles installation completed!"
 else
-    printf "Aborting...\n"
+    e_error "Aborting..."
     exit 1
 fi
 
@@ -192,12 +212,11 @@ if [[ $platform == 'osx' ]]; then
     seek_confirmation "Warning: This step may modify your OS X system defaults."
 
     if is_confirmed; then
-        bash ./bin/osxdefaults
+        source $DOTFILES_DIRECTORY/bin/osxdefaults
         e_success "OS X settings updated! You may need to restart."
     else
-        printf "Skipped OS X settings update.\n"
+        e_info "Skipped OS X settings update."
     fi
 
     open "http://sourabhbajaj.com/mac-setup/SystemPreferences/README.html"
 fi
-
