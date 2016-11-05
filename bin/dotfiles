@@ -7,7 +7,7 @@ if [[ "$unamestr" == 'Linux' ]]; then
 elif [[ "$unamestr" == 'Darwin' ]]; then
     platform='osx'
 else
-    echo Unknown plateform
+    printf "Unknown plateform!"
     exit 1
 fi
 
