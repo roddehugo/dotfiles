@@ -1,6 +1,4 @@
-# dotfiles
-
-[![Build Status](https://jenkins.favrodd.com/job/dotfiles/badge/icon)](https://jenkins.favrodd.com/job/dotfiles/)
+# dotfiles [![Build Status](https://jenkins.favrodd.com/job/dotfiles/badge/icon)](https://jenkins.favrodd.com/job/dotfiles/)
 
 ### OS X
 ```bash
