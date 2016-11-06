@@ -1,109 +1,122 @@
 #!/bin/bash
 
+brew_tap() {
+  local -a taps=(
+    'caskroom/cask'
+    'goles/battery'
+    'homebrew/apache'
+    'homebrew/completions'
+    'homebrew/dupes'
+    'homebrew/nginx'
+    'homebrew/php'
+    'homebrew/python'
+    'homebrew/science'
+    'homebrew/services'
+    'homebrew/tex'
+    'homebrew/versions'
+    'homebrew/x11'
+  )
+
+  # Install all taps
+  # brew tap command only accept one tap repo at a time
+  for tap in ${taps[@]}; do
+    e_info "Tapping $tap"
+    brew tap $tap
+  done
+}
+
+brew_install() {
+  local -a formulae=(
+    'bash'
+    'bash-completion'
+    'battery'
+    'ctags'
+    'curl'
+    'ffmpeg'
+    'git'
+    'git-cola'
+    'heroku-toolbelt'
+    'htop-osx'
+    'imagemagick'
+    'libxml2'
+    'mcrypt'
+    'mysql'
+    'ngrep'
+    'nmap'
+    'openssl'
+    'php56 --with-apache --with-homebrew-curl --with-homebrew-libxslt --with-homebrew-openssl'
+    'pip-completion'
+    'pkg-config'
+    'postgresql'
+    'python'
+    'python3'
+    'readline'
+    'reattach-to-user-namespace'
+    'rename'
+    'rsync'
+    'sqlite'
+    'ssh-copy-id'
+    'subversion'
+    'tmux'
+    'tmuxinator-completion'
+    'tree'
+    'unrar'
+    'vagrant-completion'
+    'vim --override-system-vi'
+    'wget --with-iri'
+  )
+
+  # Install all formulae
+  brew install $( printf "%s " "${formulae[@]}" )
+}
+
+brew_cask() {
+  local -a casks=(
+    'qlcolorcode'
+    'qlstephen'
+    'qlmarkdown'
+    'quicklook-json'
+    'qlprettypatch'
+    'quicklook-csv'
+    'betterzipql'
+    'qlimagesize'
+    'webpquicklook'
+    'suspicious-package'
+    'provisionql'
+    'xquartz'
+  )
+
+  # Install all casks
+  brew cask install $( printf "%s " "${casks[@]}" )
+}
+
 run_brew() {
-    # Check for Homebrew
-    if type_exists 'brew'; then
-        e_header "Updating Homebrew"
-        # Use the latest version of Homebrew
-        brew update
-        [[ $? ]] && e_success "Done"
+  if type_exists 'brew'; then
+    e_header "Updating Homebrew"
+    # Use the latest version of Homebrew
+    brew update
+    [[ $? ]] && e_success "Done"
 
-        e_header "Updating any existing Homebrew formulae"
-        # Upgrade any already-installed formulae
-        brew upgrade
-        [[ $? ]] && e_success "Done"
+    e_header "Updating any existing Homebrew formulae"
+    brew upgrade
+    [[ $? ]] && e_success "Done"
 
-        e_header "Taping Homebrew"
-        local -a taps=(
-            'caskroom/cask'
-            'goles/battery'
-            'homebrew/apache'
-            'homebrew/completions'
-            'homebrew/dupes'
-            'homebrew/nginx'
-            'homebrew/php'
-            'homebrew/python'
-            'homebrew/science'
-            'homebrew/services'
-            'homebrew/tex'
-            'homebrew/versions'
-            'homebrew/x11'
-        )
+    e_header "Taping Homebrew"
+    brew_tap
+    [[ $? ]] && e_success "Done"
 
-	# Install all taps
-	brew tap $( printf "%s " "${taps[@]}" )
-	[[ $? ]] && e_success "Done"
+    e_header "Installing Homebrew formulae"
+    brew_install
+    [[ $? ]] && e_success "Done"
 
-        e_header "Installing Homebrew formulae"
-        local -a formulae=(
-            'bash'
-            'bash-completion'
-            'battery'
-            'curl'
-            'ctags'
-            'ffmpeg'
-            'git'
-            'git-cola'
-            'rsync'
-            'htop-osx'
-            'imagemagick'
-            'libxml2'
-            'mcrypt'
-            'openssl'
-            'mysql'
-            'ngrep'
-            'nmap'
-            'pip-completion'
-            'pkg-config'
-            'postgresql'
-            'python'
-            'python3'
-            'readline'
-            'reattach-to-user-namespace'
-            'rename'
-            'sqlite'
-            'ssh-copy-id'
-            'subversion'
-            'tmux'
-            'tmuxinator-completion'
-            'tree'
-            'unrar'
-            'vagrant-completion'
-            'vim --override-system-vi'
-            'wget --with-iri'
-            'heroku-toolbelt'
-        )
+    e_header "Installing Cask formulae"
+    brew_cask
+    [[ $? ]] && e_success "Done"
 
-	# Install all formulae
-	brew install $( printf "%s " "${formulae[@]}" )
-	[[ $? ]] && e_success "Done"
-
-        e_header "Installing Cask formulae"
-        local -a casks=(
-            'qlcolorcode'
-            'qlstephen'
-            'qlmarkdown'
-            'quicklook-json'
-            'qlprettypatch'
-            'quicklook-csv'
-            'betterzipql'
-            'qlimagesize'
-            'webpquicklook'
-            'suspicious-package'
-            'provisionql'
-            'xquartz'
-        )
-	
-	# Install all casks
-	brew cask install $( printf "%s " "${casks[@]}" )
-	[[ $? ]] && e_success "Done"
-
-        # Remove outdated versions from the Cellar
-        brew cleanup
-
-    else
-        e_warn "Homebrew not found. Brew packages installation skipped."
-        exit 0
-    fi
-
+    # Remove outdated versions from the Cellar
+    brew cleanup
+  else
+    e_warn "Homebrew not found. Brew packages installation skipped."
+    exit 0
+  fi
 }
