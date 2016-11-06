@@ -44,6 +44,7 @@ source ./lib/pip
 source ./lib/configure
 
 source ./shell/bash.d/colors
+source ./shell/bash.d/exports
 source ./shell/bash.d/utils
 
 # Options
