@@ -42,6 +42,7 @@ run_brew() {
             'curl'
             'ffmpeg'
             'git'
+            'git-cola'
             'rsync'
             'htop-osx'
             'imagemagick'
