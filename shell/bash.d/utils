@@ -39,15 +39,15 @@ function e_note() {
 #   some other action
 # fi
 function seek_confirmation() {
-  printf "\n${bold}$@${reset}"
+  printf "${bold}$@${reset}"
   read -p " (y/n) " -n 1
   printf "\n"
 }
 
 # underlined
 function seek_confirmation_head() {
-  printf "\n${underline}${bold}$@${reset}"
-  read -p "${underline}${bold} (y/n)${reset} " -n 1
+  printf "${underline}${bold}$@${reset}"
+  read -p "${underline} (y/n)${reset} " -n 1
   printf "\n"
 }
 
