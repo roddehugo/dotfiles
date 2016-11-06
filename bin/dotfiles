@@ -209,7 +209,7 @@ post_mirrorfiles() {
 }
 
 # Ask before potentially overwriting files
-seek_confirmation "Warning: This step may overwrite your existing dotfiles."
+seek_confirmation "Warning: This step may overwrite your existing dotfiles. Continue?"
 
 if is_confirmed; then
     install_powerline_fonts
@@ -229,7 +229,7 @@ fi
 
 if [[ $platform == 'osx' ]]; then
     # Ask before potentially overwriting OS X defaults
-    seek_confirmation "Warning: This step may modify your OS X system defaults."
+    seek_confirmation "Warning: This step may modify your OS X system defaults. Continue?"
 
     if is_confirmed; then
         source $DOTFILES_DIRECTORY/bin/osxdefaults
