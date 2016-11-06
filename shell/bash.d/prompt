@@ -16,7 +16,7 @@ function prompt_update() {
     git update-index --really-refresh -q &>/dev/null;
 
     # Set status according to previous checks
-    if [[ ${git_status}} =~ "nothing to commit" ]]; then
+    if [[ ${git_status} =~ "nothing to commit" ]]; then
       status=" ✔";
     else
       s="";
@@ -68,7 +68,11 @@ function prompt_update() {
     branch="";
   fi;
 
-  gitLength=$((${#branch}+${#status}+${#remote}));
+  if [[ -z "$remote" && "$status" == " ✔" ]]; then
+    gitLength=$((${#branch}+${#status}+1));
+  else
+    gitLength=$((${#branch}+${#status}+${#remote}));
+  fi
 
   # Check if we're in a virtualenv
   if [[ -n "$VIRTUAL_ENV" ]]; then
