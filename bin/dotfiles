@@ -182,8 +182,6 @@ mirrorfiles() {
     link "shell/bash_profile"           ".bash_profile"
     link "shell/bashrc"                 ".bashrc"
     link "shell/curlrc"                 ".curlrc"
-    link "shell/gemrc"                  ".gemrc"
-    link "shell/npmrc"                  ".npmrc"
     link "shell/hushlogin"              ".hushlogin"
     link "shell/inputrc"                ".inputrc"
     link "shell/wgetrc"                 ".wgetrc"
