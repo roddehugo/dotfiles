@@ -1,14 +1,10 @@
 #!/bin/bash
 
 # Exit on failure
-# set -e
+set -e
 
 platform='unknown'
 unamestr=$(uname)
-
-# Prepare /usr/local directory
-mkdir -p /usr/local
-sudo chown -R $(whoami) /usr/local
 
 if [[ "$unamestr" == 'Linux' ]]; then
     platform='linux'
@@ -58,6 +54,10 @@ for opt in $@; do
         -*|--*) e_warning "Warning: invalid option $opt"; run_help ;;
     esac
 done
+
+# Prepare /usr/local directory
+mkdir -p /usr/local
+sudo chown -R $(whoami) /usr/local
 
 install_brew() {
     if [[ $platform == 'osx' ]]; then
