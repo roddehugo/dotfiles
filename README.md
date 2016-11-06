@@ -2,5 +2,7 @@
 
 ### OS X
 ```bash
-curl -fsSLo /tmp/install.sh https://raw.githubusercontent.com/roddehugo/dotfiles/osx/bin/dotfiles && /tmp/insall.sh && rm /tmp/install.sh
+curl -fsSLo /tmp/install.sh https://raw.githubusercontent.com/roddehugo/dotfiles/osx/bin/dotfiles\
+    && /tmp/insall.sh\
+    && rm /tmp/install.sh
 ```
