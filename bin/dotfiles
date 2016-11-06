@@ -143,7 +143,7 @@ sync_remote() {
 install_packages() {
     # Install and update packages
     if [[ $no_packages ]]; then
-        e_info "Skipped package installation."
+        e_info "Skipped packages installation."
     else
         e_info "Updating packages..."
         # Install Homebrew formulae
