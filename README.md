@@ -2,5 +2,5 @@
 
 ### OS X
 ```bash
-curl -fsSL https://raw.githubusercontent.com/roddehugo/dotfiles/osx/bin/dotfiles | bash
+curl -fsSLo /tmp/install.sh https://raw.githubusercontent.com/roddehugo/dotfiles/osx/bin/dotfiles && /tmp/insall.sh && rm /tmp/install.sh
 ```
