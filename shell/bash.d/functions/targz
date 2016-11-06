@@ -6,7 +6,7 @@ function targz() {
   tar -cvf "${tmpFile}" --exclude=".DS_Store" "${@}" || return 1;
 
   size=$(
-    stat -f"%z" "${tmpFile}" 2> /dev/null;
+  stat -f"%z" "${tmpFile}" 2> /dev/null;
   );
 
   local cmd="gzip";

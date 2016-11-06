@@ -2,44 +2,45 @@
 
 # set 256 color profile where possible
 if [[ $COLORTERM == gnome-* && $TERM == xterm ]] && infocmp gnome-256color >/dev/null 2>&1; then
-    export TERM=gnome-256color
+  export TERM=gnome-256color
 elif infocmp xterm-256color >/dev/null 2>&1; then
-    export TERM=xterm-256color
+  export TERM=xterm-256color
 fi
 
 load_dotfiles() {
-    local -a files=(
-        ${HOME}/.bash_profile.private # Local and private settings not under version control
-        ${HOME}/.bash.d/colors        # Colors
-        ${HOME}/.bash.d/utils         # Utils
-        ${HOME}/.bash.d/options       # Options
-        ${HOME}/.bash.d/exports       # Exports
-        ${HOME}/.bash.d/paths         # Path modifications
-        ${HOME}/.bash.d/prompt        # Custom bash prompt
-        ${HOME}/.bash.d/aliases       # Aliases
-        ${HOME}/.bash.d/functions/*   # Functions
-        ${HOME}/.bash.d/autocompletes # Autocompletes
-        $(brew --prefix)/etc/bash_completion # Bash completion (installed via Homebrew)
-    )
+  local -a files=(
+  ${HOME}/.bash_profile.private # Local and private settings not under version control
+  ${HOME}/.bash.d/colors        # Colors
+  ${HOME}/.bash.d/utils         # Utils
+  ${HOME}/.bash.d/options       # Options
+  ${HOME}/.bash.d/exports       # Exports
+  ${HOME}/.bash.d/paths         # Path modifications
+  ${HOME}/.bash.d/prompt        # Custom bash prompt
+  ${HOME}/.bash.d/aliases       # Aliases
+  ${HOME}/.bash.d/functions/*   # Functions
+  ${HOME}/.bash.d/autocompletes # Autocompletes
+  $(brew --prefix)/etc/bash_completion # Bash completion (installed via Homebrew)
+  $(brew --prefix)/etc/bash_completion.d/git-completion.bash # To fix 'completion: function _git not found'
+  )
 
-    # if these files are readable, source them
-    for index in ${!files[*]}; do
-        if [[ -r ${files[$index]} ]]; then
-            source ${files[$index]}
-        fi
-    done
+  # if these files are readable, source them
+  for index in ${!files[*]}; do
+    if [[ -r ${files[$index]} ]]; then
+      source ${files[$index]}
+    fi
+  done
 }
 
 load_environments() {
-    # Load environement manager like `rbenv` or `jenv`
-    local -a environments=()
+  # Load environement manager like `rbenv` or `jenv`
+  local -a environments=()
 
-    # Before loading environments, check that command exists
-    for env_to_init in "${environments[@]}"; do
-        if type_exists "$env_to_init"; then
-            eval "$($env_to_init init -)"
-        fi
-    done
+  # Before loading environments, check that command exists
+  for env_to_init in "${environments[@]}"; do
+    if type_exists "$env_to_init"; then
+      eval "$($env_to_init init -)"
+    fi
+  done
 
 }
 
