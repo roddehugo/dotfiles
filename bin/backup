@@ -9,54 +9,59 @@
 # IMPORTANT: Make sure you update the `DST` variable to match the name of the
 # destination backup drive
 
+DOTFILES_DIRECTORY="$HOME/.dotfiles"
+SRC="$HOME/"
+DST="${1:-/Volumes/HUGO RODDE/Backups/}"
+EXCLUDE="$DOTFILES_DIRECTORY/bin/backupignore"
+
+cd $DOTFILES_DIRECTORY
+
 source ./shell/bash.d/colors
 source ./shell/bash.d/utils
 source ./shell/bash.d/functions/pip
 
 # Ask before potentially overwriting files
-seek_confirmation "Warning: This step may overwrite your existing backup files."
+seek_confirmation "Warning: This step may overwrite your existing backup files. Continue?"
 
-e_header "brew"
+if ! is_confirmed; then
+  exit 0
+fi
+
+if [[ ! -d $DOTFILES_DIRECTORY/installed ]]; then
+  mkdir $DOTFILES_DIRECTORY/installed
+fi
+
+e_info "Backing up brew..."
 
 # Bakcup list of applications installed
-ls -l /Applications/ | grep .app | sed 's/\.app//g' | sed 's/ \( \)*/ /g' | cut -d' ' -f9- | grep -v Caskroom > "${DOTFILES_DIRECTORY}"/installed/Applicationsfile
-find /Applications -path '*Contents/_MASReceipt/receipt' -maxdepth 4 -print |\sed 's#.app/Contents/_MASReceipt/receipt#.app#g; s#/Applications/##' > "${DOTFILES_DIRECTORY}"/installed/AppStorefile
-brew tap  | awk '{print $1}' > "${DOTFILES_DIRECTORY}"/installed/Tapfile
-brew list  | awk '{print $1}' > "${DOTFILES_DIRECTORY}"/installed/Brewfile
-brew cask list  | awk '{print $1}' > "${DOTFILES_DIRECTORY}"/installed/Caskfile
+ls -l /Applications/ | grep .app | sed 's/\.app//g' | sed 's/ \( \)*/ /g' | cut -d' ' -f9- > $DOTFILES_DIRECTORY/installed/Applicationsfile
+find /Applications -path '*Contents/_MASReceipt/receipt' -maxdepth 4 -print |\sed 's#.app/Contents/_MASReceipt/receipt#.app#g; s#/Applications/##' | sed 's/\.app//g' > $DOTFILES_DIRECTORY/installed/AppStorefile
+brew tap  | awk '{print $1}' > $DOTFILES_DIRECTORY/installed/Tapfile
+brew list  | awk '{print $1}' > $DOTFILES_DIRECTORY/installed/Brewfile
+brew cask list  | awk '{print $1}' > $DOTFILES_DIRECTORY/installed/Caskfile
 
-e_header "gem"
+[[ $? ]] && e_success "Done"
 
-gem list | awk '{print $1}' > "${DOTFILES_DIRECTORY}"/installed/Gemfile
-
-# Backup list of Npm packages
-e_header "npm"
-
-# Backup list of Npm packages
-ls $(npm prefix --global)/lib/node_modules > "${DOTFILES_DIRECTORY}"/installed/Npmfile
-
-e_header "pip"
+e_info "Backing up pip..."
 
 # Backup list of pip 2.7 and pip 3 packages
-gpip list | awk '{print $1}' > "${DOTFILES_DIRECTORY}"/installed/Pipfile
-gpip3 list | awk '{print $1}'> "${DOTFILES_DIRECTORY}"/installed/Pip3file
+gpip list --format=legacy | awk '{print $1}' > $DOTFILES_DIRECTORY/installed/Pipfile
+gpip3 list --format=legacy | awk '{print $1}'> $DOTFILES_DIRECTORY/installed/Pip3file
 
-# Prepare variables to be used by rsync
-SRC=${HOME}/
-DST=/Volumes/Macintosh\ CR/Backups/
-EXCLUDE=${DOTFILES_DIRECTORY}/bin/backupignore
+[[ $? ]] && e_success "Done"
 
-if [[ ! -r "${SRC}" ]]; then
-    e_error "Source ${SRC} not readable - Cannot start the sync process"
-    exit
+e_info "Backing up rsync..."
+
+if [[ ! -r "$SRC" ]]; then
+  e_error "Source $SRC not readable - Cannot start the sync process"
+  exit 1
 fi
 
-if [[ ! -w "${DST}" ]]; then
-    e_error "Destination ${DST} not writeable - Cannot start the sync process"
-    exit
+if [[ ! -w "$DST" ]]; then
+  e_error "Destination $DST not writeable - Cannot start the sync process"
+  exit 1
 fi
 
-e_header "rsync"
 
 # --acls                   update the destination ACLs to be the same as the source ACLs
 # --archive                turn on archive mode (recursive copy + retain attributes)
@@ -70,16 +75,16 @@ e_header "rsync"
 # --xattrs                 update the remote extended attributes to be the same as the local ones
 
 rsync  --acls \
-       --archive \
-       --delete \
-       --delete-excluded \
-       --exclude-from="$EXCLUDE" \
-       --hard-links \
-       --one-file-system \
-       --sparse \
-       --verbose \
-       --xattrs \
-       --quiet \
-       "${SRC}" "${DST}"
+  --archive \
+  --delete \
+  --delete-excluded \
+  --exclude-from="$EXCLUDE" \
+  --hard-links \
+  --one-file-system \
+  --sparse \
+  --verbose \
+  --xattrs \
+  --quiet \
+  "$SRC" "$DST"
 
-exit 0
+[[ $? ]] && e_success "Done"
