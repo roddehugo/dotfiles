@@ -51,8 +51,8 @@ for opt in $@; do
     case $opt in
         --no-packages) no_packages=true ;;
         --no-sync) no_sync=true ;;
-        -h|--help) run_help;;
-        -*|--*) e_warning "Warning: invalid option $opt"; run_help ;;
+        -h|--help) run_help; exit 0 ;;
+        -*|--*) e_warning "Warning: invalid option $opt"; run_help; exit 0 ;;
     esac
 done
 
