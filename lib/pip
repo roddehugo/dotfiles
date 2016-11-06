@@ -1,49 +1,19 @@
 #!/bin/bash
 
 run_pip() {
-  # Check for pip
-  if type_exists 'pip'; then
-    e_header "Installing pip modules"
+  if type_exists "$1"; then
+    e_header "Installing $1 modules"
 
     # List of pip packages
     local -a packages=(
-    'pip'
+      'pip'
     )
 
-    # Convert the array into a list of space-separated strings
-    local -a list = $( printf "%s " "${packages[@]}" )
-
     # Install packages globally and quietly
-    gpip install $list
-
+    eval "g$1 install --upgrade $( printf "%s " "${packages[@]}" )"
     [[ $? ]] && e_success "Done"
   else
-    printf "\n"
-    e_error "Error: pip not found."
-    printf "Aborting...\n"
-    exit
-  fi
-
-  # Check for pip3
-  if type_exists 'pip3'; then
-    e_header "Installing pip3 modules"
-
-    # List of pip3 packages
-    local -a packages=(
-    'pip'
-    )
-
-    # Convert the array into a list of space-separated strings
-    local -a list = $( printf "%s " "${packages[@]}" )
-
-    # Install packages globally and quietly
-    gpip3 install $list
-
-    [[ $? ]] && e_success "Done"
-  else
-    printf "\n"
-    e_error "Error: pip3 not found."
-    printf "Aborting...\n"
-    exit
+    e_warn "$1 not found. Skipping."
+    exit 0
   fi
 }
