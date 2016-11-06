@@ -1,42 +1,31 @@
 #!/bin/bash
 
 run_configure() {
+   if type_exists 'mysql_install_db'; then
+       e_header "Configuring MySQL"
+       local tmp=$TMPDIR
+       unset TMPDIR
+       mkdir -p $(dirname $MYSQLDATA)
+       mysql_install_db --verbose --user=`whoami` --basedir="$(brew --prefix mysql)" --datadir=$MYSQLDATA --tmpdir=/tmp
+       mysql_secure_installation
+       if type_exists 'brew'; then
+           brew pin mysql
+       fi
+       export TMPDIR=$tmp
+   fi
 
-    # Check for Homebrew
-    if type_exists 'brew'; then
-        e_header "Updating Homebrew"
-        # Use the latest version of Homebrew
-        brew update
-        [[ $? ]] && e_success "Done"
+   if type_exists 'initdb'; then
+       e_header "Configuring Postgres"
+       mkdir -p $(dirname $PGDATA)
+       initdb $PGDATA
+       if type_exists 'brew'; then
+           brew pin postgres
+       fi
+   fi
 
-        e_header "Updating any existing Homebrew formulae"
-        # Upgrade any already-installed formulae
-        brew upgrade
-        [[ $? ]] && e_success "Done"
-
-        if type_exists 'mysql_install_db'; then
-            unset TMPDIR
-            mkdir -p $(dirname $MYSQLDATA)
-            mysql_install_db --verbose --user=`whoami` --basedir="$(brew --prefix mysql)" --datadir=$MYSQLDATA --tmpdir=/tmp
-            mysql_secure_installation
-            brew pin mysql
-        fi
-
-        if type_exists 'initdb'; then
-            mkdir -p $(dirname $PGDATA)
-            initdb $PGDATA
-            brew pin postgres
-        fi
-
-        if type_exists 'heroku'; then
-            heroku update
-            heroku login
-        fi
-    else
-        printf "\n"
-        e_error "Error: Homebrew not found."
-        printf "Aborting...\n"
-        exit
-    fi
-
+   if type_exists 'heroku'; then
+       e_header "Configuring Heroku"
+       heroku update
+       heroku login
+   fi
 }
