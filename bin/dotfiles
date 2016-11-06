@@ -103,15 +103,21 @@ init_git() {
         git reset --hard FETCH_HEAD
         # Remove any untracked files
         git clean -fd
+        # Checkout to the $platform branch
+        git checkout $platform
+        # Remove useless master branch
+        git br -D master
     fi
 }
 
 sync_remote() {
     # Conditionally sync with the remote repository
     if [[ $no_sync ]]; then
-        e_log "Skipped dotfiles sync."
+        e_info "Skipped dotfiles sync."
     else
         e_header "Syncing dotfiles"
+        # Stash working directory just in case
+        git stash
         # Pull down the latest changes
         git pull --rebase origin $platform
         # Update submodules
