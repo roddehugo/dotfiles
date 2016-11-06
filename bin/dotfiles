@@ -196,11 +196,7 @@ mirrorfiles() {
 
 post_mirrorfiles() {
     # Copy colorschemes
-    link "editor/editorthemes/monokai/*"          ".vim/colors/"
-    link "editor/editorthemes/tomorrow-night/*"   ".vim/colors/"
-
-    # Source tmux configuration to install plugins
-    tmux source ~/.tmux.conf
+    find $DOTFILES_DIRECTORY/editor/editorthemes -name "*.vim" -exec link {} $HOME/.vim/colors/ \;
 
     # Install vim plugins
     vim +PluginInstall +qall
