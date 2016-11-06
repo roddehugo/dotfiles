@@ -1,7 +1,6 @@
 #!/bin/bash
 
 run_brew() {
-
     # Check for Homebrew
     if type_exists 'brew'; then
         e_header "Updating Homebrew"
@@ -101,10 +100,8 @@ run_brew() {
         brew cleanup
 
     else
-        printf "\n"
-        e_error "Error: Homebrew not found."
-        printf "Aborting...\n"
-        exit
+        e_warn "Homebrew not found. Brew packages installation skipped."
+        exit 0
     fi
 
 }
