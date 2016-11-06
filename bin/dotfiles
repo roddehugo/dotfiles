@@ -181,6 +181,7 @@ mirrorfiles() {
     link "git/gitconfig"                ".gitconfig"
     link "shell/bash.d"                 ".bash.d"
     link "shell/bash_profile"           ".bash_profile"
+    link "shell/bash_profile.private"   ".bash_profile.private"
     link "shell/bashrc"                 ".bashrc"
     link "shell/curlrc"                 ".curlrc"
     link "shell/hushlogin"              ".hushlogin"
