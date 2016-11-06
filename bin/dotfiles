@@ -199,7 +199,9 @@ post_mirrorfiles() {
     find $DOTFILES_DIRECTORY/editor/editorthemes -name "*.vim" -exec link {} $HOME/.vim/colors/ \;
 
     # Install vim plugins
-    vim +PluginInstall +qall
+    if type_exists 'vim'; then
+        vim +PluginInstall +qall
+    fi
 
     # Finally source bash_profile
     source $HOME/.bash_profile
