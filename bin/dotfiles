@@ -60,6 +60,20 @@ done
 mkdir -p /usr/local
 sudo chown -R $(whoami) /usr/local
 
+install_powerline_fonts() {
+   e_header "Installing powerline fonts"
+   mkdir /tmp/fonts
+   # Get the tarball
+   e_info "Dowloading fonts..."
+   curl -fsSLo /tmp/fonts.tar.gz https://github.com/powerline/fonts/tarball/master
+   # Extract to the fonts directory
+   tar -zxf /tmp/fonts.tar.gz --strip-components 1 -C /tmp/fonts
+   # Install fonts
+   /tmp/fonts/install.sh
+   # Remove files
+   rm -rf /tmp/fonts*
+}
+
 install_brew() {
     if [[ $platform == 'osx' ]]; then
         # Before relying on Homebrew, check that packages can be compiled
@@ -200,6 +214,7 @@ post_mirrorfiles() {
 seek_confirmation "Warning: This step may overwrite your existing dotfiles."
 
 if is_confirmed; then
+    install_powerline_fonts
     install_brew
     install_git
     init_git
