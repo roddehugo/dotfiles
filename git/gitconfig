@@ -4,7 +4,7 @@
 
 [alias]
   # View abbreviated SHA, description, and history graph of the latest 20 commits
-  l = log --pretty=oneline -n 20 --graph --abbrev-commit
+  l = "!f() { git log --pretty=oneline -n ${1:-20} --graph --abbrev-commit; }; f"
   # View the current working tree status using the short format
   st = status -sb
   # Branch
@@ -93,7 +93,7 @@
   # attributesfile = ~/.gitattributes
 
   # Treat spaces before tabs and all kinds of trailing whitespace as an error
-  whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol 
+  whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
 
   # Make `git rebase` safer on OS X
   # More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
