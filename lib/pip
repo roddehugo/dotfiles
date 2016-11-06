@@ -1,51 +1,49 @@
 #!/bin/bash
 
 run_pip() {
+  # Check for pip
+  if type_exists 'pip'; then
+    e_header "Installing pip modules"
 
-    # Check for pip
-    if type_exists 'pip'; then
-        e_header "Installing pip modules"
+    # List of pip packages
+    local -a packages=(
+    'pip'
+    )
 
-        # List of pip packages
-        local -a packages=(
-            'pip'
-        )
+    # Convert the array into a list of space-separated strings
+    local -a list = $( printf "%s " "${packages[@]}" )
 
-        # Convert the array into a list of space-separated strings
-        local -a list = $( printf "%s " "${packages[@]}" )
+    # Install packages globally and quietly
+    gpip install $list
 
-        # Install packages globally and quietly
-        gpip install $list
+    [[ $? ]] && e_success "Done"
+  else
+    printf "\n"
+    e_error "Error: pip not found."
+    printf "Aborting...\n"
+    exit
+  fi
 
-        [[ $? ]] && e_success "Done"
-    else
-        printf "\n"
-        e_error "Error: pip not found."
-        printf "Aborting...\n"
-        exit
-    fi
+  # Check for pip3
+  if type_exists 'pip3'; then
+    e_header "Installing pip3 modules"
 
-    # Check for pip3
-    if type_exists 'pip3'; then
-        e_header "Installing pip3 modules"
+    # List of pip3 packages
+    local -a packages=(
+    'pip'
+    )
 
-        # List of pip3 packages
-        local -a packages=(
-            'pip'
-        )
+    # Convert the array into a list of space-separated strings
+    local -a list = $( printf "%s " "${packages[@]}" )
 
-        # Convert the array into a list of space-separated strings
-        local -a list = $( printf "%s " "${packages[@]}" )
+    # Install packages globally and quietly
+    gpip3 install $list
 
-        # Install packages globally and quietly
-        gpip3 install $list
-
-        [[ $? ]] && e_success "Done"
-    else
-        printf "\n"
-        e_error "Error: pip3 not found."
-        printf "Aborting...\n"
-        exit
-    fi
-
+    [[ $? ]] && e_success "Done"
+  else
+    printf "\n"
+    e_error "Error: pip3 not found."
+    printf "Aborting...\n"
+    exit
+  fi
 }

@@ -1,31 +1,31 @@
 #!/bin/bash
 
 run_configure() {
-   if type_exists 'mysql_install_db'; then
-       e_header "Configuring MySQL"
-       local tmp=$TMPDIR
-       unset TMPDIR
-       mkdir -p $(dirname $MYSQLDATA)
-       mysql_install_db --verbose --user=`whoami` --basedir="$(brew --prefix mysql)" --datadir=$MYSQLDATA --tmpdir=/tmp
-       mysql_secure_installation
-       if type_exists 'brew'; then
-           brew pin mysql
-       fi
-       export TMPDIR=$tmp
-   fi
+  if type_exists 'mysql_install_db'; then
+    e_header "Configuring MySQL"
+    local tmp=$TMPDIR
+    unset TMPDIR
+    mkdir -p $(dirname $MYSQLDATA)
+    mysql_install_db --verbose --user=`whoami` --basedir="$(brew --prefix mysql)" --datadir=$MYSQLDATA --tmpdir=/tmp
+    mysql_secure_installation
+    if type_exists 'brew'; then
+      brew pin mysql
+    fi
+    export TMPDIR=$tmp
+  fi
 
-   if type_exists 'initdb'; then
-       e_header "Configuring Postgres"
-       mkdir -p $(dirname $PGDATA)
-       initdb $PGDATA
-       if type_exists 'brew'; then
-           brew pin postgres
-       fi
-   fi
+  if type_exists 'initdb'; then
+    e_header "Configuring Postgres"
+    mkdir -p $(dirname $PGDATA)
+    initdb $PGDATA
+    if type_exists 'brew'; then
+      brew pin postgres
+    fi
+  fi
 
-   if type_exists 'heroku'; then
-       e_header "Configuring Heroku"
-       heroku update
-       heroku login
-   fi
+  if type_exists 'heroku'; then
+    e_header "Configuring Heroku"
+    heroku update
+    heroku login
+  fi
 }
