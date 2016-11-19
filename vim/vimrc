@@ -96,7 +96,7 @@ Plugin 'ntpeters/vim-better-whitespace'
 Plugin 'terryma/vim-multiple-cursors'
 
 " Dash shortcuts to search app
-Plugin 'rizzatti/dash.vim'
+" Plugin 'rizzatti/dash.vim'
 
 " Manage Marked2 Application
 Plugin 'itspriddle/vim-marked'
@@ -114,19 +114,19 @@ Plugin 'davidhalter/jedi-vim'
 Plugin 'digitaltoad/vim-jade'
 
 " Some vim snippets for Meteor
-Plugin 'cmather/vim-meteor-snippets'
+" Plugin 'cmather/vim-meteor-snippets'
 "
 " Autocompletion plugin for Meteor 1.0
-Plugin 'Slava/tern-meteor'
+" Plugin 'Slava/tern-meteor'
 
 " Go development plugin for Vim
-Plugin 'fatih/vim-go'
+" Plugin 'fatih/vim-go'
 
 " Markdown support
 Plugin 'tpope/vim-markdown'
 
 " Vebugger is yet another debugger frontend plugin for Vim
-Plugin 'idanarye/vim-vebugger'
+" Plugin 'idanarye/vim-vebugger'
 
 " PHP CodeStyle fixer
 Plugin 'stephpy/vim-php-cs-fixer'
