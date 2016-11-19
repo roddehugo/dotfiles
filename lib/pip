@@ -1,8 +1,8 @@
 #!/bin/bash
 
 run_pip() {
-  if type_exists "$1"; then
-    e_header "Installing $1 modules"
+  if type_exists 'pip'; then
+    e_header "Installing pip modules"
 
     # List of pip packages
     local -a packages=(
@@ -12,10 +12,10 @@ run_pip() {
     )
 
     # Install packages globally and quietly
-    eval "g$1 install --upgrade $( printf "%s " "${packages[@]}" )"
+    gpip install --upgrade $( printf "%s " "${packages[@]}" )
     [[ $? ]] && e_success "Done"
   else
-    e_warn "$1 not found. Skipping."
+    e_warn "pip not found. Skipping."
     exit 0
   fi
 }
