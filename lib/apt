@@ -1,0 +1,57 @@
+#!/bin/bash
+
+apt_install_packages() {
+  local -a packages=(
+    'build-essential'
+    'automake'
+    'cmake'
+    'vim-gnome'
+    'python-software-properties'
+    'software-properties-common'
+    'tmux-next'
+  )
+
+  # Install all packages
+  sudo apt-get install -y $( printf "%s " "${packages[@]}" )
+
+  # Link tmux-next (latest version of tmux) to tmux
+  sudo ln -s /usr/bin/tmux-next /usr/bin/tmux
+}
+
+apt_remove_packages() {
+  local -a packages=(
+    'tmux'
+  )
+
+  # Remove all packages
+  sudo apt-get remove -y $( printf "%s " "${packages[@]}" )
+}
+
+run_softwares() {
+  if type_exists 'apt-get'; then
+    e_header "Updating packages list"
+    sudo apt-get -y update
+    [[ $? ]] && e_success "Done"
+
+    e_header "Upgrading packages"
+    sudo apt-get -y upgrade
+    [[ $? ]] && e_success "Done"
+
+    e_header "Removing Apt packages"
+    apt_remove_packages
+    [[ $? ]] && e_success "Done"
+
+    e_header "Installing Apt packages"
+    apt_install_packages
+    [[ $? ]] && e_success "Done"
+
+    # Remove automatically all unused packages
+    sudo apt-get -y autoremove
+
+    # Erase old downloaded archive files
+    sudo apt-get -y clean
+  else
+    e_warn "Apt not found. Apt packages installation skipped."
+    exit 0
+  fi
+}

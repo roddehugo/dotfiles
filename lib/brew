@@ -25,7 +25,7 @@ brew_tap() {
   done
 }
 
-brew_install() {
+brew_formulae() {
   local -a formulae=(
     'bash'
     'bash-completion'
@@ -90,7 +90,7 @@ brew_cask() {
   brew cask install $( printf "%s " "${casks[@]}" )
 }
 
-run_brew() {
+run_softwares() {
   if type_exists 'brew'; then
     e_header "Updating Homebrew"
     # Use the latest version of Homebrew
@@ -106,7 +106,7 @@ run_brew() {
     [[ $? ]] && e_success "Done"
 
     e_header "Installing Homebrew formulae"
-    brew_install
+    brew_formulae
     [[ $? ]] && e_success "Done"
 
     e_header "Installing Cask formulae"

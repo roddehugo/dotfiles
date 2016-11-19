@@ -38,8 +38,13 @@ fi
 
 cd $DOTFILES_DIRECTORY
 
+if [[ $platform == 'osx' ]]; then
+    source ./lib/brew
+else
+    source ./lib/apt
+fi
+
 source ./lib/help
-source ./lib/brew
 source ./lib/pip
 source ./lib/configure
 
@@ -101,7 +106,7 @@ install_git() {
         if [[ $platform == 'osx' ]]; then
             brew install git
         else
-            sudo apt-get install git --yes
+            sudo apt-get install -y git
         fi
     fi
 }
@@ -146,8 +151,8 @@ install_packages() {
         e_info "Skipped packages installation."
     else
         e_info "Updating packages..."
-        # Install Homebrew formulae
-        run_brew
+        # Install softwares from either lib/brew or lib/apt
+        run_softwares
         # Install Pip packages
         run_pip
         # Configure installed packages
