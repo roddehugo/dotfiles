@@ -21,9 +21,9 @@ DOTFILES_GIT_REMOTE="git@github.com:roddehugo/dotfiles.git"
 
 # If missing, download and extract the dotfiles repository
 if [[ ! -d $DOTFILES_DIRECTORY ]]; then
-    if [[ $platform == 'osx' && -d "~/Library/Mobile Documents/com~apple~CloudDocs/dotfiles" ]]; then
+    if [[ $platform == 'osx' && -d "$HOME/Library/Mobile Documents/com~apple~CloudDocs/dotfiles" ]]; then
         printf "Symlinking dotfiles...\n"
-        ln -sf "~/Library/Mobile Documents/com~apple~CloudDocs/dotfiles" "$DOTFILES_DIRECTORY"
+        ln -sf "$HOME/Library/Mobile Documents/com~apple~CloudDocs/dotfiles" "$DOTFILES_DIRECTORY"
     else
         printf "Downloading dotfiles...\n"
         mkdir $DOTFILES_DIRECTORY
