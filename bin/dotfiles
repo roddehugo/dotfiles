@@ -126,7 +126,7 @@ init_git() {
         # Checkout to the $platform branch
         git checkout $platform
         # Remove useless master branch
-        git br -D master
+        git branch -D master
     fi
 }
 
