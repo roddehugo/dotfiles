@@ -28,18 +28,27 @@ brew_tap() {
 
 brew_formulae() {
   local -a formulae=(
+    'ack'
+    'astyle'
+    'autoconf'
+    'automake'
     'bash'
     'bash-completion'
     'battery'
+    'binutils'
+    'cmake'
     'ctags'
+    'cscope'
     'curl --with-open-ssl'
     'ffmpeg'
+    'freetype'
+    'fzf'
     'git'
     'git-cola'
-    'heroku-toolbelt'
     'htop-osx'
     'imagemagick'
     'libxml2'
+    'libyaml'
     'lua'
     'mcrypt'
     'mysql'
@@ -48,6 +57,7 @@ brew_formulae() {
     'nmap'
     'openssl'
     'php56 --with-apache --with-homebrew-curl --with-homebrew-libxslt --with-homebrew-openssl --without-snmp'
+    'pillow'
     'pip-completion'
     'pkg-config'
     'postgresql'
@@ -58,6 +68,7 @@ brew_formulae() {
     'rename'
     'rsync'
     'ruby'
+    'sdl2'
     'sqlite'
     'ssh-copy-id'
     'subversion'
@@ -68,6 +79,7 @@ brew_formulae() {
     'vagrant-completion'
     'vim --override-system-vi'
     'wget --with-iri'
+    'zlib'
   )
 
   # Install all formulae
