@@ -81,10 +81,10 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-surround'
 
 " Track the engine.
-Plugin 'SirVer/ultisnips'
+"Plugin 'SirVer/ultisnips'
 
 " Snippets are separated from the engine. Add this if you want them
-Plugin 'honza/vim-snippets'
+" Plugin 'honza/vim-snippets'
 
 " Syntax checking hacks for vim
 Plugin 'scrooloose/syntastic'
@@ -129,7 +129,7 @@ Plugin 'tpope/vim-markdown'
 " Plugin 'idanarye/vim-vebugger'
 
 " PHP CodeStyle fixer
-Plugin 'stephpy/vim-php-cs-fixer'
+"Plugin 'stephpy/vim-php-cs-fixer'
 
 call vundle#end()
 " }}}
