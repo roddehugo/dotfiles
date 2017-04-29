@@ -41,3 +41,6 @@ export MONGODATA=/usr/local/var/mongo
 # Define Lua paths
 export LUA_PATH="/usr/local/lua/share/lua/5.3/?.lua;;"
 export LUA_CPATH="/usr/local/lua/lib/lua/5.3/?.so;;"
+
+# Use globally installed package in Node
+export NODE_PATH="/usr/local/lib"
