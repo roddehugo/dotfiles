@@ -1,3 +1,4 @@
+" vim:foldmethod=marker:foldlevel=0
 set history=1000
 
 " Use the Monokai Dark theme
@@ -181,8 +182,6 @@ set smarttab
 " Number of spaces per Tab
 set tabstop=4
 set softtabstop=4
-
-" Number of auto-indent spaces
 set shiftwidth=4
 
 " Use spaces instead of tabs
@@ -443,15 +442,14 @@ let g:php_cs_fixer_verbose = 1                    " Return the output of command
 if has('autocmd') && !exists('autocommands_loaded')
   let autocommands_loaded = 1
   autocmd FileType php setlocal ts=4 sts=4 sw=4 et
+  autocmd FileType lua setlocal ts=4 sts=4 sw=4 et
   autocmd FileType json setlocal ts=4 sts=4 sw=4 et
   autocmd FileType yaml setlocal ts=2 sts=2 sw=2 et
-  autocmd FileType make setlocal ts=8 sts=8 sw=8 noet
   autocmd FileType ruby setlocal ts=2 sts=2 sw=2 et
   autocmd FileType html setlocal ts=2 sts=2 sw=2 et indentkeys-=*<return>
   autocmd FileType jade setlocal ts=2 sts=2 sw=2 et
-  autocmd FileType markdown,textile setlocal tw=0 wm=0 wrap spell
-  autocmd FileType .xml exe ":silent %!xmllint --format --recover - 2>/dev/null"
-  autocmd BufNewFile,BufRead *.svg set filetype=xml
+  autocmd FileType make setlocal ts=8 sts=8 sw=8 noet
+  autocmd FileType markdown,textile,gitcommit setlocal tw=0 wm=0 wrap spell
 endif
 "}}}
 
@@ -473,9 +471,6 @@ nnoremap * *<C-O>:%s///gn<CR>
 
 " Jump to tags
 nnoremap <C-g> <C-]>
-
-" Close the current buffer
-noremap <leader>? :q<cr>
 
 " Toggle Tagbar
 nnoremap <leader>; :TagbarToggle<cr>
@@ -558,6 +553,7 @@ au TabLeave * let g:lasttab = tabpagenr()
 map <leader>oe :e <C-R>=expand("%:p:h") . "/" <CR>
 map <leader>ot :tabe <C-R>=expand("%:p:h") . "/" <CR>
 map <leader>os :split <C-R>=expand("%:p:h") . "/" <CR>
+map <leader>ov :vsplit <C-R>=expand("%:p:h") . "/" <CR>
 
 " Switch CWD to the directory of the open buffer
 map <leader>cd :cd %:p:h<cr>:pwd<cr>
@@ -603,7 +599,6 @@ cno $s ~/Sites/
 cnoremap <C-A> <Home>
 cnoremap <C-E> <End>
 cnoremap <C-K> <C-U>
-
 cnoremap <C-P> <Up>
 cnoremap <C-N> <Down>
 "}}}
