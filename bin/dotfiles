@@ -15,24 +15,24 @@ else
     exit 1
 fi
 
-DOTFILES_DIRECTORY="$HOME/.dotfiles"
+DOTFILES_DIRECTORY=~/.dotfiles
 DOTFILES_TARBALL_PATH="https://github.com/roddehugo/dotfiles/tarball/$platform"
 DOTFILES_GIT_REMOTE="git@github.com:roddehugo/dotfiles.git"
 
 # If missing, download and extract the dotfiles repository
 if [[ ! -d $DOTFILES_DIRECTORY ]]; then
-    if [[ $platform == 'osx' && -d "$HOME/Library/Mobile Documents/com~apple~CloudDocs/dotfiles" ]]; then
+    if [[ $platform == 'osx' && -d ~/Library/Mobile\ Documents/com~apple~CloudDocs/dotfiles ]]; then
         printf "Symlinking dotfiles...\n"
-        ln -sf "$HOME/Library/Mobile Documents/com~apple~CloudDocs/dotfiles" "$DOTFILES_DIRECTORY"
+        ln -sf ~/Library/Mobile\ Documents/com~apple~CloudDocs/dotfiles $DOTFILES_DIRECTORY
     else
         printf "Downloading dotfiles...\n"
         mkdir $DOTFILES_DIRECTORY
         # Get the tarball
-        curl -fsSLo $HOME/dotfiles.tar.gz $DOTFILES_TARBALL_PATH
+        curl -fsSLo ~/dotfiles.tar.gz $DOTFILES_TARBALL_PATH
         # Extract to the dotfiles directory
-        tar -zxf $HOME/dotfiles.tar.gz --strip-components 1 -C $DOTFILES_DIRECTORY
+        tar -zxf ~/dotfiles.tar.gz --strip-components 1 -C $DOTFILES_DIRECTORY
         # Remove the tarball
-        rm -rf $HOME/dotfiles.tar.gz
+        rm -rf ~/dotfiles.tar.gz
     fi
 fi
 
@@ -55,6 +55,7 @@ source ./shell/bash.d/utils
 # Options
 for opt in $@; do
     case $opt in
+        --no-fonts) no_fonts=true ;;
         --no-packages) no_packages=true ;;
         --no-sync) no_sync=true ;;
         -h|--help) run_help; exit 0 ;;
@@ -67,17 +68,22 @@ mkdir -p /usr/local
 sudo chown -R $(whoami) /usr/local
 
 install_powerline_fonts() {
-   e_header "Installing powerline fonts"
-   mkdir /tmp/fonts
-   # Get the tarball
-   e_info "Dowloading fonts..."
-   curl -fsSLo /tmp/fonts.tar.gz https://github.com/powerline/fonts/tarball/master
-   # Extract to the fonts directory
-   tar -zxf /tmp/fonts.tar.gz --strip-components 1 -C /tmp/fonts
-   # Install fonts
-   /tmp/fonts/install.sh
-   # Remove files
-   rm -rf /tmp/fonts*
+    # Install and update packages
+    if [[ $no_fonts ]]; then
+        e_info "Skipped powerline fonts installation."
+    else
+        e_info "Installing powerline fonts..."
+        mkdir /tmp/fonts
+        # Get the tarball
+        e_info "Dowloading fonts..."
+        curl -fsSLo /tmp/fonts.tar.gz https://github.com/powerline/fonts/tarball/master
+        # Extract to the fonts directory
+        tar -zxf /tmp/fonts.tar.gz --strip-components 1 -C /tmp/fonts
+        # Install fonts
+        /tmp/fonts/install.sh
+        # Remove files
+        rm -rf /tmp/fonts*
+    fi
 }
 
 install_brew() {
@@ -162,7 +168,7 @@ install_packages() {
 
 link() {
     # Force create/replace the symlink.
-    ln -fs "$DOTFILES_DIRECTORY/$1" "$HOME/$2"
+    ln -fs $DOTFILES_DIRECTORY/$1 ~/$2
 }
 
 pre_mirrorfiles() {
@@ -177,13 +183,19 @@ pre_mirrorfiles() {
     [[ ! -d ~/.vim/bundle ]]  && mkdir -p ~/.vim/bundle
     [[ ! -d ~/.vim/backups ]] && mkdir -p ~/.vim/backups
     git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+
+    # And neovim
+    [[ ! -d ~/.config/nvim ]] && mkdir -p ~/.tmux/plugins
 }
 
 mirrorfiles() {
     # Create the necessary symbolic links between the `.dotfiles` and `HOME`
     # directory. The `bash_profile` sources other files directly from the
     # `.dotfiles` repository.
+    link "editor/editorconfig"          ".editorconfig"
+    link "editor/editorthemes"          ".editorthemes"
     link "git/gitconfig"                ".gitconfig"
+    link "neovim"                       ".config/nvim"
     link "shell/bash.d"                 ".bash.d"
     link "shell/bash_profile"           ".bash_profile"
     link "shell/bash_profile.private"   ".bash_profile.private"
@@ -192,8 +204,6 @@ mirrorfiles() {
     link "shell/hushlogin"              ".hushlogin"
     link "shell/inputrc"                ".inputrc"
     link "shell/wgetrc"                 ".wgetrc"
-    link "editor/editorconfig"          ".editorconfig"
-    link "editor/editorthemes"          ".editorthemes"
     link "vim/vimrc"                    ".vimrc"
     link "ssh"                          ".ssh"
     link "tmux/tmux.conf"               ".tmux.conf"
@@ -201,16 +211,23 @@ mirrorfiles() {
 }
 
 post_mirrorfiles() {
-    # Copy colorschemes
-    find $DOTFILES_DIRECTORY/editor/editorthemes -name "*.vim" -exec link {} $HOME/.vim/colors/ \;
-
     # Install vim plugins
     if type_exists 'vim'; then
         vim +PluginInstall +qall
     fi
 
+    # Install neovim plugins
+    if type_exists 'nvim'; then
+        nvim +UpdateRemotePlugins +PlugInstall +qall
+    fi
+
+    # Add the new shell to the list of allowed shells
+    sudo bash -c 'echo /usr/local/bin/bash >> /etc/shells'
+    # Change to the new shell
+    chsh -s /usr/local/bin/bash
+
     # Finally source bash_profile
-    source $HOME/.bash_profile
+    source ~/.bash_profile
 }
 
 # Ask before potentially overwriting files
