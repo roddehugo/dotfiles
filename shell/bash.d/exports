@@ -37,3 +37,7 @@ export MARKPATH=$DOTFILES_DIRECTORY/marks
 export PGDATA=/usr/local/var/postgres
 export MYSQLDATA=/usr/local/var/mysql
 export MONGODATA=/usr/local/var/mongo
+
+# Define Lua paths
+export LUA_PATH="/usr/local/lua/share/lua/5.3/?.lua;;"
+export LUA_CPATH="/usr/local/lua/lib/lua/5.3/?.so;;"
