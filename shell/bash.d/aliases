@@ -32,6 +32,9 @@ alias j='jobs'
 alias vg='vagrant'
 alias activate='source venv/bin/activate'
 
+# Because it's so much nicer
+alias vim='nvim'
+
 # Update commands
 alias up-osx='sudo softwareupdate -i -a'
 alias up-brew='brew update && brew upgrade && brew cleanup && brew cask cleanup && brew doctor'
