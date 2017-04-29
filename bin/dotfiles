@@ -195,7 +195,8 @@ mirrorfiles() {
     link "editor/editorconfig"          ".editorconfig"
     link "editor/editorthemes"          ".editorthemes"
     link "git/gitconfig"                ".gitconfig"
-    link "neovim"                       ".config/nvim"
+    link "nvim/init.vim"                ".config/nvim/init.vim"
+    link "nvim/plugins.vim"             ".config/nvim/plugins.vim"
     link "shell/bash.d"                 ".bash.d"
     link "shell/bash_profile"           ".bash_profile"
     link "shell/bash_profile.private"   ".bash_profile.private"
@@ -214,11 +215,13 @@ post_mirrorfiles() {
     # Install vim plugins
     if type_exists 'vim'; then
         vim +PluginInstall +qall
+        ln -sf ~/.vim/{bundle/vim-colorschemes/,}colors
     fi
 
     # Install neovim plugins
     if type_exists 'nvim'; then
         nvim +UpdateRemotePlugins +PlugInstall +qall
+        ln -sf ~/.config/nvim/{plugged/vim-colorschemes/,}colors
     fi
 
     # Add the new shell to the list of allowed shells
