@@ -4,7 +4,7 @@
 
 [alias]
   # View abbreviated SHA, description, and history graph of the latest 20 commits
-  l = "!f() { git log --pretty=oneline -n ${1:-20} --graph --abbrev-commit; }; f"
+  l = "!f() { git log -n ${1:-20} --pretty=oneline --graph --abbrev-commit --decorate; }; f"
   # View the current working tree status using the short format
   st = status -sb
   # Branch
@@ -23,10 +23,8 @@
   cu = !"git add -u && git commit -m"
   # Switch to a branch, creating it if necessary
   co = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
-  # Stashes
-  sl = stash list
-  sa = stash apply
-  ss = stash save
+  # Switch to master but fetch first
+  com = "!f() { git fetch && git checkout master; }; f"
   # Show verbose output about tags, branches or remotes
   tags = tag -l
   branches = branch -a
@@ -42,19 +40,19 @@
   # `git di $number` shows the diff between the state `$number` revisions ago and the current state
   din = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
   # Pull in remote changes for the current repository and all its submodules
-  pl = !"git pull; git submodule foreach git pull origin master"
+  pl = !"git pull; git submodule foreach git pull"
   # Set upstream remote branch
   upstr = !"f() { git branch --set-upstream-to=origin/$1 $1; }; f"
   # I know what you did yesterday - great for follow-ups
-  logme = log --since '1 day ago' --oneline --author rodde.hugo@gmail.com
+  logme = !"f() { git log --since '1 day ago' --oneline --author $(git config --get user.email); }; f"
   # Credit an author on the latest commit
   credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
   # List contributors with number of commits
   contributors = shortlog --summary --numbered
   # Interactive rebase with the given number of latest commits
-  reb = "!r() { git rebase -i HEAD~$1; }; r"
+  reb = "!r() { git rebase -i HEAD~\"${@}\"; }; r"
   # Reset with given number of latest commits
-  res = "!r() { git reset HEAD^$1 $2; }; r"
+  res = "!r() { git reset HEAD~\"${@}\"; }; r"
   # Find branches containing commit
   fb = "!f() { git branch -a --contains $1; }; f"
   # Find tags containing commit
@@ -68,25 +66,33 @@
   # Show git history as a tree
   tree = "log --graph --decorate --abbrev-commit --date-order --pretty=format:'%Cgreen%h%Creset : %s%Cred%d%Creset (%Cblue%an%Creset, %Cblue%ar%Creset)'"
   tree-all = "log --graph --decorate --abbrev-commit --date-order --pretty=format:'%Cgreen%h%Creset : %s%Cred%d%Creset (%Cblue%an%Creset, %Cblue%ar%Creset)' --all"
-  # Merge GitHub pull request on top of the `master` branch
-  mpr = "!f() { \
-    if [ $(printf \"%s\" \"$1\" | grep '^[0-9]\\+$' > /dev/null; printf $?) -eq 0 ]; then \
-      git fetch origin refs/pull/$1/head:pr/$1 && \
-      git rebase master pr/$1 && \
-      git checkout master && \
-      git merge pr/$1 && \
-      git branch -D pr/$1 && \
-      git commit --amend -m \"$(git log -1 --pretty=%B)\n\nCloses #$1.\"; \
-    fi \
-  }; f"
+  # Fetch Github Pull Requests
+  pr = "!f() { git fetch origin refs/pull/$1/head:pr/$1 && git checkout pr/$1; }; f"
+  # Fetch Gitlab Merge Requests
+  mr = "!f() { git fetch origin merge-requests/$2/head:mr/$2 && git checkout mr/$2; }; f"
+  # Spring clean
   springcleaning = for-each-ref --sort=-committerdate --format='%(refname:short) %(committerdate:short)'
+  # Update commit date '--use-commit-date' will compute the new date wrt. the commit being amended
+  set-date = !"f() { \
+    if [ \"$1\" = \"--use-committer-date\" ]; then \
+      commit_date=$(git log -n 1 --pretty=medium --format=\"%ct\" | head -n 3 | tail -n 1 | sed 's/Date:[ ]*//g'); \
+      new=$(date -R -d \"$(date -d @\"$commit_date\") $2\"); \
+    elif [ \"$1\" = \"--use-author-date\" ]; then \
+      commit_date=$(git log -n 1 --pretty=medium --format=\"%at\" | head -n 3 | tail -n 1 | sed 's/Date:[ ]*//g'); \
+      new=$(date -R -d \"$(date -d @\"$commit_date\") $2\"); \
+    else \
+      new=$(date -R -d ${1:-now}); \
+    fi; \
+    GIT_COMMITTER_DATE=\"$new\" git commit --amend --no-edit --date=\"$new\"; \
+    git log -n 1 --pretty=fuller | egrep --color=auto \"[a-z0-9]{40}|(Author|Commit)Date\" -B 2; \
+    }; f"
 
 [apply]
   # Detect whitespace errors when applying a patch
   whitespace = fix
 
 [core]
-  editor = vim
+  editor = nvim
 
   # Use custom `.gitignore` and `.gitattributes`
   # excludesfile = ~/.gitignore
@@ -119,12 +125,23 @@
   # Include summaries of merged commits in newly created merge commit messages
   log = true
 
+[rebase]
+  # Automatically squashes fixup commits
+  autosquash = true
+
 [push]
   # Push the current branch to update a branch with the same name on the receiving end
   default = current
 
+[fetch]
+  # Remove deleted branch upstream on local repository
+  prune = true
+
 [grep]
   lineNumber = true
+
+[cola]
+  spellcheck = true
 
 [color "branch"]
   current = yellow reverse
