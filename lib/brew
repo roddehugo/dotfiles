@@ -15,6 +15,7 @@ brew_tap() {
     'homebrew/tex'
     'homebrew/versions'
     'homebrew/x11'
+    'neovim/neovim'
   )
 
   # Install all taps
@@ -39,8 +40,10 @@ brew_formulae() {
     'htop-osx'
     'imagemagick'
     'libxml2'
+    'lua'
     'mcrypt'
     'mysql'
+    'neovim'
     'ngrep'
     'nmap'
     'openssl'
@@ -54,10 +57,11 @@ brew_formulae() {
     'reattach-to-user-namespace'
     'rename'
     'rsync'
+    'ruby'
     'sqlite'
     'ssh-copy-id'
     'subversion'
-    'tmux --HEAD'
+    'tmux --HEAD master'
     'tmuxinator-completion'
     'tree'
     'unrar'
@@ -67,22 +71,24 @@ brew_formulae() {
   )
 
   # Install all formulae
-  brew install $( printf "%s " "${formulae[@]}" )
+  for index in ${!formulae[*]}; do
+    brew install ${formulae[$index]} --force
+  done
 }
 
 brew_cask() {
   local -a casks=(
-    'qlcolorcode'
-    'qlstephen'
-    'qlmarkdown'
-    'quicklook-json'
-    'qlprettypatch'
-    'quicklook-csv'
     'betterzipql'
-    'qlimagesize'
-    'webpquicklook'
-    'suspicious-package'
     'provisionql'
+    'qlcolorcode'
+    'qlimagesize'
+    'qlmarkdown'
+    'qlprettypatch'
+    'qlstephen'
+    'quicklook-csv'
+    'quicklook-json'
+    'suspicious-package'
+    'webpquicklook'
     'xquartz'
   )
 
