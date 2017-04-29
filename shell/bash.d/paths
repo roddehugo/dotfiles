@@ -1,13 +1,13 @@
 #!/bin/bash
 
+# Reset PATH on top
+PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
+
 # Directories to be prepended to PATH
 declare -a dirs_to_prepend=(
-  "$(brew --prefix)/bin"  # Add installed Homebrew binaries
-  "$(brew --prefix)/sbin" # Add installed Homebrew binaries
-)
-
-# Directories to be appended to PATH
-declare -a dirs_to_append=(
+  '/usr/local/gcc-arm-none-eabi-4_9-2015q2/bin/' # Add gcc arm
+  '/usr/local/flatbuffers/bin' # Add flatc
+  '/usr/local/lua/bin' # Add lua 5.3
 )
 
 # Prepend directories to PATH
@@ -18,6 +18,10 @@ for index in ${!dirs_to_prepend[*]}; do
   fi
 done
 unset dirs_to_prepend
+
+# Directories to be appended to PATH
+declare -a dirs_to_append=(
+)
 
 # Append directories to PATH
 for index in ${!dirs_to_append[*]}
