@@ -24,9 +24,6 @@ export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 # Pip should only run if there is a virtualenv currently activated
 export PIP_REQUIRE_VIRTUALENV=true
 
-# Set architecture flags
-export ARCHFLAGS="-arch x86_64"
-
 # Highlight section titles in manual pages
 export LESS_TERMCAP_md="${yellow}"
 
