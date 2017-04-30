@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Find a pid given a processus name case isensitive
 function pid() {

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Homemade shortcuts to favorite dirs
 function jump {

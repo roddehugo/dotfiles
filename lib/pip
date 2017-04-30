@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 run_pip() {
   if type_exists 'pip'; then
