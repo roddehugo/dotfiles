@@ -82,7 +82,7 @@ install_powerline_fonts() {
         # Install fonts
         /tmp/fonts/install.sh
         # Remove files
-        rm -rf /tmp/fonts*
+        rm -rf /tmp/fonts{/,.tar.gz}
     fi
 }
 
