@@ -127,11 +127,9 @@ let g:deoplete#enable_at_startup = 1
 " Path to store the cscope files (cscope.files and cscope.out)
 let g:cscope_dir = '~/.cscope'
 
-" Map the default keys on startup
-" These keys are prefixed by CTRL+\ <cscope param>
-" A.e.: CTRL+\ d for goto definition of word under cursor
-let g:cscope_map_keys = 1
+" Configuration filename to look for when starting plugin
+let g:cscope_config = 'cscope.cfg'
 
-" Update the cscope files on startup of cscope.
+" Update the cscope files on startup of cscope
 let g:cscope_update_on_start = 1
 " }}}

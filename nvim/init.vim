@@ -145,15 +145,7 @@ set cspc=3 " how many components of a file's path to display
 " '+' indicates that results must be appended to quickfix window,
 " '-' implies previous results clearance, '0' or absence - don't use quickfix
 " set cscopequickfix=a-,c-,d-,e-,f-,g-,i-,s-,t-
-" add any cscope database in current directory
-set nocsverb " no verbosity for the default loading
-if filereadable("cscope.out")
-  cs add cscope.out
-  " else add the database pointed to by environment variable
-elseif $CSCOPE_DB != ""
-  cs add $CSCOPE_DB
-endif
-set csverb " restore verbosity
+" set nocsverb " no verbosity for the default loading
 " }}}
 " {{{ Mappings
 let mapleader=","
@@ -172,6 +164,9 @@ nnoremap 0 ^
 
 " tweak ESC to be 'jk' typed fast
 inoremap jk <ESC>
+
+" make use of ctags and csope easier
+noremap gt <C-]>
 
 " fold/unfold map
 noremap <space> za
@@ -312,22 +307,8 @@ nmap <leader>cg :cs find g <C-R>=expand("<cword>")<CR><CR>   " definition
 nmap <leader>ci :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR> " files including
 nmap <leader>cs :cs find s <C-R>=expand("<cword>")<CR><CR>   " C symbol
 nmap <leader>ct :cs find t <C-R>=expand("<cword>")<CR><CR>   " text string
-
-" some nifty mappings if cscope is on
-if (len(split(execute('cscope show'), "\n")) > 1)
-  nmap gf <leader>cf
-  nmap gg <leader>cg
-  nmap gs <leader>cs
-  nmap gt <C-]>
-endif
 " }}}
 " {{{ Functions
-" return to last edit position when opening files
-autocmd BufReadPost *
-    \ if line("'\"") > 0 && line("'\"") <= line("$") |
-    \   exe "normal! g`\"" |
-    \ endif
-
 " window movement shortcuts
 " move to the window in the direction shown, or create a new window
 function! WinMove(key)
@@ -342,15 +323,40 @@ function! WinMove(key)
     exec "wincmd ".a:key
   endif
 endfunction
+
+" return to last edit position when opening files
+command! GotoLastKnownLine call GotoLastKnownLine()
+function! GotoLastKnownLine()
+  if line("'\"") > 0 && line("'\"") <= line("$")
+    exe "normal! g`\""
+  endif
+endfunction
+
+" enable shortcuts of cscope is on
+command! CScopeShortcuts call CScopeShortcuts()
+function! CScopeShortcuts()
+  if len(split(execute('cscope show'), '\n')) > 1
+    nmap ga <leader>ca
+    nmap gd <leader>cg
+    nmap gf <leader>cf
+    nmap gi <leader>ci
+    nmap gs <leader>cs
+  endif
+endfunction
 " }}}
-" {{{ Filetype
+" {{{ Autocommands
 if has('autocmd') && !exists('autocommands_loaded')
- let autocommands_loaded = 1
- autocmd BufEnter * EnableStripWhitespaceOnSave
- autocmd BufRead,BufNewFile Module set filetype=make
- autocmd! BufWritePost * Neomake
- autocmd FileType make setlocal ts=8 sts=8 sw=8 noet
- autocmd FileType markdown,textile,gitcommit setlocal spell
+  let autocommands_loaded = 1
+  autocmd VimEnter * CScopeStart
+
+  autocmd BufEnter * CScopeShortcuts
+  autocmd BufEnter * EnableStripWhitespaceOnSave
+  autocmd BufReadPost * GotoLastKnownLine
+  autocmd BufWritePost * Neomake
+
+  autocmd BufRead,BufNewFile Module set filetype=make
+  autocmd FileType make setlocal ts=8 sts=8 sw=8 noet
+  autocmd FileType markdown,textile,gitcommit setlocal spell
 endif
 " }}}
 " {{{ Command line
