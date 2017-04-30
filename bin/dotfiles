@@ -59,7 +59,7 @@ for opt in $@; do
         --no-packages) no_packages=true ;;
         --no-sync) no_sync=true ;;
         -h|--help) run_help; exit 0 ;;
-        -*|--*) e_warning "Warning: invalid option $opt"; run_help; exit 0 ;;
+        -*|--*) e_warning "Error: invalid option $opt"; run_help; exit 1 ;;
     esac
 done
 
