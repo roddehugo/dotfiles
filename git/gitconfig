@@ -95,8 +95,8 @@
   editor = nvim
 
   # Use custom `.gitignore` and `.gitattributes`
-  # excludesfile = ~/.gitignore
-  # attributesfile = ~/.gitattributes
+  excludesfile = ~/.gitignore
+  attributesfile = ~/.gitattributes
 
   # Treat spaces before tabs and all kinds of trailing whitespace as an error
   whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
@@ -119,7 +119,11 @@
   tool = vimdiff
 
 [difftool]
-  prompt = false
+  # Wait for confirmation after each difftool invocation
+  prompt = true
+
+[difftool "vimdiff"]
+  cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
 
 [merge]
   # Include summaries of merged commits in newly created merge commit messages
