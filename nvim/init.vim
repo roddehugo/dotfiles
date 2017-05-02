@@ -270,10 +270,14 @@ nnoremap <leader>mq :MarkedQuit<cr>
 
 " opens a new tab with the current buffer's path
 " super useful when editing files in the same directory
-noremap <leader>oe :e <C-R>=expand("%:p:h") . "/" <CR>
-noremap <leader>ot :tabe <C-R>=expand("%:p:h") . "/" <CR>
-noremap <leader>os :split <C-R>=expand("%:p:h") . "/" <CR>
-noremap <leader>ov :vsplit <C-R>=expand("%:p:h") . "/" <CR>
+nnoremap <leader>oe :e <C-R>=expand("%:p:h") . "/" <CR>
+nnoremap <leader>ot :tabe <C-R>=expand("%:p:h") . "/" <CR>
+nnoremap <leader>os :split <C-R>=expand("%:p:h") . "/" <CR>
+nnoremap <leader>ov :vsplit <C-R>=expand("%:p:h") . "/" <CR>
+nnoremap <leader>oc :e %<.c<CR>
+nnoremap <leader>oC :e %<.cc<CR>
+nnoremap <leader>oh :e %<.h<CR>
+nnoremap <leader>oH :e %<.hh<CR>
 
 " vimux runner
 noremap <Leader>vp :VimuxPromptCommand<CR>
@@ -304,7 +308,7 @@ nmap <leader>cd :cs find d <C-R>=expand("<cword>")<CR><CR>   " fct called by
 nmap <leader>ce :cs find e <C-R>=expand("<cword>")<CR><CR>   " egrep
 nmap <leader>cf :cs find f <C-R>=expand("<cfile>")<CR><CR>   " file
 nmap <leader>cg :cs find g <C-R>=expand("<cword>")<CR><CR>   " definition
-nmap <leader>ci :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR> " files including
+nmap <leader>ci :cs find i <C-R>=expand("<cfile>")<CR><CR>   " files including
 nmap <leader>cs :cs find s <C-R>=expand("<cword>")<CR><CR>   " C symbol
 nmap <leader>ct :cs find t <C-R>=expand("<cword>")<CR><CR>   " text string
 " }}}
