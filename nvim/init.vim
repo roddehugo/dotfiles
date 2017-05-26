@@ -360,6 +360,7 @@ if has('autocmd') && !exists('autocommands_loaded')
 
   autocmd BufRead,BufNewFile Module set filetype=make
   autocmd FileType make setlocal ts=8 sts=8 sw=8 noet
+  autocmd FileType c,cpp setlocal ts=4 sts=4 sw=4 et omnifunc=clang_complete#ClangComplete
   autocmd FileType markdown,textile,gitcommit setlocal spell
 endif
 " }}}

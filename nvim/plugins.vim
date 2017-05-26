@@ -30,6 +30,7 @@ Plug 'airblade/vim-gitgutter' " vim plugin which shows a git diff in the gutter 
 " tmux
 Plug 'benmills/vimux' " tmux integration for vim
 Plug 'christoomey/vim-tmux-navigator' " let vim open tmux buffer
+Plug 'wellle/tmux-complete.vim' " autocompletion for visible strings in panes
 
 " utilities
 Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] } | Plug 'Xuyuanp/nerdtree-git-plugin' " file drawer
@@ -45,11 +46,9 @@ Plug 'tpope/vim-obsession' " continuously updated session files
 Plug 'tpope/vim-surround' " quoting/parenthesizing made simple
 Plug 'tpope/vim-repeat' " enable repeating supported plugin maps with '.'
 Plug 'tpope/vim-fugitive' " amazing git wrapper for vim
-Plug 'tpope/vim-sleuth' " detect indent style (tabs vs. spaces)
-Plug 'Raimondi/delimitMate' " automatic closing of quotes, parenthesis, brackets, etc.
-Plug 'AndrewRadev/splitjoin.vim' " single/multi line code handler: gS - split one line into multiple, gJ - combine multiple lines into one
+Plug 'Raimondi/delimitMate' " automatic closing of quotes, parenthesis, brackets
 Plug 'vim-scripts/matchit.zip' " extended % matching
-Plug 'ntpeters/vim-better-whitespace' " highlights trailing whiteSpace in red and provides :StripWhitespace to fix it
+Plug 'ntpeters/vim-better-whitespace' " highlights trailing whitespace
 
 " file searching
 Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim' " fuzzy file finder and so much more
@@ -74,10 +73,15 @@ Plug 'tpope/vim-markdown', { 'for': 'markdown' } " markdown support
 Plug 'elzr/vim-json', { 'for': 'json' } " JSON support
 
 " python
-Plug 'klen/python-mode' " python-mode. PyLint, Rope, Pydoc, breakpoints from box.
+Plug 'klen/python-mode' " python-mode. PyLint, Rope, Pydoc, breakpoints from box
+Plug 'zchee/deoplete-jedi' " code completion for python
 
-" Lua
+" lua
 Plug 'tbastos/vim-lua' " improved lua syntax and indentation
+
+" c/cpp
+Plug 'Shougo/neoinclude.vim' " completion for include files
+Plug 'Rip-Rip/clang_complete' " code completion for c/cpp
 
 call plug#end()
 " }}}
@@ -122,14 +126,28 @@ let g:fzf_layout = { 'down': '~30%' }
 
 " Deoplete.
 let g:deoplete#enable_at_startup = 1
+let g:deoplete#auto_completion_start_length = 1
+let g:deoplete#enable_smart_case = 1
+" let g:deoplete#omni#input_patterns.cpp = ['[^. *\t]\.\w*', '[^. *\t]\::\w*', '[^. *\t]\->\w*', '[<"].*/']
 
 " Cscope
-" Path to store the cscope files (cscope.files and cscope.out)
 let g:cscope_dir = '~/.cscope'
-
-" Configuration filename to look for when starting plugin
-let g:cscope_config = 'cscope.cfg'
-
-" Update the cscope files on startup of cscope
+let g:cscope_config = '.cscope_config'
 let g:cscope_update_on_start = 1
+let g:inccomplete_showdirs = 1
+
+" Clang
+let g:clang_auto_select = 0
+let g:clang_complete_auto = 0
+" let g:clang_complete_macros = 1
+" let g:clang_complete_patterns = 1
+" let g:clang_conceal_snippets = 0
+let g:clang_make_default_keymappings = 0
+let g:clang_omnicppcomplete_compliance = 0
+let g:clang_snippets = 0
+let g:clang_trailing_placeholder = 0
+let g:clang_user_options = '-std=c++11'
+let g:clang_library_path = '/usr/local/opt/llvm/lib/libclang.dylib'
+" Tmux complete
+let g:tmuxcomplete#trigger = ''
 " }}}
