@@ -1,2 +1,5 @@
 # CScope
-cscope.cfg
+.cscope_config
+
+# Clang
+.clang_complete
