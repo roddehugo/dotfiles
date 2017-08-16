@@ -73,11 +73,11 @@ Plug 'tpope/vim-markdown', { 'for': 'markdown' } " markdown support
 Plug 'elzr/vim-json', { 'for': 'json' } " JSON support
 
 " python
-Plug 'klen/python-mode' " python-mode. PyLint, Rope, Pydoc, breakpoints from box
-Plug 'zchee/deoplete-jedi' " code completion for python
+Plug 'klen/python-mode', { 'for': 'python' } " python-mode. PyLint, Rope, Pydoc, breakpoints from box
+Plug 'zchee/deoplete-jedi', { 'for': 'python' } " code completion for python
 
 " lua
-Plug 'tbastos/vim-lua' " improved lua syntax and indentation
+Plug 'tbastos/vim-lua', { 'for': 'lua' } " improved lua syntax and indentation
 
 " c/cpp
 Plug 'Shougo/neoinclude.vim' " completion for include files
@@ -148,6 +148,7 @@ let g:clang_snippets = 0
 let g:clang_trailing_placeholder = 0
 let g:clang_user_options = '-std=c++11'
 let g:clang_library_path = '/usr/local/opt/llvm/lib/libclang.dylib'
+
 " Tmux complete
 let g:tmuxcomplete#trigger = ''
 " }}}
