@@ -8,6 +8,7 @@ declare -a dirs_to_prepend=(
   '/usr/local/gcc-arm-none-eabi-4_9-2015q2/bin/' # Add gcc arm
   '/usr/local/flatbuffers/bin' # Add flatc
   '/usr/local/lua/bin' # Add lua 5.3
+  '/usr/local/opt/openssl/bin'
 )
 
 # Prepend directories to PATH
