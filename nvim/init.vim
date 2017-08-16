@@ -13,7 +13,6 @@ set viminfo^=% " remember info about open buffers on close
 set nocompatible " not compatible with vi
 set autoread " detect when a file is changed
 set hidden " current buffer can be put into background
-set noesckeys " disallow cursor keys in insert mode
 
 set history=1000 " change history length
 set undolevels=1000 " number of undo levels
@@ -360,6 +359,7 @@ if has('autocmd') && !exists('autocommands_loaded')
   autocmd BufWritePost * Neomake
 
   autocmd BufRead,BufNewFile Module set filetype=make
+  autocmd BufRead,BufNewFile *.luaconf set filetype=lua
   autocmd FileType make setlocal ts=8 sts=8 sw=8 noet
   autocmd FileType c,cpp setlocal ts=4 sts=4 sw=4 et omnifunc=clang_complete#ClangComplete
   autocmd FileType markdown,textile,gitcommit setlocal spell
