@@ -287,7 +287,8 @@ noremap <Leader>vq :VimuxCloseRunner<CR>
 noremap <leader>vs :VimuxInterruptRunner<CR>
 
 " fuzzy searching
-if isdirectory(".git")
+if isdirectory(".git") || filereadable(".git")
+  nnoremap <silent> <leader>c :Commit<cr>
   nnoremap <silent> <leader>f :GFiles<cr>
   nnoremap <silent> <leader>g :GFiles?<cr>
 else
