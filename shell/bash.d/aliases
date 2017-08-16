@@ -189,3 +189,7 @@ alias showdesktop='defaults write com.apple.finder CreateDesktop -bool true && k
 # Stuff I never really use but cannot delete either because of http://xkcd.com/530/
 alias volumeoff='osascript -e "set volume output muted true"'
 alias volumeon='osascript -e "set volume 7"'
+
+# Tell the OS to only use the internal Bluetooth
+alias btoff='sudo nvram bluetoothHostControllerSwitchBehavior=never'
+alias bton='sudo nvram -d bluetoothHostControllerSwitchBehavior'
