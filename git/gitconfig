@@ -5,6 +5,8 @@
 [alias]
   # View abbreviated SHA, description, and history graph of the latest 20 commits
   l = "!f() { git log -n ${1:-20} --pretty=oneline --graph --abbrev-commit --decorate; }; f"
+  # Show git history as a tree
+  t = "!f() { git log --graph --pretty=format:'%C(yellow)%h%Creset %s %Cred%d%Creset (%Cblue%an%Creset, %Cblue%ar%Creset)' --decorate ${@}; }; f"
   # View the current working tree status using the short format
   st = status -sb
   # Branch
@@ -41,8 +43,10 @@
   ds = diff --staged
   # `git di $number` shows the diff between the state `$number` revisions ago and the current state
   din = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
+  # Pull in remote changes for the current repository and init/update its submodules
+  plu = !"git pull && git submodule init && git submodule update"
   # Pull in remote changes for the current repository and all its submodules
-  pl = !"git pull && git submodule foreach git pull"
+  pls = !"git pull && git submodule foreach git pull"
   # Set upstream remote branch
   upstr = !"f() { git branch --set-upstream-to=origin/$1 $1; }; f"
   # I know what you did yesterday - great for follow-ups
@@ -65,25 +69,26 @@
   fm = "!f() { git log --pretty=format:'%C(yellow)%h%Creset %s %Cred%d%Creset' --decorate --date=short --grep=$1; }; f"
   # Find commits made by a contributor the last day
   fp = "!f() { git log --since '1 day ago' --online --author $1; }; f"
-  # Show git history as a tree
-  tree = "log --graph --pretty=format:'%C(yellow)%h%Creset %s %Cred%d%Creset (%Cblue%an%Creset, %Cblue%ar%Creset)' --decorate"
-  tree-all = "log --graph --pretty=format:'%C(yellow)%h%Creset %s %Cred%d%Creset (%Cblue%an%Creset, %Cblue%ar%Creset)' --decorate --all"
   # Fetch Github Pull Requests
   pr = "!f() { git fetch origin refs/pull/$1/head:pr/$1 && git checkout pr/$1; }; f"
   # Fetch Gitlab Merge Requests
   mr = "!f() { git fetch origin merge-requests/$2/head:mr/$2 && git checkout mr/$2; }; f"
+  # WIP
+  wip = !"git ca 'wip [skip ci]'"
+  # Refrech master after a merge
+  refresh = "!f() { git com && git plu && git dm; }; f"
   # Spring clean
   springcleaning = for-each-ref --sort=-committerdate --format='%(refname:short) %(committerdate:short)'
   # Update commit date '--use-commit-date' will compute the new date wrt. the commit being amended
   set-date = !"f() { \
     if [ \"$1\" = \"--use-committer-date\" ]; then \
-      commit_date=$(git log -n 1 --pretty=medium --format=\"%ct\" | head -n 3 | tail -n 1 | sed 's/Date:[ ]*//g'); \
-      new=$(date -R -d \"$(date -d @\"$commit_date\") $2\"); \
+      commit_date=$(git log -n 1 --pretty=medium --format=%ct); \
+      new=$(date -R -r $commit_date -v $2); \
     elif [ \"$1\" = \"--use-author-date\" ]; then \
-      commit_date=$(git log -n 1 --pretty=medium --format=\"%at\" | head -n 3 | tail -n 1 | sed 's/Date:[ ]*//g'); \
-      new=$(date -R -d \"$(date -d @\"$commit_date\") $2\"); \
+      commit_date=$(git log -n 1 --pretty=medium --format=%at); \
+      new=$(date -R -r $commit_date $2); \
     else \
-      new=$(date -R -v ${1:-now}); \
+      new=$(date -R -v ${1:-+0S}); \
     fi; \
     GIT_COMMITTER_DATE=\"$new\" git commit --amend --no-edit --date=\"$new\"; \
     git log -n 1 --pretty=fuller | egrep --color=auto \"[a-z0-9]{40}|(Author|Commit)Date\" -B 2; \
@@ -118,7 +123,7 @@
 [diff]
   # Detect copies as well as renames
   renames = copies
-  tool = meld
+  tool = vimdiff
 
 [difftool]
   # Wait for confirmation after each difftool invocation
@@ -131,10 +136,16 @@
   # Include summaries of merged commits in newly created merge commit messages
   log = true
   diffstat = true
-  tool = meld
+  tool = vimdiff
+
+[mergetool]
+  prompt = true
+
+[mergetool "vimdiff"]
+  cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
 
 [rebase]
-  # Automatically squashes fixup commits
+  # Automatically squash fixup commits
   autosquash = true
 
 [push]
@@ -156,7 +167,7 @@
   spellcheck = true
   fontdiff = Monaco,12,-1,5,50,0,0,0,0,0
   blameviewer = git gui blame
-  boldheaders = false
+  boldheaders = true
 
 [color "branch"]
   current = yellow reverse
