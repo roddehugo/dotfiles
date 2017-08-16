@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# Wait for serial port.
+function waitserial() {
+  local port=$1;
+  local pattern=/dev/cu.usbmodem*
+  while [[ -z "$port" ]]; do
+    port=($(ls $pattern 2> /dev/null))
+  done;
+  local id=0
+  if [[ ${#port[@]} -gt 1 ]]; then
+    for i in ${!port[@]}; do
+      printf "%s\t%s\n" "$i" "${port[$i]}"
+    done
+    printf "Select a serial port [0]: "
+    read id
+  fi;
+  port="${port[$id]}"
+  local output;
+  local start=$SECONDS;
+  while [[ -z "$output" || "$output" =~ "Bootloader?" ]]; do
+    [[ -r $port ]] && read -r -t 0.5 2> /dev/null output < $port;
+    if [[ -w $port && $(( $SECONDS - start )) -ge 2 ]]; then
+      echo "print 'Hello World!'" 2> /dev/null > $port;
+      start=$SECONDS;
+    fi;
+  done;
+  miniterm.py -e -f direct ${port} | tee /tmp/$(basename $port).log;
+}
