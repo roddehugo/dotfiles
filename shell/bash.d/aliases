@@ -76,6 +76,9 @@ alias egrep="egrep $grepflags"
 alias fgrep="fgrep $grepflags"
 unset grepflags
 
+# Ignore directories for Ack
+alias ack="ack --ignore-dir=obj/ --ignore-dir=lib/"
+
 # tmux aliases
 alias ta='tmux attach'
 alias tls='tmux ls'
