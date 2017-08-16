@@ -69,7 +69,7 @@ alias md='mkdir -p'
 alias rd='rmdir'
 alias d='dirs -v | head -10'
 
-# Always use color output for `grep`
+# Always use color output for `grep` and ignore directories.
 grepflags='--color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'
 alias grep="grep $grepflags"
 alias egrep="egrep $grepflags"
