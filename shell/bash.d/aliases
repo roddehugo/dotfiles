@@ -34,6 +34,7 @@ alias activate='source venv/bin/activate'
 
 # Because it's so much nicer
 alias vim='nvim'
+alias make='make -j8'
 
 # Update commands
 alias up-osx='sudo softwareupdate -i -a'
