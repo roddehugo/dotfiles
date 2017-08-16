@@ -39,7 +39,7 @@ alias make='make -j8'
 # Update commands
 alias up-osx='sudo softwareupdate -i -a'
 alias up-brew='brew update && brew upgrade && brew cleanup && brew cask cleanup && brew doctor'
-alias up-pip='gpip install --upgrade pip setuptools virtualenv wheel ipython'
+alias up-pip='gpip2 install --upgrade pip setuptools virtualenv wheel ipython'
 alias up-all='up-osx; up-brew; up-pip;'
 
 # Detect which `ls` flavor is in use
