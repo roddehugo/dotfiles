@@ -12,10 +12,9 @@ tm_separator_left_thin="❮"
 tm_separator_right_bold="▶"
 tm_separator_right_thin="❯"
 
-set -g status-left-length 32
+set -g status-left-length 10
 set -g status-right-length 150
 set -g status-interval 5
-
 
 # default statusbar colors
 # set-option -g status-bg colour0
@@ -28,10 +27,10 @@ set-window-option -g window-status-fg $tm_color_inactive
 set-window-option -g window-status-bg default
 set -g window-status-format "#I #W"
 
-# active window title colors
+# active window title color
 set-window-option -g window-status-current-fg $tm_color_active
 set-window-option -g window-status-current-bg default
-set-window-option -g  window-status-current-format "#[bold]#I #W"
+set-window-option -g window-status-current-format "#[bold]#I #W"
 
 # pane border
 set-option -g pane-border-fg $tm_color_inactive
@@ -51,11 +50,11 @@ set-window-option -g clock-mode-colour $tm_color_active
 tm_spotify="#[fg=$tm_color_music]#(osascript ~/Workspaces/applescripts/spotify.applescript)"
 tm_itunes="#[fg=$tm_color_music]#(osascript ~/Workspaces/applescripts/itunes.applescript)"
 tm_rdio="#[fg=$tm_color_music]#(osascript ~/Workspaces/applescripts/rdio.applescript)"
-tm_battery="#(battery -p -t)"
+tm_battery="#(battery -pte)"
 
-tm_date="#[fg=$tm_color_inactive] %R %d %b"
-tm_host="#[fg=$tm_color_feature,bold]#h"
+tm_date="#[fg=$tm_color_inactive]%R %d %b"
+tm_host="#[fg=$tm_color_feature,bold]#H"
 tm_session_name="#[fg=$tm_color_feature,bold]$tm_icon #S"
 
 set -g status-left $tm_session_name' '
-set -g status-right $tm_itunes' '$tm_battery' '$tm_date' '$tm_host
+set -g status-right $tm_itunes' '$tm_date' '$tm_battery'  '$tm_host
