@@ -33,17 +33,17 @@ Plug 'christoomey/vim-tmux-navigator' " let vim open tmux buffer
 Plug 'wellle/tmux-complete.vim' " autocompletion for visible strings in panes
 
 " utilities
-Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] } | Plug 'Xuyuanp/nerdtree-git-plugin' " file drawer
+" Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] } | Plug 'Xuyuanp/nerdtree-git-plugin' " file drawer
 Plug 'shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'neomake/neomake' " syntastic using neovim's job control functonality
 Plug 'mfulz/cscope.nvim' " cscope wrapper for neovim
-Plug 'vim-scripts/taglist.vim' " taglist sidebar
+" Plug 'vim-scripts/taglist.vim' " taglist sidebar
+" Plug 'aserebryakov/vim-todo-lists' " todo lists
 
 " enhancements
 Plug 'ervandew/supertab' " perform all your vim insert mode completions with Tab
 Plug 'tpope/vim-commentary' " comment stuff out
 Plug 'tpope/vim-ragtag' " endings for html, xml, etc. - enhances surround
-Plug 'tpope/vim-obsession' " continuously updated session files
 Plug 'tpope/vim-surround' " quoting/parenthesizing made simple
 Plug 'tpope/vim-repeat' " enable repeating supported plugin maps with '.'
 Plug 'tpope/vim-fugitive' " amazing git wrapper for vim

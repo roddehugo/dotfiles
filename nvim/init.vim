@@ -41,7 +41,7 @@ set ruler " show row and column ruler information
 set rulerformat=%=%h%m%r%w\ %(%c%V%),%l/%L\ %P
 
 " line numbers
-set relativenumber " relative line numbers
+" set relativenumber " relative line numbers
 set number " show line numbers
 set numberwidth=3 " set gutter width to n cols
 
@@ -123,9 +123,9 @@ set wildignore=*.o,*~,*.pyc,.git\*,.hg\*,.svn\*,.meteor
 " code folding
 set foldenable " fold by default
 set foldlevel=0 " fold all levels by default
-set foldcolumn=2 " sets the width for a gutter column
+set foldcolumn=1 " sets the width for a gutter column
 set foldmethod=indent " fold based on indent
-set foldnestmax=10 " deepest fold is 10 levels
+set foldnestmax=6 " deepest fold
 
 " cscope tags
 " a: places where this symbol is assigned a value
@@ -150,7 +150,7 @@ set cspc=3 " how many components of a file's path to display
 let mapleader=","
 
 " set paste toggle
-set pastetoggle=<leader>v
+set pastetoggle=<leader>vv
 
 " disable Ex mode
 noremap <silent> Q <nop>
@@ -192,12 +192,6 @@ noremap <leader>mm mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 " refactor all file
 noremap <leader>= ggVG=
 
-" shortcut to save
-noremap <leader>, :w<cr>
-
-" toggle NERDTree
-noremap <leader><tab> :NERDTreeToggle<cr>
-
 " switch between current and last buffer
 nnoremap <leader>; <c-^>
 
@@ -207,12 +201,9 @@ noremap <silent> <leader>W :w !sudo tee % > /dev/null<CR>
 " switch CWD to the directory of the open buffer
 noremap <silent> <leader>cd :cd %:p:h<cr>:pwd<cr>
 
-" search for word under the cursor
-nnoremap * "fyiw :/<c-r>f<cr>NN
-
 " edit vim config
 noremap <leader>ev :e! ~/.config/nvim/init.vim<cr>
-" edit gitconfi
+" edit git config
 noremap <leader>eg :e! ~/.gitconfig<cr>
 " edit tmux config
 noremap <leader>et :e! ~/.tmux.conf<cr>
@@ -360,9 +351,12 @@ if has('autocmd') && !exists('autocommands_loaded')
 
   autocmd BufRead,BufNewFile Module set filetype=make
   autocmd BufRead,BufNewFile *.luaconf set filetype=lua
+  autocmd BufRead,BufNewFile *.vue set filetype=html
   autocmd FileType make setlocal ts=8 sts=8 sw=8 noet
   autocmd FileType c,cpp setlocal ts=4 sts=4 sw=4 et omnifunc=clang_complete#ClangComplete
   autocmd FileType markdown,textile,gitcommit setlocal spell
+  autocmd FileType gitcommit set tw=72 cc=72
+  autocmd FileType todo setlocal spell foldmethod=marker foldlevel=0
 endif
 " }}}
 " {{{ Command line
