@@ -3,8 +3,8 @@
 # In case we want to use it somewhere
 export DOTFILES_DIRECTORY=$HOME/.dotfiles
 
-# Make vim the default editor
-export EDITOR="vim"
+# Make neovim the default editor
+export EDITOR="nvim"
 
 # Larger bash history (allow 32^3 entries; default is 500)
 export HISTSIZE=32768
@@ -12,7 +12,7 @@ export HISTFILESIZE=$HISTSIZE
 export HISTCONTROL=ignoredups
 
 # Make some commands not show up in history
-export HISTIGNORE="ls:cd:cd -:pwd:exit:date"
+export HISTIGNORE="ls:cd:cd -:pwd:exit:date:jrnl *"
 
 # Prefer US English and use UTF-8
 export LANG="en_US.UTF-8"
@@ -44,4 +44,7 @@ export LUA_PATH="/usr/local/lua/share/lua/5.3/?.lua;;"
 export LUA_CPATH="/usr/local/lua/lib/lua/5.3/?.so;;"
 
 # Use globally installed package in Node
-export NODE_PATH="/usr/local/lib"
+export NODE_PATH=/usr/local/lib
+
+# For pkg-config to find additional softwares.
+export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig
