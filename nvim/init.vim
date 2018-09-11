@@ -355,7 +355,8 @@ if has('autocmd') && !exists('autocommands_loaded')
   autocmd FileType make setlocal ts=8 sts=8 sw=8 noet
   autocmd FileType c,cpp setlocal ts=4 sts=4 sw=4 et omnifunc=clang_complete#ClangComplete
   autocmd FileType markdown,textile,gitcommit setlocal spell
-  autocmd FileType gitcommit set tw=72 cc=72
+  autocmd FileType gitcommit setlocal tw=72 cc=72
+  autocmd FileType gitrebase setlocal tw=87 cc=87
   autocmd FileType todo setlocal spell foldmethod=marker foldlevel=0
 endif
 " }}}
