@@ -42,8 +42,9 @@ alias tmp="$EDITOR $(mktemp)"
 # Update commands
 alias up-osx='sudo softwareupdate -i -a'
 alias up-brew='brew update && brew upgrade && brew cleanup && brew cask cleanup && brew doctor'
-alias up-pip='gpip2 install --upgrade pip setuptools virtualenv wheel ipython'
-alias up-all='up-osx; up-brew; up-pip;'
+alias up-pip2='gpip2 install --upgrade pip setuptools virtualenv wheel ipython'
+alias up-pip3='gpip3 install --upgrade pip setuptools virtualenv wheel ipython'
+alias up-all='up-osx; up-brew; up-pip2; up-pip3;'
 
 # Detect which `ls` flavor is in use
 if ls --color > /dev/null 2>&1; then # GNU `ls`
