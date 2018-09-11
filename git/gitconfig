@@ -4,15 +4,13 @@
 
 [alias]
   # View abbreviated SHA, description, and history graph of the latest 20 commits
-  l = "!f() { git log -n ${1:-30} --pretty=oneline --graph --abbrev-commit --decorate; }; f"
+  l = "!f() { git log --oneline --graph --decorate -n ${1:-30} ${@:2}; }; f"
   # Show git history as a tree
-  t = "!f() { git log --graph --pretty=format:'%C(yellow)%h%Creset %s %Cred%d%Creset (%Cblue%an%Creset, %Cblue%ar%Creset)' --decorate ${@}; }; f"
+  t = "!f() { git log --oneline --graph --decorate --branches ${@}; }; f"
   # View the current working tree status using the short format
   st = status -sb
   # Branch
   br = branch
-  # Patches
-  patches = log -p
   # Clone a repository including all submodules
   cr = clone --recursive
   # Commit
@@ -27,7 +25,8 @@
   co = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
   # Switch to master but fetch first
   com = "!f() { git fetch && git checkout master; }; f"
-  # Show verbose output about tags, branches or remotes
+  # Show verbose output about patches, tags, branches or remotes
+  patches = log -p
   tags = tag -l
   branches = branch -a
   remotes = remote -v
