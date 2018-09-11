@@ -3,3 +3,9 @@
 
 # Clang
 .clang_complete
+
+# GDB
+.gdb
+
+# Todo
+.todo

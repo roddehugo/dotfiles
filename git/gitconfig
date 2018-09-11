@@ -4,7 +4,7 @@
 
 [alias]
   # View abbreviated SHA, description, and history graph of the latest 20 commits
-  l = "!f() { git log -n ${1:-20} --pretty=oneline --graph --abbrev-commit --decorate; }; f"
+  l = "!f() { git log -n ${1:-30} --pretty=oneline --graph --abbrev-commit --decorate; }; f"
   # Show git history as a tree
   t = "!f() { git log --graph --pretty=format:'%C(yellow)%h%Creset %s %Cred%d%Creset (%Cblue%an%Creset, %Cblue%ar%Creset)' --decorate ${@}; }; f"
   # View the current working tree status using the short format
@@ -35,6 +35,8 @@
   amend = commit --amend --reuse-message=HEAD
   # Fixup the currently staged files to the specified commit
   fixup = commit --fixup
+  # Squash the currently staged files to the specified commit
+  squash = commit --squash
   # Remove branches that have already been merged with master
   dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
   # Show the diff between the latest commit and the current state
@@ -74,10 +76,10 @@
   # Fetch Gitlab Merge Requests
   mr = "!f() { git fetch origin merge-requests/$2/head:mr/$2 && git checkout mr/$2; }; f"
   # WIP
-  wip = !"git ca 'wip [skip ci]'"
+  wip = !"f() { git ca \"wip [skip ci]: $1\"; }; f"
   # Refrech master after a merge
   refresh = "!f() { git com && git plu && git dm; }; f"
-  # Spring clean
+  # Displays all refs with committerdate
   springcleaning = for-each-ref --sort=-committerdate --format='%(refname:short) %(committerdate:short)'
   # Update commit date '--use-commit-date' will compute the new date wrt. the commit being amended
   set-date = !"f() { \
