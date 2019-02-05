@@ -156,6 +156,8 @@
 [fetch]
   # Remove deleted branch upstream on local repository
   prune = true
+  # Fetch remote tags
+  tags = true
 
 [grep]
   lineNumber = true
