@@ -75,7 +75,7 @@ install_powerline_fonts() {
         e_info "Installing powerline fonts..."
         mkdir /tmp/fonts
         # Get the tarball
-        e_info "Dowloading fonts..."
+        e_info "Downloading fonts..."
         curl -fsSLo /tmp/fonts.tar.gz https://github.com/powerline/fonts/tarball/master
         # Extract to the fonts directory
         tar -zxf /tmp/fonts.tar.gz --strip-components 1 -C /tmp/fonts
