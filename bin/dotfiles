@@ -185,7 +185,7 @@ pre_mirrorfiles() {
     git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
     # And neovim
-    [[ ! -d ~/.config/nvim ]] && mkdir -p ~/.tmux/plugins
+    [[ ! -d ~/.config/nvim ]] && mkdir -p ~/.config/nvim
 }
 
 mirrorfiles() {
