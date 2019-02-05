@@ -53,7 +53,10 @@ set shortmess=atTI
 " }}}
 " {{{ Behavior
 " switch cursor to line in insert mode, and block when not
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
+set guicursor=i:ver25-iCursor
+
+" always activate spell corrections
+set spell
 
 " splits
 set splitbelow
@@ -164,6 +167,9 @@ nnoremap 0 ^
 " tweak ESC to be 'jk' typed fast
 inoremap jk <ESC>
 
+" tweak ESC to exit terminal mode
+tnoremap jk <C-\><C-n>
+
 " make use of ctags and csope easier
 noremap gt <C-]>
 
@@ -183,6 +189,9 @@ noremap <leader><space> :set hlsearch! hlsearch?<cr>
 " wipout buffer
 nnoremap <leader>bb :bw<cr>
 
+" switch between current and last buffer
+nnoremap <leader>; <c-^>
+
 " fix trailing spaces in buffer
 noremap <leader>ss :StripWhitespace<CR>
 
@@ -190,10 +199,10 @@ noremap <leader>ss :StripWhitespace<CR>
 noremap <leader>mm mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
 " refactor all file
-noremap <leader>= ggVG=
+noremap =f ggVG=
 
-" switch between current and last buffer
-nnoremap <leader>; <c-^>
+" refactor json file
+noremap =j :%!python -m json.tool<CR>
 
 " save a file as root (,W)
 noremap <silent> <leader>W :w !sudo tee % > /dev/null<CR>
@@ -278,13 +287,22 @@ noremap <leader>vs :VimuxInterruptRunner<CR>
 
 " fuzzy searching
 if isdirectory(".git") || filereadable(".git")
-  nnoremap <silent> <leader>c :Commit<cr>
+  nnoremap <silent> <leader>c :Commits<cr>
+  nnoremap <silent> <leader>C :BCommits<cr>
   nnoremap <silent> <leader>f :GFiles<cr>
   nnoremap <silent> <leader>g :GFiles?<cr>
+  nnoremap <silent> <leader>G :Rg<cr>
+  nnoremap <silent> <leader>F :Files<cr>
 else
   nnoremap <silent> <leader>f :Files<cr>
 endif
 nnoremap <silent> <leader>b :Buffers<cr>
+nnoremap <silent> <leader>t :Tags<cr>
+
+" mapping selecting mappings
+nmap <leader><tab> <plug>(fzf-maps-n)
+xmap <leader><tab> <plug>(fzf-maps-x)
+omap <leader><tab> <plug>(fzf-maps-o)
 
 " insert mode completion
 imap <c-x><c-k> <plug>(fzf-complete-word)
@@ -302,6 +320,18 @@ nmap <leader>cg :cs find g <C-R>=expand("<cword>")<CR><CR>   " definition
 nmap <leader>ci :cs find i <C-R>=expand("<cfile>")<CR><CR>   " files including
 nmap <leader>cs :cs find s <C-R>=expand("<cword>")<CR><CR>   " C symbol
 nmap <leader>ct :cs find t <C-R>=expand("<cword>")<CR><CR>   " text string
+
+" using a '/' search and key mapping
+nnoremap \z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\\|\\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2<CR>
+
+" relative path (src/foo.txt)
+nnoremap <leader>cf :let @+=expand("%")<CR>
+" absolute path (/something/src/foo.txt)
+nnoremap <leader>cF :let @+=expand("%:p")<CR>
+" filename (foo.txt)
+nnoremap <leader>ct :let @+=expand("%:t")<CR>
+" directory name (/something/src)
+nnoremap <leader>ch :let @+=expand("%:p:h")<CR>
 " }}}
 " {{{ Functions
 " window movement shortcuts
@@ -338,6 +368,56 @@ function! CScopeShortcuts()
     nmap gs <leader>cs
   endif
 endfunction
+
+" command to fold everything except what you searched for
+command! -nargs=* Foldsearch
+      \ if <q-args> != '' |
+      \   exe "normal /".<q-args>."\<CR>" |
+      \ endif |
+      \ if @/ != '' |
+      \   setlocal
+      \     foldexpr=FoldRegex(v:lnum,@/,2)
+      \     foldmethod=expr
+      \     foldlevel=0 |
+      \ endif
+
+function! FoldRegex(lnum,pat,context)
+  " get start/end positions for context lines
+  let startline=a:lnum-a:context
+  while startline < 1
+    let startline+=1
+  endwhile
+  let endline=a:lnum+a:context
+  while endline > line('$')
+    let endline-=1
+  endwhile
+
+  let returnval = 2
+
+  let pos=getpos('.')
+
+  " search from current line to get matches ON the line
+  call cursor(a:lnum, 1)
+  let matchline=search(a:pat,'cW',endline)
+  if matchline==a:lnum
+    let returnval = 0
+  elseif matchline > 0
+    " if current line didn't match, there could have been a match within
+    " trailing context lines
+    let returnval = 1
+  else
+    " if no match at current line, search leading context lines for a match
+    call cursor(startline, 1)
+    let matchline=search(a:pat,'cW',a:lnum)
+    if matchline > 0
+      let returnval = 1
+    endif
+  endif
+
+  call setpos('.',pos)
+
+  return returnval
+endfun
 " }}}
 " {{{ Autocommands
 if has('autocmd') && !exists('autocommands_loaded')
@@ -352,12 +432,15 @@ if has('autocmd') && !exists('autocommands_loaded')
   autocmd BufRead,BufNewFile Module set filetype=make
   autocmd BufRead,BufNewFile *.luaconf set filetype=lua
   autocmd BufRead,BufNewFile *.vue set filetype=html
+  autocmd BufRead,BufNewFile .notes set filetype=markdown
+  autocmd BufRead,BufNewFile jrnl*.txt set filetype=journal
   autocmd FileType make setlocal ts=8 sts=8 sw=8 noet
   autocmd FileType c,cpp setlocal ts=4 sts=4 sw=4 et omnifunc=clang_complete#ClangComplete
   autocmd FileType markdown,textile,gitcommit setlocal spell
   autocmd FileType gitcommit setlocal tw=72 cc=72
   autocmd FileType gitrebase setlocal tw=87 cc=87
-  autocmd FileType todo setlocal spell foldmethod=marker foldlevel=0
+  autocmd FileType todo setlocal spell ts=4 sts=4 sw=4
+  autocmd FileType journal setlocal tw=80 cc=80 spell spelllang=fr
 endif
 " }}}
 " {{{ Command line
