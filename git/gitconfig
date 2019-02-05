@@ -30,6 +30,8 @@
   tags = tag -l
   branches = branch -a
   remotes = remote -v
+  # Get the commit referenced by a tag
+  tagref = rev-list --abbrev-commit -n 1
   # Amend the currently staged files to the latest commit
   amend = commit --amend --reuse-message=HEAD
   # Fixup the currently staged files to the specified commit
