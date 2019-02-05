@@ -34,3 +34,6 @@ complete -o "nospace" -W "Contacts Calendar Dock Finder Mail Safari iTunes Syste
 
 # Add `license` tab completion
 complete -o "nospace" -W "mit apache2 gpl2" license;
+
+# Add `gitlab` tab completion
+complete -o "nospace" -W "pipelines" gitlab;
