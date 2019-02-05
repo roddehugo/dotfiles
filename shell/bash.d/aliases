@@ -63,6 +63,8 @@ alias la="ls -lhAF $colorflag"
 alias lsd="ls -lhF $colorflag | grep --color=never '^d'"
 # Always use color output for `ls`
 alias ls="ls -h $colorflag"
+# Sort files with increasing version numbers.
+alias lv="ls | sort --version-sort"
 unset colorflag
 
 # Shortcut to remove all with force
