@@ -194,6 +194,7 @@ mirrorfiles() {
     # `.dotfiles` repository.
     link "editor/editorconfig"          ".editorconfig"
     link "editor/editorthemes"          ".editorthemes"
+    link "gdb/gdbinit"                  ".gdbinit"
     link "git/gitconfig"                ".gitconfig"
     link "git/gitignore"                ".gitignore"
     link "git/tigrc"                    ".tigrc"
