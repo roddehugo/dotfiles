@@ -119,7 +119,7 @@ function prompt_command() {
 
 function prompt_align() {
   prompt_update;
-  local offset=37;
+  local offset=35;
 
   PLEFT="\[${blue}\]${shortPWD}\[${reset}\]";
   PRIGHT="\$(prompt_venv)\$(prompt_git)\[${reset}\]";
