@@ -196,6 +196,7 @@ mirrorfiles() {
     link "editor/editorthemes"          ".editorthemes"
     link "git/gitconfig"                ".gitconfig"
     link "git/gitignore"                ".gitignore"
+    link "git/tigrc"                    ".tigrc"
     link "nvim/init.vim"                ".config/nvim/init.vim"
     link "nvim/plugins.vim"             ".config/nvim/plugins.vim"
     link "shell/bash.d"                 ".bash.d"
