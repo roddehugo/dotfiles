@@ -152,7 +152,7 @@ alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET
 
 # One of @janmoesen’s ProTips
 for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
-  alias "$method"="lwp-request -m '$method'"
+  alias "$method"="lwp-request -E -m '$method'"
 done
 
 # URL-encode strings
