@@ -84,7 +84,7 @@
   mr = "!f() { git fetch origin merge-requests/$2/head:mr/$2 && git checkout mr/$2; }; f"
   # WIP
   wip = !"f() { git ca \"wip [skip ci]: $1\"; }; f"
-  # Refrech master after a merge
+  # Refresh master after a merge
   refresh = "!f() { git com && git plu && git dm; }; f"
   # Displays all refs with committerdate
   springcleaning = for-each-ref --sort=-committerdate --format='%(refname:short) %(committerdate:short)'
