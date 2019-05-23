@@ -31,6 +31,7 @@ Plug 'airblade/vim-gitgutter' " vim plugin which shows a git diff in the gutter 
 Plug 'benmills/vimux' " tmux integration for vim
 Plug 'christoomey/vim-tmux-navigator' " let vim open tmux buffer
 Plug 'wellle/tmux-complete.vim' " autocompletion for visible strings in panes
+Plug 'tmux-plugins/vim-tmux-focus-events' " autoread option work properly for terminal vim
 
 " utilities
 Plug 'shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
