@@ -38,6 +38,12 @@
   fixup = commit --fixup
   # Squash the currently staged files to the specified commit
   squash = commit --squash
+  # Undo last commit but keep staged changes.
+  undo = reset --soft HEAD^
+  # Commit staged changes reusing previous commit message.
+  recommit = commit -C ORIG_HEAD
+  # Split a Git commit and preserve message. Option '-p' for patch edition.
+  split-head = "!f() { git reset --soft @~ && git reset $@ && git commit -C ORIG_HEAD; }; f"
   # Remove branches that have already been merged with master
   dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
   # Show the diff between the latest commit and the current state
