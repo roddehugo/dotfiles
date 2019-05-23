@@ -77,7 +77,7 @@ set linebreak " set soft wrapping
 set showbreak=↪\ " show at breaking
 set textwidth=80 " set hard text wrapping (number of cols)
 set colorcolumn=80 " display wrapping column
-set formatoptions=crq " format using textwidth, including comments and gq
+set formatoptions=tcrq " format using textwidth, including comments and gq
 
 " highlighting
 set cursorline " highlight position of cursor
@@ -445,8 +445,8 @@ if has('autocmd') && !exists('autocommands_loaded')
   autocmd FileType markdown,textile,gitcommit setlocal spell
   autocmd FileType gitcommit setlocal tw=72 cc=72
   autocmd FileType gitrebase setlocal tw=87 cc=87
-  autocmd FileType todo setlocal spell ts=4 sts=4 sw=4
-  autocmd FileType journal setlocal tw=80 cc=80 spell spelllang=fr
+  autocmd FileType todo setlocal spell ts=2 sts=2 sw=2 et nofoldenable
+  autocmd FileType journal setlocal spell spelllang=fr tw=80 cc=80
 endif
 " }}}
 " {{{ Command line
