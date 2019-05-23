@@ -349,6 +349,12 @@ function! WinMove(key)
   endif
 endfunction
 
+" insert today's date in journal format
+command! Today call Today()
+function! Today()
+    exec "put =strftime('%m/%d/%a')"
+endfunction
+
 " return to last edit position when opening files
 command! GotoLastKnownLine call GotoLastKnownLine()
 function! GotoLastKnownLine()
