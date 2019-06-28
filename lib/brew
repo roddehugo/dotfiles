@@ -2,20 +2,10 @@
 
 brew_tap() {
   local -a taps=(
-    'caskroom/cask'
     'goles/battery'
-    'homebrew/apache'
-    'homebrew/completions'
-    'homebrew/dupes'
-    'homebrew/nginx'
-    'homebrew/php'
-    'homebrew/python'
-    'homebrew/science'
+    'homebrew/bundle'
+    'homebrew/cask'
     'homebrew/services'
-    'homebrew/tex'
-    'homebrew/versions'
-    'homebrew/x11'
-    'neovim/neovim'
   )
 
   # Install all taps
@@ -39,28 +29,23 @@ brew_formulae() {
     'cmake'
     'ctags'
     'cscope'
-    'curl --with-open-ssl'
+    'curl'
     'ffmpeg'
     'freetype'
     'fzf'
     'git'
-    'git-cola'
     'htop-osx'
     'imagemagick'
     'libxml2'
     'libyaml'
     'lua'
     'mcrypt'
-    'mysql'
     'neovim'
     'ngrep'
     'nmap'
     'openssl'
-    'php56 --with-apache --with-homebrew-curl --with-homebrew-libxslt --with-homebrew-openssl --without-snmp'
-    'pillow'
     'pip-completion'
     'pkg-config'
-    'postgresql'
     'python'
     'python3'
     'readline'
@@ -71,46 +56,51 @@ brew_formulae() {
     'sdl2'
     'sqlite'
     'ssh-copy-id'
-    'subversion'
-    'tmux --HEAD master'
+    'tmux --HEAD'
     'tmuxinator-completion'
     'tree'
-    'unrar'
-    'vagrant-completion'
-    'vim --override-system-vi'
-    'wget --with-iri'
+    'vim'
+    'wget'
     'zlib'
   )
 
   # Install all formulae
-  for index in ${!formulae[*]}; do
-    brew install ${formulae[$index]} --force
+  for formula in ${formulae[@]}; do
+    e_info "Brewing $formula"
+    brew install $formula
   done
 }
 
 brew_cask() {
   local -a casks=(
-    'betterzipql'
     'provisionql'
     'qlcolorcode'
     'qlimagesize'
     'qlmarkdown'
     'qlprettypatch'
     'qlstephen'
+    'qlvideo'
     'quicklook-csv'
     'quicklook-json'
     'suspicious-package'
     'webpquicklook'
-    'xquartz'
   )
 
   # Install all casks
-  brew cask install $( printf "%s " "${casks[@]}" )
+  for cask in ${casks[@]}; do
+    e_info "Casking $cask"
+    brew cask install $cask
+  done
 }
 
 run_softwares() {
   if type_exists 'brew'; then
     e_header "Updating Homebrew"
+
+    # Check everything is fine
+    brew doctor
+    [[ $? ]] && e_success "Done"
+
     # Use the latest version of Homebrew
     brew update
     [[ $? ]] && e_success "Done"
