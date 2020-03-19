@@ -1,14 +1,13 @@
 " vim:foldmethod=marker:foldlevel=0
 set history=1000
 
-" Use the Monokai Dark theme
+" use the monokai dark theme
 set background=dark
 colorscheme Tomorrow-Night
 
-" Make Vim more useful
+" make vim more useful
 set nocompatible
 filetype off
-
 " {{{ Vundle
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -17,303 +16,238 @@ set rtp+=~/.vim/bundle/Vundle.vim
 " alternatively, pass a path where Vundle should install plugins
 call vundle#begin('~/.vim/bundle')
 
-" Let Vundle manage Vundle
+" let Vundle manage Vundle
 Plugin 'gmarik/Vundle.vim'
 Plugin 'flazz/vim-colorschemes'
 
-" Let vim control tmux
+" let vim control tmux
 Plugin 'benmills/vimux'
 Plugin 'christoomey/vim-tmux-navigator'
 
-" Read editorconfig
+" read editorconfig
 Plugin 'editorconfig/editorconfig-vim'
 
-" Continuously updated session files
+" continuously updated session files
 Plugin 'tpope/vim-obsession'
 
-" A Git wrapper so awesome, it should be illegal
+" a git wrapper so awesome, it should be illegal
 Plugin 'tpope/vim-fugitive'
 
-" Enable repeating supported plugin maps with "."
+" enable repeating supported plugin maps with "."
 Plugin 'tpope/vim-repeat'
 
-" A tree explorer plugin for vim
-Plugin 'jistr/vim-nerdtree-tabs'
-Plugin 'scrooloose/nerdtree'
-Plugin 'Xuyuanp/nerdtree-git-plugin'
-
-" Vim plugin for intensely orgasmic commenting
+" vim plugin for intensely orgasmic commenting
 Plugin 'scrooloose/nerdcommenter'
 
-" Lean & mean status/tabline for vim that's light as air
+" lean & mean status/tabline for vim that's light as air
 Plugin 'bling/vim-airline'
 
-" Vim plugin, provides insert mode auto-completion for quotes, parens, brackets, etc.
+" vim plugin, provides insert mode auto-completion for quotes, parens, brackets, etc.
 Plugin 'Raimondi/delimitMate'
 
-" Vim plugin that displays tags in a window, ordered by scope
-Plugin 'majutsushi/tagbar'
-
-" Automated tag file generation and syntax highlighting of tags in Vim
-Plugin 'xolox/vim-misc'
-Plugin 'xolox/vim-easytags'
-
-" Vim script for text filtering and alignment
-" Plugin 'godlygeek/tabular'
-
-" Fuzzy file, buffer, mru, tag, etc finder.
-" Plugin 'kien/ctrlp.vim'
-
-" Unite and create user interfaces
+" unite and create user interfaces
 Plugin 'shougo/unite.vim'
 Plugin 'shougo/neomru.vim'
 Plugin 'shougo/vimproc.vim'
 
-" A code-completion engine for Vim
-" Plugin 'Valloric/YouCompleteMe'
-
-" Perform all your vim insert mode completions with Tab
+" perform all your vim insert mode completions with tab
 Plugin 'ervandew/supertab'
 
-" A Vim plugin which shows a git diff in the gutter and stages/reverts hunks
+" a vim plugin which shows a git diff in the gutter and stages/reverts hunks
 Plugin 'airblade/vim-gitgutter'
 
-" Quoting/parenthesizing made simple
+" quoting/parenthesizing made simple
 Plugin 'tpope/vim-surround'
 
-" Track the engine.
-"Plugin 'SirVer/ultisnips'
-
-" Snippets are separated from the engine. Add this if you want them
-" Plugin 'honza/vim-snippets'
-
-" Syntax checking hacks for vim
+" syntax checking hacks for vim
 Plugin 'scrooloose/syntastic'
 
-" Highlights trailing whitespace in red and provides :FixWhitespace to fix it
+" highlights trailing whitespace in red and provides :fixwhitespace to fix it
 Plugin 'ntpeters/vim-better-whitespace'
 
-" True Sublime Text style multiple selections for Vim
-Plugin 'terryma/vim-multiple-cursors'
-
-" Dash shortcuts to search app
-" Plugin 'rizzatti/dash.vim'
-
-" Manage Marked2 Application
+" manage marked2 application
 Plugin 'itspriddle/vim-marked'
 
-" Emmet for vim
-Plugin 'mattn/emmet-vim'
-
-" Vim python-mode. PyLint, Rope, Pydoc, breakpoints from box.
-Plugin 'klen/python-mode'
-
-" Using the jedi autocompletion library for VIM.
-Plugin 'davidhalter/jedi-vim'
-
-" Vim Jade template engine syntax highlighting and indention
-Plugin 'digitaltoad/vim-jade'
-
-" Some vim snippets for Meteor
-" Plugin 'cmather/vim-meteor-snippets'
-"
-" Autocompletion plugin for Meteor 1.0
-" Plugin 'Slava/tern-meteor'
-
-" Go development plugin for Vim
-" Plugin 'fatih/vim-go'
-
-" Markdown support
+" markdown support
 Plugin 'tpope/vim-markdown'
-
-" Vebugger is yet another debugger frontend plugin for Vim
-" Plugin 'idanarye/vim-vebugger'
-
-" PHP CodeStyle fixer
-"Plugin 'stephpy/vim-php-cs-fixer'
 
 call vundle#end()
 " }}}
-
 " {{{ Interface
-" Show line numbers
+" show line numbers
 set number
 set numberwidth=3
 
-" Break lines at word
+" break lines at word
 set linebreak
 
-" Wrap-broken line prefix
+" wrap-broken line prefix
 set showbreak=>\
 
-" Line wrap (number of cols)
+" line wrap (number of cols)
 set textwidth=120
 
 " format using textwidth, including comments and gq
 set formatoptions=crq
 
-" Set lines wrap
+" set lines wrap
 set wrap
 
-" Highlight matching brace
+" highlight matching brace
 set showmatch
 
-" Use visual bell (no beeping)
-set visualbell
+" use visual bell (no beeping)
+"set visualbell
 
-" Highlight all search results
+" disable all bells
+set belloff=all
+
+" highlight all search results
 set hlsearch
 
-" Enable smart-case search
+" enable smart-case search
 set smartcase
 
-" Always case-insensitive
+" always case-insensitive
 set ignorecase
 
-" Searches for strings incrementally
+" searches for strings incrementally
 set incsearch
 
-" Enable smart-indent
+" enable smart-indent
 set cindent
 
-" Enable smart-tabst
+" enable smart-tabst
 set smarttab
 
-" Number of spaces per Tab
+" number of spaces per Tab
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 
-" Use spaces instead of tabs
+" use spaces instead of tabs
 set expandtab
 
-" Show row and column ruler information
+" show row and column ruler information
 set ruler
 set rulerformat=%=%h%m%r%w\ %(%c%V%),%l/%L\ %P
 
-" Number of undo levels
+" number of undo levels
 set undolevels=1000
 
-" Backspace behaviour
+" backspace behaviour
 set backspace=indent,eol,start
 
 " a - terse messages (like [+] instead of [Modified]
 " t - truncate file names
-" I - no intro message when starting vim fileless
-" T - truncate long messages to avoid having to hit a key
+" i - no intro message when starting vim fileless
+" t - truncate long messages to avoid having to hit a key
 set shortmess=atTI
 
-" Display the number of (characters|lines) in visual mode, also cur command
+" display the number of (characters|lines) in visual mode, also cur command
 set showcmd
 
-" Remove preview poping from autocompletion
+" remove preview poping from autocompletion
 set completeopt=menu
 
-" Max items in popup menu
+" max items in popup menu
 set pumheight=8
 
-" Show fold column, fold by indent
+" show fold column, fold by indent
 set foldcolumn=2
 set foldmethod=indent
 
-" Always show tab line
+" always show tab line
 set showtabline=2
 
-" Highlight searches
+" highlight searches
 set hlsearch
 
-" Highlight position of cursor
+" highlight position of cursor
 set cursorline
 
-" Show the current mode
+" show the current mode
 set showmode
 
-" Show the filename in the window titlebar
+" show the filename in the window titlebar
 set title
 
-" Show “invisible” characters
+" show “invisible” characters
 set lcs=tab:▸\ ,trail:·,eol:¬,nbsp:_
 set list
 
-" Always show status line
+" always show status line
 set laststatus=2
 set wrap
 " }}}
-
-" {{{ behavior
-" Enable syntax highlighting
+" {{{ Behavior
+" enable syntax highlighting
 syntax on
 
-" Let the filetype plugins do the work.
+" let the filetype plugins do the work.
 filetype plugin on
 filetype indent on
 
-" Optimize for fast terminal connections
+" optimize for fast terminal connections
 set ttyfast
 
-" Centralize backups, swapfiles and undo history
+" centralize backups, swapfiles and undo history
 set backupdir=~/.vim/backups
 set directory=~/.vim/swaps
 set undodir=~/.vim/undo
 
-" Don’t create backups when editing files in certain directories
+" don’t create backups when editing files in certain directories
 set backupskip=/tmp/*,/private/tmp/*
 
-" Set to auto read when a file is changed from the outside
+" set to auto read when a file is changed from the outside
 set autoread
 
-" Use the OS clipboard by default (on versions compiled with `+clipboard`)
+" use the OS clipboard by default (on versions compiled with `+clipboard`)
 set clipboard=unnamed
 
-" Enhance command-line completion
+" enhance command-line completion
 set wildmenu
 
-" Allow cursor keys in insert mode
+" allow cursor keys in insert mode
 set esckeys
 
-" Add the g flag to search/replace by default
+" add the g flag to search/replace by default
 set gdefault
 
-" Use UTF-8 without BOM
+" use UTF-8 without BOM
 set encoding=utf-8 nobomb
 
-" Ignore compiled files
+" ignore compiled files
 set wildignore=*.o,*~,*.pyc,.git\*,.hg\*,.svn\*,.meteor
 
-" Change mapleader
+" change mapleader
 let mapleader=","
 
-" Respect modeline in files
+" respect modeline in files
 set modeline
 set modelines=4
 
-" Enable per-directory .vimrc files and disable unsafe commands in them
+" enable per-directory .vimrc files and disable unsafe commands in them
 " set exrc
 " set secure
 
-" Enable mouse in all modes
+" enable mouse in all modes
 set mouse=a
 
-" Disable error bells
+" disable error bells
 set noerrorbells
 
-" Don’t reset cursor to start of line when moving around.
+" don’t reset cursor to start of line when moving around.
 set nostartofline
 
-" I want new splits to appear to the right and to the bottom of the current
+" i want new splits to appear to the right and to the bottom of the current
 set splitbelow
 set splitright
 
-" Use relative line numbers
-if exists("&relativenumber")
-  set relativenumber
-  au BufReadPost * set relativenumber
-endif
-
-" Start scrolling three lines before the horizontal window border
+" start scrolling three lines before the horizontal window border
 set scrolloff=3
 
-" Strip trailing whitespace (,ss)
+" strip trailing whitespace (,ss)
 function! StripWhitespace()
   let save_cursor = getpos(".")
   let old_query = getreg('/')
@@ -323,20 +257,20 @@ function! StripWhitespace()
 endfunction
 noremap <leader>ss :call StripWhitespace()<CR>
 
-" Specify the behavior when switching between buffers
+" specify the behavior when switching between buffers
 try
   set switchbuf=useopen,usetab,newtab
   set stal=2
 catch
 endtry
 
-" Return to last edit position when opening files
+" return to last edit position when opening files
 autocmd BufReadPost *
       \ if line("'\"") > 0 && line("'\"") <= line("$") |
       \   exe "normal! g`\"" |
       \ endif
 
-" Window movement shortcuts
+" window movement shortcuts
 " move to the window in the direction shown, or create a new window
 function! WinMove(key)
   let t:curwin = winnr()
@@ -351,19 +285,15 @@ function! WinMove(key)
   endif
 endfunction
 
-" Remember info about open buffers on close
+" remember info about open buffers on close
 set viminfo^=%
 " }}}
-
-" {{{ plugins
-" To ensure that this plugin works well with Tim Pope's fugitive
-" If you wanted to avoid loading EditorConfig for any remote files over ssh
+" {{{ Plugins
+" to ensure that this plugin works well with Tim Pope's fugitive
+" if you wanted to avoid loading EditorConfig for any remote files over ssh
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 
-" If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsEditSplit="vertical"
-
-" Unite
+" unite
 let g:unite_source_history_yank_enable=1
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
 nnoremap <leader>t :Unite -buffer-name=files -start-insert file_rec/async:!<cr>
@@ -374,86 +304,22 @@ nnoremap <leader>o :Unite -buffer-name=outline -start-insert outline<cr>
 nnoremap <leader>y :Unite -buffer-name=yank history/yank<cr>
 nnoremap <leader>b :Unite -buffer-name=buffer buffer<cr>
 
-" Airline
+" airline
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 
-" PyMode
-let g:pymode_options_max_line_length = 120
-let g:pymode_breakpoint_cmd = "import ipdb; ipdb.set_trace() ### XXX BREAKPOINT"
-
-" Pymode Rope
-let g:pymode_rope = 0
-let g:pymode_rope_autoimport = 1
-let g:pymode_rope_lookup_project = 1
-let g:pymode_rope_goto_definition_bind = "<C-]>"
-
-" Pymode Lint
-let g:pymode_lint = 1
-let g:pymode_lint_checkers = ['pyflakes', 'pep8']
-let g:pymode_lint_options_pep8 = {'max_line_length': g:pymode_options_max_line_length}
-let g:pymode_lint_options_pylint = {'max-line-length': g:pymode_options_max_line_length}
-let g:pymode_lint_on_write = 1
-
-" Pymode Virtualenv
-let g:pymode_virtualenv = 1
-
-" NERDTree
-let g:NERDSpaceDelims = 1
-let NERDTreeIgnore = ['^\vendor$', '^\.meteor$', '\.pyc$', '^\.bundle$', '^\.bzr$', '^\.git$', '^\.hg$', '^\.sass-cache$', '^\.svn$', '^\.$', '^\.\.$']
-nmap <leader><tab> :NERDTreeTabsToggle<cr>
-
-" Snippets
-let g:UltiSnipsExpandTrigger="<leader><tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-f>"
-let g:UltiSnipsJumpBackwardTrigger="<c-b>"
-let g:UltiSnipsEditSplit="vertical"
-
-" Supertab
+" supertab
 let g:SuperTabDefaultCompletionType = 'context'
-
-" Easytags
-" Load tags for current folder
-" set tags=./tags;
-let g:easytags_events = ['BufWritePost']
-let g:easytags_auto_highlight = 0
-let g:easytags_on_cursorhold = 0
-let g:easytags_dynamic_files = 1
-let g:easytags_file = '~/.vim/tags'
-let g:easytags_by_filetype = 0
-let g:easytags_async = 1
-let g:easytags_autorecurse = 0
-
-" PHP CS Fixer
-" If php-cs-fixer is in $PATH, you don't need to define line below
-" let g:php_cs_fixer_path = "~/php-cs-fixer.phar" " define the path to the php-cs-fixer.phar
-let g:php_cs_fixer_level = "symfony"              " which level ?
-let g:php_cs_fixer_config = "default"             " configuration
-"let g:php_cs_fixer_config_file = '.php_cs'       " configuration file
-let g:php_cs_fixer_php_path = "php"               " Path to PHP
-" If you want to define specific fixers:
-"let g:php_cs_fixer_fixers_list = "linefeed,short_tag,indentation"
-let g:php_cs_fixer_enable_default_mapping = 1     " Enable the mapping by default (<leader>pcd)
-let g:php_cs_fixer_dry_run = 1                    " Call command with dry-run option
-let g:php_cs_fixer_verbose = 1                    " Return the output of command if 1, else an inline information.
 " }}}
-
-" {{{ autocommand
+" {{{ Autocommand
 if has('autocmd') && !exists('autocommands_loaded')
   let autocommands_loaded = 1
-  autocmd FileType php setlocal ts=4 sts=4 sw=4 et
-  autocmd FileType lua setlocal ts=4 sts=4 sw=4 et
-  autocmd FileType json setlocal ts=4 sts=4 sw=4 et
-  autocmd FileType yaml setlocal ts=2 sts=2 sw=2 et
-  autocmd FileType ruby setlocal ts=2 sts=2 sw=2 et
   autocmd FileType html setlocal ts=2 sts=2 sw=2 et indentkeys-=*<return>
-  autocmd FileType jade setlocal ts=2 sts=2 sw=2 et
   autocmd FileType make setlocal ts=8 sts=8 sw=8 noet
   autocmd FileType markdown,textile,gitcommit setlocal tw=0 wm=0 wrap spell
 endif
 "}}}
-
-" {{{ maps
+" {{{ Maps
 " disable Ex mode
 noremap Q <NOP>
 
@@ -463,28 +329,22 @@ nmap \t2 :set ts=2 sts=2 sw=2 noet<cr>
 nmap \s4 :set ts=4 sts=4 sw=4 et<cr>
 nmap \s2 :set ts=2 sts=2 sw=2 et<cr>
 
-" Shortcut to save
-" noremap <leader>, :w<cr>
-
-" Word under cursor
+" word under cursor
 nnoremap * *<C-O>:%s///gn<CR>
 
-" Jump to tags
+" jump to tags
 nnoremap <C-g> <C-]>
 
-" Toggle Tagbar
-nnoremap <leader>; :TagbarToggle<cr>
-
-" Refactor all file
+" refactor all file
 noremap <leader>= ggVG=
 
 " wipout buffer
 nmap <silent> <leader><leader>b :bw<cr>
 
-" Fold/Unfold map
+" fold/Unfold map
 noremap <space> za
 
-" Remap C-space to completion
+" remap C-space to completion
 inoremap <C-Space> <C-x><C-o>
 inoremap <C-@> <C-Space>
 
@@ -505,7 +365,7 @@ map <leader>et :e! ~/.tmux.conf<cr>
 " enable . command in visual mode
 vnoremap . :normal .<cr>
 
-" Smart way to move between windows
+" smart way to move between windows
 map <C-j> <C-W>j
 map <C-k> <C-W>k
 map <C-h> <C-W>h
@@ -518,17 +378,17 @@ nnoremap <silent> <leader><C-l> :call WinMove('l')<cr>
 " search for word under the cursor
 nnoremap <leader>/ "fyiw :/<c-r>f<cr>
 
-" Save a file as root (,W)
+" save a file as root (,W)
 noremap <leader>W :w !sudo tee % > /dev/null<CR>
 
-" Useful mappings for managing tabs
+" useful mappings for managing tabs
 map <leader>tn :tabnew<cr>
 map <leader>to :tabonly<cr>
 map <leader>tc :tabclose<cr>
 map <leader>tm :tabmove
 map <leader><leader>t :tabnext<cr>
 
-" Fugitive Shortcuts
+" fugitive Shortcuts
 nmap <leader>ge :Gedit<cr>
 nmap <silent> <leader>gc :Gcommit<cr>
 nmap <silent> <leader>gb :Gblame<cr>
@@ -536,58 +396,55 @@ nmap <silent> <leader>gr :Gread<cr>
 nmap <silent> <leader>gs :Gstatus<cr>
 nmap <silent> <leader>gw :Gwrite<cr>
 
-" Marked2 shortcuts
+" marked2 shortcuts
 nmap <leader>mo :MarkedOpen!<cr>
 nmap <leader>mq :MarkedQuit<cr>
 
 " switch between current and last buffer
 nmap <leader>. <c-^>
 
-" Let 'tl' toggle between this and the last accessed tab
+" let 'tl' toggle between this and the last accessed tab
 let g:lasttab = 1
 nmap <leader>tl :exe "tabn ".g:lasttab<cr>
 au TabLeave * let g:lasttab = tabpagenr()
 
-" Opens a new tab with the current buffer's path
-" Super useful when editing files in the same directory
+" opens a new tab with the current buffer's path
+" super useful when editing files in the same directory
 map <leader>oe :e <C-R>=expand("%:p:h") . "/" <CR>
 map <leader>ot :tabe <C-R>=expand("%:p:h") . "/" <CR>
 map <leader>os :split <C-R>=expand("%:p:h") . "/" <CR>
 map <leader>ov :vsplit <C-R>=expand("%:p:h") . "/" <CR>
 
-" Switch CWD to the directory of the open buffer
+" switch CWD to the directory of the open buffer
 map <leader>cd :cd %:p:h<cr>:pwd<cr>
 
-" Remap VIM 0 to first non-blank character
+" remap VIM 0 to first non-blank character
 map 0 ^
 
-" Tweak ESC to be 'jk' typed fast
+" tweak ESC to be 'jk' typed fast
 imap jk <ESC>
 
-" Prompt for a command to run
+" prompt for a command to run
 map <Leader>vp :VimuxPromptCommand<CR>
 
-" Run last command executed by VimuxRunCommand
+" run last command executed by VimuxRunCommand
 map <leader>vl :VimuxRunLastCommand<CR>
 
-" Inspect runner pane map
+" inspect runner pane map
 map <leader>vi :VimuxInspectRunner<CR>
 
-" Close vim tmux runner opened by VimuxRunCommand
+" close vim tmux runner opened by VimuxRunCommand
 map <Leader>vq :VimuxCloseRunner<CR>
 
-" Interrupt any command running in the runner pane map
+" interrupt any command running in the runner pane map
 map <leader>vs :VimuxInterruptRunner<CR>
-
 " }}}
-
-" {{{ misc
-" Remove the Windows ^M - when the encodings gets messed up
+" {{{ Misc
+" remove the Windows ^M - when the encodings gets messed up
 noremap <leader><leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 " }}}
-
-" {{{ command line
-" Smart mappings on the command line
+" {{{ Command Line
+" smart mappings on the command line
 cno $h ~/
 cno $d ~/Desktop/
 cno $c ./
@@ -595,7 +452,7 @@ cno $b ~/.bash.d/
 cno $w ~/Workspaces/
 cno $s ~/Sites/
 
-" Bash like keys for the command line
+" bash like keys for the command line
 cnoremap <C-A> <Home>
 cnoremap <C-E> <End>
 cnoremap <C-K> <C-U>
