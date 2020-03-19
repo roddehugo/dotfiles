@@ -168,7 +168,7 @@ install_packages() {
 
 link() {
     # Force create/replace the symlink.
-    ln -fs $DOTFILES_DIRECTORY/$1 ~/$2
+    ln -fs ${DOTFILES_DIRECTORY}/$1 ~/$2
 }
 
 pre_mirrorfiles() {
