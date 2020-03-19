@@ -8,8 +8,8 @@ bind main 3 !git commit --squash %(commit)
 bind main 4 !git commit --amend --no-edit
 bind main 5 !git commit --amend --edit
 bind main 9 !git rebase -i %(commit)
-bind main ` !git submodule update --init
-bind main ù !git fetch --tags --prune
+bind main U !git submodule update --init --recursive
+bind main T !git fetch --tags --prune
 bind main * !git pull --rebase origin %(branch)
 bind main ^ !git push --set-upstream origin %(branch)
 bind main ¨ !git push --set-upstream origin +%(branch)
