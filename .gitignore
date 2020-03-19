@@ -1,5 +1,6 @@
 installed/
 ssh/
+gnupg
 *.private
 marks/*
 
