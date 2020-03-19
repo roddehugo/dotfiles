@@ -1,13 +1,17 @@
 " vim:foldmethod=marker:foldlevel=0
 source ~/.config/nvim/plugins.vim
+
 " {{{ General
+
 set background=dark
 colorscheme Tomorrow-Night
 
 syntax on " enable syntax highlighting
 filetype plugin indent on " let the filetype plugins do the work.
+
 " }}}
 " {{{ System
+
 set viminfo^=% " remember info about open buffers on close
 
 set nocompatible " not compatible with vi
@@ -26,22 +30,24 @@ set mouse=a " enable mouse in all modes
 set modeline " respect modeline in files
 set modelines=2 " only read the first two lines
 
-set backupdir=~/.vim-tmp,~/.tmp,/tmp
-set directory=~/.vim-tmp,~/.tmp,/tmp
-set undodir=~/.vim-tmp,~/.tmp,/tmp
+set backupdir=~/.config/nvim/backups
+set directory=~/.config/nvim/swaps
+set undodir=~/.config/nvim/undo
+
 " }}}
 " {{{ Interface
+
 set laststatus=2 " always show status line
 set showtabline=2 " always show tab line
-set showcmd " display the number of (characters|lines) in visual mode
+set showcmd " display the number of characters and lines in visual mode
 set showmode " show the current mode
+set synmaxcol=180 " only syntax first n characters
 
 " ruler
 set ruler " show row and column ruler information
 set rulerformat=%=%h%m%r%w\ %(%c%V%),%l/%L\ %P
 
 " line numbers
-" set relativenumber " relative line numbers
 set number " show line numbers
 set numberwidth=3 " set gutter width to n cols
 
@@ -50,10 +56,16 @@ set numberwidth=3 " set gutter width to n cols
 " I - no intro message when starting vim fileless
 " T - truncate long messages to avoid having to hit a key
 set shortmess=atTI
+
 " }}}
 " {{{ Behavior
-" switch cursor to line in insert mode, and block when not
+
+" switch cursor to line in insert mode
 set guicursor=i:ver25-iCursor
+" switch cursor to block in other modes
+set guicursor+=n-v-c:block-nCursor
+" switch blinking in all mode
+set guicursor+=a:blinkon0
 
 " always activate spell corrections
 set spell
@@ -68,7 +80,7 @@ set inccommand=nosplit
 " movements
 set backspace=indent,eol,start " make backspace behave in a sane manner
 set nostartofline " don’t reset cursor to start of line when moving around.
-set scrolloff=5 "keep n lines below and above cursor.
+set scrolloff=5 " keep n lines below and above cursor.
 
 " line breaking/wrapping
 set wrap " turn on line wrapping
@@ -82,19 +94,19 @@ set formatoptions=tcrq " format using textwidth, including comments and gq
 " highlighting
 set cursorline " highlight position of cursor
 set showmatch " highlight matching brace
-set mat=2 " how many tenths of a second to blink
-match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$' " hightlight conflicts
+set mat=0 " how many tenths of a second to blink
+match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$' " highlight conflicts
 
 " search
-set magic  " set magic on, for regex
+set magic " set magic on, for regex
 set ignorecase " case insensitive searching
-set smartcase " case-sensitive if expresson contains a capital letter
+set smartcase " case-sensitive if expression contains a capital letter
 set hlsearch " highlight search results
 set incsearch " set incremental search, like modern browsers
-set nolazyredraw " don't redraw while executing macros
 set gdefault " add the g flag to search/replace by default
+set lazyredraw " don't redraw while executing macros
 
-" visual bell (no beeping)
+" visual bell and no error notification (no beeping)
 set noerrorbells
 set visualbell
 
@@ -148,8 +160,11 @@ set cspc=3 " how many components of a file's path to display
 " '-' implies previous results clearance, '0' or absence - don't use quickfix
 " set cscopequickfix=a-,c-,d-,e-,f-,g-,i-,s-,t-
 " set nocsverb " no verbosity for the default loading
+
 " }}}
 " {{{ Mappings
+
+" set custom mapleader
 let mapleader=","
 
 " set paste toggle
@@ -209,6 +224,9 @@ noremap <silent> <leader>W :w !sudo tee % > /dev/null<CR>
 
 " switch CWD to the directory of the open buffer
 noremap <silent> <leader>cd :cd %:p:h<cr>:pwd<cr>
+
+" create parent directories
+noremap <silent> <leader>md :call mkdir(expand('%:h'), 'p')
 
 " edit vim config
 noremap <leader>ev :e! ~/.config/nvim/init.vim<cr>
@@ -311,15 +329,15 @@ imap <c-x><c-j> <plug>(fzf-complete-file-ag)
 imap <c-x><c-l> <plug>(fzf-complete-line)
 
 " cscope searching
-nmap <leader>ca :cs find a <C-R>=expand("<cword>")<CR><CR>   " assignement
-nmap <leader>cc :cs find c <C-R>=expand("<cword>")<CR><CR>   " fct calling
-nmap <leader>cd :cs find d <C-R>=expand("<cword>")<CR><CR>   " fct called by
-nmap <leader>ce :cs find e <C-R>=expand("<cword>")<CR><CR>   " egrep
-nmap <leader>cf :cs find f <C-R>=expand("<cfile>")<CR><CR>   " file
-nmap <leader>cg :cs find g <C-R>=expand("<cword>")<CR><CR>   " definition
-nmap <leader>ci :cs find i <C-R>=expand("<cfile>")<CR><CR>   " files including
-nmap <leader>cs :cs find s <C-R>=expand("<cword>")<CR><CR>   " C symbol
-nmap <leader>ct :cs find t <C-R>=expand("<cword>")<CR><CR>   " text string
+nmap <leader>ca :cs find a <C-R>=expand("<cword>")<CR><CR> " assignement
+nmap <leader>cc :cs find c <C-R>=expand("<cword>")<CR><CR> " fct calling
+nmap <leader>cd :cs find d <C-R>=expand("<cword>")<CR><CR> " fct called by
+nmap <leader>ce :cs find e <C-R>=expand("<cword>")<CR><CR> " egrep
+nmap <leader>cf :cs find f <C-R>=expand("<cfile>")<CR><CR> " file
+nmap <leader>cg :cs find g <C-R>=expand("<cword>")<CR><CR> " definition
+nmap <leader>ci :cs find i <C-R>=expand("<cfile>")<CR><CR> " files including
+nmap <leader>cs :cs find s <C-R>=expand("<cword>")<CR><CR> " C symbol
+nmap <leader>ct :cs find t <C-R>=expand("<cword>")<CR><CR> " text string
 
 " using a '/' search and key mapping
 nnoremap \z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\\|\\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2<CR>
@@ -332,8 +350,10 @@ nnoremap <leader>cF :let @+=expand("%:p")<CR>
 nnoremap <leader>ct :let @+=expand("%:t")<CR>
 " directory name (/something/src)
 nnoremap <leader>ch :let @+=expand("%:p:h")<CR>
+
 " }}}
 " {{{ Functions
+
 " window movement shortcuts
 " move to the window in the direction shown, or create a new window
 function! WinMove(key)
@@ -424,11 +444,12 @@ function! FoldRegex(lnum,pat,context)
 
   return returnval
 endfun
+
 " }}}
 " {{{ Autocommands
+
 if has('autocmd') && !exists('autocommands_loaded')
   let autocommands_loaded = 1
-  autocmd VimEnter * CScopeStart
 
   autocmd BufEnter * CScopeShortcuts
   autocmd BufEnter * EnableStripWhitespaceOnSave
@@ -448,8 +469,10 @@ if has('autocmd') && !exists('autocommands_loaded')
   autocmd FileType todo setlocal spell ts=2 sts=2 sw=2 et nofoldenable
   autocmd FileType journal setlocal spell spelllang=fr tw=80 cc=80
 endif
+
 " }}}
 " {{{ Command line
+
 " smart mappings on the command line
 cnoremap $h ~/
 cnoremap $c ./
@@ -464,4 +487,5 @@ cnoremap <C-E> <End>
 cnoremap <C-K> <C-U>
 cnoremap <C-P> <Up>
 cnoremap <C-N> <Down>
+
 " }}}

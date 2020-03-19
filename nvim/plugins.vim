@@ -1,5 +1,7 @@
 " vim:foldmethod=marker:foldlevel=0
+
 " {{{ Plugin Manager
+
 " check whether vim-plug is installed and install it if necessary
 let plugpath = expand('<sfile>:p:h'). '/autoload/plug.vim'
 if !filereadable(plugpath)
@@ -15,8 +17,10 @@ if !filereadable(plugpath)
         exit
     endif
 endif
+
 " }}}
 " {{{ Plugins
+
 call plug#begin('~/.config/nvim/plugged')
 
 " colorschemes
@@ -35,8 +39,7 @@ Plug 'tmux-plugins/vim-tmux-focus-events' " autoread option work properly for te
 
 " utilities
 Plug 'shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'neomake/neomake' " syntastic using neovim's job control functonality
-Plug 'mfulz/cscope.nvim' " cscope wrapper for neovim
+Plug 'neomake/neomake' " syntastic using neovim's job control functionality
 Plug 'aserebryakov/vim-todo-lists' " todo lists
 
 " enhancements
@@ -80,12 +83,23 @@ Plug 'zchee/deoplete-jedi', { 'for': 'python' } " code completion for python
 Plug 'tbastos/vim-lua', { 'for': 'lua' } " improved lua syntax and indentation
 
 " c/cpp
-Plug 'Shougo/neoinclude.vim' " completion for include files
-Plug 'Rip-Rip/clang_complete' " code completion for c/cpp
+Plug 'Shougo/neoinclude.vim', { 'for': ['c', 'cpp']} " completion for include files
+Plug 'Rip-Rip/clang_complete', { 'for': ['c', 'cpp']} " code completion for c/cpp
+Plug 'mfulz/cscope.nvim', { 'for': ['c', 'cpp']} " cscope wrapper for neovim
+
+" go
+Plug 'fatih/vim-go', { 'for': 'go' } " development plugin
+Plug 'deoplete-plugins/deoplete-go', { 'for': 'go', 'do': 'make'} " code completion
+Plug 'jodosha/vim-godebug', { 'for': 'go' } " debugging plugin
 
 call plug#end()
+
 " }}}
 " {{{ Configuration
+
+" Use Ag with Ack
+let g:ackprg = 'ag --nogroup --nocolor --column'
+
 " Supertab
 let g:SuperTabDefaultCompletionType = "<c-n>"
 let g:SuperTabContextDefaultCompletionType = "<c-n>"
@@ -114,60 +128,16 @@ let g:pymode_lint_on_write = 1
 " Pymode Virtualenv
 let g:pymode_virtualenv = 1
 
-" NERDTree
-let NERDTreeShowHidden = 1
-let NERDTreeIgnore = ['^\vendor$', '^\.meteor$', '\.pyc$', '^\.bundle$', '^\.bzr$', '^\.git$', '^\.hg$', '^\.sass-cache$', '^\.svn$', '^\.$', '^\.\.$']
-
 " Don't hide quotes in json files
 let g:vim_json_syntax_conceal = 0
 
 " FZF
 let g:fzf_layout = { 'down': '~30%' }
 
-" Command for git grep
-" - fzf#vim#grep(command, with_column, [options], [fullscreen])
-" command! -bang -nargs=* Ggrep
-"   \ call fzf#vim#grep(
-"   \   'git grep --line-number '.shellescape(<q-args>), 0,
-"   \   { 'dir': systemlist('git rev-parse --show-toplevel')[0] }, <bang>0)
-
-" Override Colors command. You can safely do this in your .vimrc as fzf.vim
-" will not override existing commands.
-" command! -bang Colors
-"   \ call fzf#vim#colors({'left': '15%', 'options': '--reverse --margin 30%,0'}, <bang>0)
-
-" Augmenting Ag command using fzf#vim#with_preview function
-"   * fzf#vim#with_preview([[options], preview window, [toggle keys...]])
-"     * For syntax-highlighting, Ruby and any of the following tools are required:
-"       - Highlight: http://www.andre-simon.de/doku/highlight/en/highlight.php
-"       - CodeRay: http://coderay.rubychan.de/
-"       - Rouge: https://github.com/jneen/rouge
-"
-"   :Ag  - Start fzf with hidden preview window that can be enabled with "?" key
-"   :Ag! - Start fzf in fullscreen and display the preview window above
-" command! -bang -nargs=* Ag
-"   \ call fzf#vim#ag(<q-args>,
-"   \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-"   \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
-"   \                 <bang>0)
-
-" Similarly, we can apply it to fzf#vim#grep. To use ripgrep instead of ag:
-" command! -bang -nargs=* Rg
-"   \ call fzf#vim#grep(
-"   \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
-"   \   <bang>0 ? fzf#vim#with_preview('up:60%')
-"   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-"   \   <bang>0)
-
-" Likewise, Files command with preview window
-" command! -bang -nargs=? -complete=dir Files
-"   \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
-
 " Deoplete.
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#auto_completion_start_length = 1
 let g:deoplete#enable_smart_case = 1
-" let g:deoplete#omni#input_patterns.cpp = ['[^. *\t]\.\w*', '[^. *\t]\::\w*', '[^. *\t]\->\w*', '[<"].*/']
 
 " Cscope
 let g:cscope_dir = '~/.cscope'
@@ -186,11 +156,12 @@ let g:clang_omnicppcomplete_compliance = 0
 let g:clang_snippets = 0
 let g:clang_trailing_placeholder = 0
 let g:clang_user_options = '-std=c++11'
-let g:clang_library_path = '/usr/local/opt/llvm/lib/libclang.dylib'
+let g:clang_library_path = '/Library/Developer/CommandLineTools/usr/lib/libclang.dylib'
 
 " Tmux complete
 let g:tmuxcomplete#trigger = ''
 
 " Vim Todo List
 let g:VimTodoListsMoveItems = 0
+
 " }}}
