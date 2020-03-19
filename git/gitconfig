@@ -102,6 +102,8 @@
     GIT_COMMITTER_DATE=\"$new\" git commit --amend --no-edit --date=\"$new\"; \
     git log -n 1 --pretty=fuller | egrep --color=auto \"[a-z0-9]{40}|(Author|Commit)Date\" -B 2; \
   }; f"
+  # Update commit author
+  set-author = !"f() { git commit --amend --no-edit --author=\"${@}\"; }; f"
 
 [apply]
   # Detect whitespace errors when applying a patch
