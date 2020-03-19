@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Load completion installed via Homebrew
+[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
+
 # Add completion for marks shortcuts
 _completemarks() {
   local curw=${COMP_WORDS[COMP_CWORD]}
@@ -9,13 +12,10 @@ _completemarks() {
 }
 complete -F _completemarks jump unmark
 
-# Enable vagrant command autocompletion for `vg` alias as well
-complete -o default -F _vagrant vg
+# Enable pip command autocompletion for `gpip3` alias as well
+complete -o default -F _pip gpip3
 
-# Enable pip command autocompletion for `gpip` alias as well
-complete -o default -F _pip gpip
-
-# Enable git command  autocompletion for 'g' as well
+# Enable git command autocompletion for 'g' as well
 complete -o default -o nospace -F _git g
 
 # Enable Tab completion to select options
@@ -30,10 +30,16 @@ complete -o default -o nospace -F _git g
 complete -W "NSGlobalDomain" defaults;
 
 # Add `killall` tab completion for common apps
-complete -o "nospace" -W "Contacts Calendar Dock Finder Mail Safari iTunes SystemUIServer Terminal Twitter" killall;
+complete -o "nospace" -W "Calendar Contacts Dock Finder Mail Music Safari SystemUIServer Terminal" killall;
 
 # Add `license` tab completion
 complete -o "nospace" -W "mit apache2 gpl2" license;
 
+# Add `load` tab completion
+complete -o "nospace" -W "rvm nvm" load;
+
 # Add `gitlab` tab completion
 complete -o "nospace" -W "pipelines" gitlab;
+
+# Add 'go' tab completion
+complete -C "gocomplete" go

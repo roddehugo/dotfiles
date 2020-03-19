@@ -29,7 +29,7 @@ function e_note() {
   printf "${underline}${bold}${blue}Note:${reset}  ${blue}%s${reset}\n" "$@"
 }
 
-# Credt: https://github.com/kevva/dotfiles
+# Credit: https://github.com/kevva/dotfiles
 # Usage for seeking information
 #
 # seek_confirmation "Ask a question"
@@ -81,14 +81,14 @@ function is_git_repository() {
 #   some other action
 # fi
 function type_exists() {
-  if [[ $(type -P $1) ]]; then
+  if [[ $(type -t $1) ]]; then
     return 0
   fi
   return 1
 }
 
 # Test whether a Homebrew formula is already installed
-# $1 - formula name (may include options)
+# $1 = formula name (may include options)
 function formula_exists() {
   if $(brew list $1 >/dev/null); then
     printf "%s already installed.\n" "$1"

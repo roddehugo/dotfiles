@@ -22,29 +22,28 @@ alias ..6='cd ../../../../../..'
 alias desktop='cd ~/Desktop'
 alias documents='cd ~/Documents'
 alias downloads='cd ~/Downloads'
-alias sites='cd ~/Sites/projects'
+alias sites='cd ~/Sites'
 alias workspaces='cd ~/Workspaces'
+alias projects='cd ~/Projects'
 alias icloud='cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/'
 
 # So lazy am i
 alias g='git'
 alias h='history'
 alias j='jobs'
-alias vg='vagrant'
+alias n='nvim'
 alias activate='source venv/bin/activate'
 
 # Because it's so much nicer
-alias vi='nvim'
-alias vim='nvim'
+alias edit="$EDITOR"
 alias make='make -j8'
 alias tmp="$EDITOR $(mktemp)"
 
 # Update commands
 alias up-osx='sudo softwareupdate -i -a'
-alias up-brew='brew update && brew upgrade && brew cleanup && brew cask cleanup && brew doctor'
-alias up-pip2='gpip2 install --upgrade pip setuptools virtualenv wheel ipython'
-alias up-pip3='gpip3 install --upgrade pip setuptools virtualenv wheel ipython'
-alias up-all='up-osx; up-brew; up-pip2; up-pip3;'
+alias up-brew='brew update && brew upgrade && brew cleanup && brew doctor'
+alias up-pip='gpip3 install --upgrade pip setuptools wheel virtualenv ipython'
+alias up-all='up-osx; up-brew; up-pip;'
 
 # Detect which `ls` flavor is in use
 if ls --color > /dev/null 2>&1; then # GNU `ls`
@@ -92,6 +91,8 @@ alias tat='tmux attach -t'
 alias tns='tmux new-session -s'
 
 # Print path directories
+
+complete -C /Users/hugo/Workspaces/go/bin/gocomplete go
 alias path='echo -e ${PATH//:/\\n}'
 
 # Recommended 'top' invocation to minimize resources
@@ -110,9 +111,6 @@ alias map='xargs -n1'
 
 # Trim new lines and copy to clipboard
 alias c='tr -d "\n" | pbcopy'
-
-# Copy my public key to the pasteboard
-alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | e_success 'Public key copied to pasteboard.'"
 
 # Usage: cppcompile main.cpp
 alias cppcompile='c++ -std=c++11 -stdlib=libc++'
@@ -177,10 +175,6 @@ command -v md5sum > /dev/null || alias md5sum='md5'
 # OS X has no `sha1sum` nor `sha256sum`, so use `shasum` as a fallback
 command -v sha1sum > /dev/null || alias sha1sum='shasum'
 command -v sha256sum > /dev/null || alias sha256sum="shasum -a 256"
-
-# Kill all the tabs in Chrome to free up memory
-# [C] explained: http://www.commandlinefu.com/commands/view/402/exclude-grep-from-your-grepped-output-of-ps-alias-included-in-description
-alias chromekill="ps ux | grep '[C]hrome Helper --type=renderer' | grep -v extension-process | tr -s ' ' | cut -d ' ' -f2 | xargs kill"
 
 # Lock the screen (when going AFK)
 alias afk='/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend'

@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 
-# Handle pip global installation
-function gpip2(){
-  PIP_REQUIRE_VIRTUALENV="" pip2 "$@"
-}
-
-# For pip3
+# For pip, should be pip3 by default
 function gpip3(){
   PIP_REQUIRE_VIRTUALENV="" pip3 "$@"
 }

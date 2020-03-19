@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+# Load nvm environment along with bash completion
+function load_nvm() {
+  if [[ -n "$NVMPATH" ]]; then
+    local -a files=(
+      ${NVMPATH}/nvm.sh
+      ${NVMPATH}/bash_completion
+    )
+
+    # If these files are readable, source them
+    for index in ${!files[*]}; do
+      if [[ -r ${files[$index]} ]]; then
+        source ${files[$index]}
+      fi
+    done
+  fi
+}
+
+# Load rvm environment along with bash completion
+function load_rvm() {
+  if [[ -n "$RVMPATH" ]]; then
+    local -a files=(
+      ${RVMPATH}/scripts/rvm
+      ${RVMPATH}/scripts/completion
+    )
+
+    # If these files are readable, source them
+    for index in ${!files[*]}; do
+      if [[ -r ${files[$index]} ]]; then
+        source ${files[$index]}
+      fi
+    done
+  fi
+}
+
+# Function to load an environment
+# $1 = environment name
+function load() {
+  local loader="load_$1"
+  if type_exists "$loader"; then
+    eval "$loader"
+    return 1
+  fi
+  return 0
+}

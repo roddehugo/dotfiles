@@ -5,10 +5,7 @@ PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
 
 # Directories to be prepended to PATH
 declare -a dirs_to_prepend=(
-  '/usr/local/gcc-arm-none-eabi-4_9-2015q2/bin/' # Add gcc arm
-  '/usr/local/flatbuffers/bin' # Add flatc
-  '/usr/local/lua/bin' # Add lua 5.3
-  '/usr/local/opt/openssl/bin'
+  '/usr/local/opt/openssl/bin' # Add Brewed OpenSSL
 )
 
 # Prepend directories to PATH
@@ -22,6 +19,10 @@ unset dirs_to_prepend
 
 # Directories to be appended to PATH
 declare -a dirs_to_append=(
+  '/usr/local/texlive/2019/bin/x86_64-darwin' # Add Brewed TexLive
+  '/usr/local/CrossPack-AVR/bin/' # Add Brewed CrossPack AVR
+  "${RVMPATH}/bin" # Add RVM command line tools
+  "${GOPATH}/bin" # Add Go command line tools
 )
 
 # Append directories to PATH

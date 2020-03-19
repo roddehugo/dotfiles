@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Tell readline where to find configuration
+export INPUTRC=$HOME/.inputrc
+
 # In case we want to use it somewhere
 export DOTFILES_DIRECTORY=$HOME/.dotfiles
 
@@ -34,7 +37,7 @@ export MANPAGER="less -X"
 # Set .marks as the folder for jumping symlinks
 export MARKPATH=$DOTFILES_DIRECTORY/marks
 
-# Define databases
+# Define database paths
 export PGDATA=/usr/local/var/postgres
 export MYSQLDATA=/usr/local/var/mysql
 export MONGODATA=/usr/local/var/mongo
@@ -46,5 +49,15 @@ export LUA_CPATH="/usr/local/lua/lib/lua/5.3/?.so;;"
 # Use globally installed package in Node
 export NODE_PATH=/usr/local/lib
 
-# For pkg-config to find additional softwares.
+# For pkg-config to find additional softwares
 export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig
+
+# Tell nvm where is the working directory
+export NVM_DIR=$HOME/.nvm
+export NVMPATH=$NVM_DIR
+
+# Tell rvm where is the working directory.
+export RVMPATH=$HOME/.rvm
+
+# Tell go where is the working directory
+export GOPATH=$HOME/Workspaces/go
