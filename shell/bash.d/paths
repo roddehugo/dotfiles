@@ -5,12 +5,13 @@ PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
 
 # Directories to be prepended to PATH
 declare -a dirs_to_prepend=(
-  '/usr/local/opt/openssl/bin' # Add Brewed OpenSSL
+  '/usr/local/opt/openssl/bin' # Add brewed OpenSSL
+  '/usr/local/opt/qt/bin' # Add brewed Qt
 )
 
 # Prepend directories to PATH
 for index in ${!dirs_to_prepend[*]}; do
-  if [ -d ${dirs_to_prepend[$index]} ]; then
+  if [ -d "${dirs_to_prepend[$index]}" ]; then
     # If these directories exist, then prepend them to existing PATH
     PATH="${dirs_to_prepend[$index]}:$PATH"
   fi
@@ -19,16 +20,15 @@ unset dirs_to_prepend
 
 # Directories to be appended to PATH
 declare -a dirs_to_append=(
-  '/usr/local/texlive/2019/bin/x86_64-darwin' # Add Brewed TexLive
-  '/usr/local/CrossPack-AVR/bin/' # Add Brewed CrossPack AVR
-  "${RVMPATH}/bin" # Add RVM command line tools
-  "${GOPATH}/bin" # Add Go command line tools
+  '/usr/local/texlive/2019/bin/x86_64-darwin' # Add brewed TexLive
+  '/usr/local/CrossPack-AVR/bin' # Add brewed avr toolchain
+  '/usr/local/Espressif/xtensa-lx106-elf/bin' # Add installed xtensa toolchain
 )
 
 # Append directories to PATH
 for index in ${!dirs_to_append[*]}
 do
-  if [ -d ${dirs_to_append[$index]} ]; then
+  if [ -d "${dirs_to_append[$index]}" ]; then
     # If these bins exist, then append them to existing PATH
     PATH="$PATH:${dirs_to_append[$index]}"
   fi

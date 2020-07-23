@@ -1,5 +1,26 @@
 #!/usr/bin/env bash
 
+# Load docker environment
+function load_docker() {
+  if [[ -z "$DOCKER_HOST" ]]; then
+    if type_exists 'docker-machine'; then
+      local machine="docker"
+      # Load docker machine environment
+      eval $(docker-machine env $machine)
+      # Get docker machine IP address
+      local ip="$(docker-machine ip $machine 2>/dev/null)"
+      if [[ -n "$ip" ]]; then
+        if ! grep "$ip" /etc/hosts >>/dev/null; then
+          # Clear existing docker.local entry from /etc/hosts
+          sudo sed -i "" "/[[:space:]]$machine\.local$/d" /etc/hosts
+          # Add docker machine IP to hosts
+          sudo /usr/bin/env bash -c "echo \"$ip	$machine.local\" >> /etc/hosts"
+        fi
+      fi
+    fi
+  fi
+}
+
 # Load nvm environment along with bash completion
 function load_nvm() {
   if [[ -n "$NVMPATH" ]]; then

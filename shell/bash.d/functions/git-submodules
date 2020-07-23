@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Initialize submodule from .gitmodules file
+function git-submodules() {
+    git config -f .gitmodules --get-regexp '^submodule\..*\.path$' |
+    while read path_key path
+    do
+        local url_key=$(echo $path_key | sed 's/\.path/.url/')
+        local url=$(git config -f .gitmodules --get "$url_key")
+        git submodule add $url $path
+    done
+}

@@ -22,21 +22,16 @@ alias ..6='cd ../../../../../..'
 alias desktop='cd ~/Desktop'
 alias documents='cd ~/Documents'
 alias downloads='cd ~/Downloads'
-alias sites='cd ~/Sites'
 alias workspaces='cd ~/Workspaces'
 alias projects='cd ~/Projects'
 alias icloud='cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/'
 
-# So lazy am i
-alias g='git'
-alias h='history'
-alias j='jobs'
-alias n='nvim'
+# Python virtualenv
 alias activate='source venv/bin/activate'
 
 # Because it's so much nicer
+alias g="git"
 alias edit="$EDITOR"
-alias make='make -j8'
 alias tmp="$EDITOR $(mktemp)"
 
 # Update commands
@@ -84,15 +79,14 @@ unset grepflags
 # Ignore directories for Ack
 alias ack="ack --ignore-dir=obj/ --ignore-dir=lib/"
 
-# tmux aliases
+# Tmux aliases
+alias tstart='tmux start-server'
 alias ta='tmux attach'
-alias tls='tmux ls'
 alias tat='tmux attach -t'
+alias tls='tmux list-sessions'
 alias tns='tmux new-session -s'
 
 # Print path directories
-
-complete -C /Users/hugo/Workspaces/go/bin/gocomplete go
 alias path='echo -e ${PATH//:/\\n}'
 
 # Recommended 'top' invocation to minimize resources
@@ -110,7 +104,7 @@ alias timer='e_header "Timer started. Stop with Ctrl-D." && date && time cat && 
 alias map='xargs -n1'
 
 # Trim new lines and copy to clipboard
-alias c='tr -d "\n" | pbcopy'
+alias trcopy='tr -d "\n" | pbcopy'
 
 # Usage: cppcompile main.cpp
 alias cppcompile='c++ -std=c++11 -stdlib=libc++'
