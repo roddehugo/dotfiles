@@ -1,18 +1,27 @@
 # Custom key mappings.
 bind generic 0 !@sh -c "printf '%s' '%(commit)' | pbcopy"
 bind generic - !git wip
-bind refs B !git rebase -i %(branch)
+
+bind status N !@git add --intent-to-add %(file)
+bind status D !@?rm %(file)
+
+bind refs N !@git branch "%(prompt Enter branch name: )"
+bind refs B !git rebase --interactive %(branch)
+
 bind main ! !git revert %(commit)
 bind main 2 !git commit --fixup %(commit)
 bind main 3 !git commit --squash %(commit)
 bind main 4 !git commit --amend --no-edit
 bind main 5 !git commit --amend --edit
-bind main 9 !git rebase -i %(commit)
+bind main 9 !git rebase --interactive %(commit)
 bind main U !git submodule update --init --recursive
-bind main T !git fetch --tags --prune
+bind main F !git fetch --prune
+bind main T !git fetch --tags --prune-tags
 bind main * !git pull --rebase origin %(branch)
 bind main ^ !git push --set-upstream origin %(branch)
-bind main ¨ !git push --set-upstream origin +%(branch)
+bind main + !git push --set-upstream origin +%(branch)
+
+bind main t !@git tag "%(prompt Enter tag name: )" %(commit)
 
 # Custom refresh mode
 set refresh-mode = auto

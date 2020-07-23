@@ -1,9 +1,9 @@
 [user]
-  email = rodde.hugo@gmail.com
+  email = hugo.rodde@me.com
   name = Hugo Rodde
 
 [alias]
-  # View abbreviated SHA, description, and history graph of the latest 20 commits
+  # View abbreviated SHA, description, and history graph of the latest 30 commits
   l = "!f() { git log --oneline --graph --decorate -n ${1:-30} ${@:2}; }; f"
   # Show git history as a tree
   t = "!f() { git log --oneline --graph --decorate --branches ${@}; }; f"
@@ -23,6 +23,8 @@
   cu = !"git add -u && git commit -m"
   # Switch to a branch, creating it if necessary
   co = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
+  # Switch to develop but fetch first
+  cod = "!f() { git fetch && git checkout develop; }; f"
   # Switch to master but fetch first
   com = "!f() { git fetch && git checkout master; }; f"
   # Initialize a repository with an empty commit
@@ -43,7 +45,7 @@
   # Undo last commit but keep staged changes.
   undo = reset --soft HEAD^
   # Commit staged changes reusing previous commit message.
-  recommit = commit -C ORIG_HEAD
+  redo = commit -C ORIG_HEAD
   # Split a Git commit and preserve message. Option '-p' for patch edition.
   split-head = "!f() { git reset --soft @~ && git reset $@ && git commit -C ORIG_HEAD; }; f"
   # Remove branches that have already been merged with master
@@ -105,7 +107,7 @@
     git log -n 1 --pretty=fuller | egrep --color=auto \"[a-z0-9]{40}|(Author|Commit)Date\" -B 2; \
   }; f"
   # Update commit author
-  set-author = !"f() { git commit --amend --no-edit --author=\"${@}\"; }; f"
+  set-author = !"f() { git commit --allow-empty --amend --no-edit --author=\"${@}\"; }; f"
 
 [apply]
   # Detect whitespace errors when applying a patch
@@ -164,6 +166,10 @@
 [push]
   # Push the current branch to update a branch with the same name on the receiving end
   default = current
+
+[pull]
+  # Automatically rebase when pulling commits
+  rebase = true
 
 [fetch]
   # Remove deleted branch upstream on local repository
