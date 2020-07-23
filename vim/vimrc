@@ -1,251 +1,257 @@
 " vim:foldmethod=marker:foldlevel=0
-set history=1000
+" {{{ General
 
-" use the monokai dark theme
-set background=dark
-colorscheme Tomorrow-Night
+syntax on " enable syntax highlighting
+filetype plugin indent on " let the filetype plugins do the work.
 
-" make vim more useful
-set nocompatible
-filetype off
-" {{{ Vundle
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-
-" call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-call vundle#begin('~/.vim/bundle')
-
-" let Vundle manage Vundle
-Plugin 'gmarik/Vundle.vim'
-Plugin 'flazz/vim-colorschemes'
-
-" let vim control tmux
-Plugin 'benmills/vimux'
-Plugin 'christoomey/vim-tmux-navigator'
-
-" read editorconfig
-Plugin 'editorconfig/editorconfig-vim'
-
-" continuously updated session files
-Plugin 'tpope/vim-obsession'
-
-" a git wrapper so awesome, it should be illegal
-Plugin 'tpope/vim-fugitive'
-
-" enable repeating supported plugin maps with "."
-Plugin 'tpope/vim-repeat'
-
-" vim plugin for intensely orgasmic commenting
-Plugin 'scrooloose/nerdcommenter'
-
-" lean & mean status/tabline for vim that's light as air
-Plugin 'bling/vim-airline'
-
-" vim plugin, provides insert mode auto-completion for quotes, parens, brackets, etc.
-Plugin 'Raimondi/delimitMate'
-
-" unite and create user interfaces
-Plugin 'shougo/unite.vim'
-Plugin 'shougo/neomru.vim'
-Plugin 'shougo/vimproc.vim'
-
-" perform all your vim insert mode completions with tab
-Plugin 'ervandew/supertab'
-
-" a vim plugin which shows a git diff in the gutter and stages/reverts hunks
-Plugin 'airblade/vim-gitgutter'
-
-" quoting/parenthesizing made simple
-Plugin 'tpope/vim-surround'
-
-" syntax checking hacks for vim
-Plugin 'scrooloose/syntastic'
-
-" highlights trailing whitespace in red and provides :fixwhitespace to fix it
-Plugin 'ntpeters/vim-better-whitespace'
-
-" manage marked2 application
-Plugin 'itspriddle/vim-marked'
-
-" markdown support
-Plugin 'tpope/vim-markdown'
-
-call vundle#end()
 " }}}
-" {{{ Interface
-" show line numbers
-set number
-set numberwidth=3
+" {{{ System
 
-" break lines at word
-set linebreak
+set nocompatible " not compatible with vi
+set autoread " detect when a file is changed
+set hidden " current buffer can be put into background
 
-" wrap-broken line prefix
-set showbreak=>\
+set history=1000 " change history length
+set undolevels=1000 " number of undo levels
 
-" line wrap (number of cols)
-set textwidth=120
+set ttyfast " optimize for fast terminal connections
+set clipboard=unnamed " use the OS clipboard by default
+set encoding=utf-8 nobomb " use UTF-8 without BOM
+set mouse=a " enable mouse in all modes
 
-" format using textwidth, including comments and gq
-set formatoptions=crq
-
-" set lines wrap
-set wrap
-
-" highlight matching brace
-set showmatch
-
-" use visual bell (no beeping)
-"set visualbell
-
-" disable all bells
-set belloff=all
-
-" highlight all search results
-set hlsearch
-
-" enable smart-case search
-set smartcase
-
-" always case-insensitive
-set ignorecase
-
-" searches for strings incrementally
-set incsearch
-
-" enable smart-indent
-set cindent
-
-" enable smart-tabst
-set smarttab
-
-" number of spaces per Tab
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
-
-" use spaces instead of tabs
-set expandtab
-
-" show row and column ruler information
-set ruler
-set rulerformat=%=%h%m%r%w\ %(%c%V%),%l/%L\ %P
-
-" number of undo levels
-set undolevels=1000
-
-" backspace behaviour
-set backspace=indent,eol,start
-
-" a - terse messages (like [+] instead of [Modified]
-" t - truncate file names
-" i - no intro message when starting vim fileless
-" t - truncate long messages to avoid having to hit a key
-set shortmess=atTI
-
-" display the number of (characters|lines) in visual mode, also cur command
-set showcmd
-
-" remove preview poping from autocompletion
-set completeopt=menu
-
-" max items in popup menu
-set pumheight=8
-
-" show fold column, fold by indent
-set foldcolumn=2
-set foldmethod=indent
-
-" always show tab line
-set showtabline=2
-
-" highlight searches
-set hlsearch
-
-" highlight position of cursor
-set cursorline
-
-" show the current mode
-set showmode
-
-" show the filename in the window titlebar
-set title
-
-" show “invisible” characters
-set lcs=tab:▸\ ,trail:·,eol:¬,nbsp:_
-set list
-
-" always show status line
-set laststatus=2
-set wrap
-" }}}
-" {{{ Behavior
-" enable syntax highlighting
-syntax on
-
-" let the filetype plugins do the work.
-filetype plugin on
-filetype indent on
-
-" optimize for fast terminal connections
-set ttyfast
+set modeline " respect modeline in files
+set modelines=2 " only read the first two lines
 
 " centralize backups, swapfiles and undo history
 set backupdir=~/.vim/backups
 set directory=~/.vim/swaps
 set undodir=~/.vim/undo
 
-" don’t create backups when editing files in certain directories
+" don't create backups when editing files in certain directories
 set backupskip=/tmp/*,/private/tmp/*
 
-" set to auto read when a file is changed from the outside
-set autoread
+" }}}
+" {{{ Interface
 
-" use the OS clipboard by default (on versions compiled with `+clipboard`)
-set clipboard=unnamed
+set laststatus=2 " always show status line
+set showtabline=2 " always show tab line
+set showcmd " display the number of characters and lines in visual mode
+set showmode " show the current mode
+set synmaxcol=180 " only syntax first n characters
 
-" enhance command-line completion
-set wildmenu
+" ruler
+set ruler " show row and column ruler information
+set rulerformat=%=%h%m%r%w\ %(%c%V%),%l/%L\ %P
 
-" allow cursor keys in insert mode
-set esckeys
+" line numbers
+set number " show line numbers
+set numberwidth=3 " set gutter width to n cols
 
-" add the g flag to search/replace by default
-set gdefault
+" a - terse messages (like [+] instead of [Modified]
+" t - truncate file names
+" I - no intro message when starting vim fileless
+" T - truncate long messages to avoid having to hit a key
+set shortmess=atTI
 
-" use UTF-8 without BOM
-set encoding=utf-8 nobomb
+" }}}
+" {{{ Behavior
 
-" ignore compiled files
+" always activate spell corrections
+set spell
+
+" movements
+set backspace=indent,eol,start " make backspace behave in a sane manner
+set nostartofline " don’t reset cursor to start of line when moving around.
+set scrolloff=5 " keep n lines below and above cursor.
+
+" line breaking/wrapping
+set wrap " turn on line wrapping
+set wrapmargin=8 " wrap lines when coming within n characters from side
+set linebreak " set soft wrapping
+set showbreak=↪\  " show at breaking (with extra space)
+set textwidth=80 " set hard text wrapping (number of cols)
+set colorcolumn=80 " display wrapping column
+set formatoptions=tcrq " format using textwidth, including comments and gq
+
+" highlighting
+set cursorline " highlight position of cursor
+set showmatch " highlight matching brace
+
+" search
+set magic " set magic on, for regex
+set ignorecase " case insensitive searching
+set smartcase " case-sensitive if expression contains a capital letter
+set hlsearch " highlight search results
+set incsearch " set incremental search, like modern browsers
+set gdefault " add the g flag to search/replace by default
+set lazyredraw " don't redraw while executing macros
+
+" visual bell and no error notification (no beeping)
+set noerrorbells
+set visualbell
+
+" indentation
+set autoindent " automatically set indent of new line
+set smartindent " automatically inserts one extra level of indentation
+set cindent " like smartindent but stricter and more customisable
+
+" toggle invisible characters
+set list
+set listchars=tab:▸\ ,trail:·,eol:¬,nbsp:_,extends:❯,precedes:❮
+
+" tabulation
+set expandtab " insert tabs rather than spaces for <Tab>
+set smarttab " tab respects 'tabstop', 'shiftwidth', and 'softtabstop'
+set tabstop=4 " the visible width of tabs
+set softtabstop=4 " edit as if the tabs are 4 characters wide
+set shiftwidth=4 " number of spaces to use for indent and unindent
+set shiftround " round indent to a multiple of 'shiftwidth'
+
+" autocompletion
+set completeopt=menu
+set completeopt+=longest " complete files like a shell
+set wildmenu " enhanced command line completion
+set wildmode=longest,full " complete files like a shell
+set pumheight=8 " max items in popup menu
 set wildignore=*.o,*~,*.pyc,.git\*,.hg\*,.svn\*,.meteor
 
-" change mapleader
+" code folding
+set foldenable " fold by default
+set foldlevel=0 " fold all levels by default
+set foldcolumn=1 " sets the width for a gutter column
+set foldmethod=indent " fold based on indent
+set foldnestmax=6 " deepest fold
+
+" }}}
+" {{{ Mappings
+
+" set custom mapleader
 let mapleader=","
 
-" respect modeline in files
-set modeline
-set modelines=4
+" set paste toggle
+set pastetoggle=<leader>vv
 
-" enable per-directory .vimrc files and disable unsafe commands in them
-" set exrc
-" set secure
+" disable Ex mode
+noremap <silent> Q <nop>
 
-" enable mouse in all modes
-set mouse=a
+" enable . command in visual mode
+vnoremap . :normal .<cr>
 
-" disable error bells
-set noerrorbells
+" remap VIM 0 to first non-blank character
+nnoremap 0 ^
 
-" don’t reset cursor to start of line when moving around.
-set nostartofline
+" make use of ctags and csope easier
+noremap gt <C-]>
 
-" i want new splits to appear to the right and to the bottom of the current
-set splitbelow
-set splitright
+" fold/unfold map
+noremap <space> za
+noremap <c-space> zA
 
-" start scrolling three lines before the horizontal window border
-set scrolloff=3
+" toggle curet or line
+nnoremap <leader>i :set cursorline!<cr>
+
+" toggle special characters
+nnoremap <leader>l :set list! list?<cr>
+
+" toggle highlighted search
+noremap <leader><space> :set hlsearch! hlsearch?<cr>
+
+" wipeout buffer
+nnoremap <leader>bb :bw<cr>
+
+" switch between current and last buffer
+nnoremap <leader>; <c-^>
+
+" fix trailing spaces in buffer
+noremap <leader>ss :StripWhitespace<cr>
+
+" remove the Windows ^M - when the encodings gets messed up
+noremap <leader>mm mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
+
+" refactor all file
+noremap =f ggVG=
+
+" refactor json file
+noremap =j :%!python -m json.tool<cr>
+
+" save a file as root (,W)
+noremap <silent> <leader>W :w !sudo tee -S % > /dev/null<cr>
+
+" switch CWD to the directory of the open buffer
+noremap <silent> <leader>cd :cd %:p:h<cr>:pwd<cr>
+
+" create parent directories
+noremap <silent> <leader>md :call mkdir(expand('%:h'), 'p')<cr>
+
+" edit vim config
+noremap <leader>ev :e! ~/.config/nvim/init.vim<cr>
+" edit git config
+noremap <leader>eg :e! ~/.gitconfig<cr>
+" edit tmux config
+noremap <leader>et :e! ~/.tmux.conf<cr>
+
+" keep selection after indentation
+vnoremap <silent> < <gv
+vnoremap <silent> > >gv
+
+" moving up and down work as you would expect
+nnoremap <silent> ^ g^
+nnoremap <silent> $ g$
+
+" disable arrow keys in escape mode
+map <silent> <up> <nop>
+map <silent> <down> <nop>
+map <silent> <left> <nop>
+map <silent> <right> <nop>
+
+" disable arrow keys in insert mode
+imap <silent> <up> <nop>
+imap <silent> <down> <nop>
+imap <silent> <left> <nop>
+imap <silent> <right> <nop>
+
+" scroll the viewport faster
+nnoremap <silent> <C-e> 3<C-e>
+nnoremap <silent> <C-y> 3<C-y>
+
+" helpers for dealing with other people's code
+nnoremap \t4 :set ts=4 sts=4 sw=4 noet<cr>
+nnoremap \t2 :set ts=2 sts=2 sw=2 noet<cr>
+nnoremap \s4 :set ts=4 sts=4 sw=4 et<cr>
+nnoremap \s2 :set ts=2 sts=2 sw=2 et<cr>
+
+" smart way to move between windows
+noremap <C-j> <C-W>j
+noremap <C-k> <C-W>k
+noremap <C-h> <C-W>h
+noremap <C-l> <C-W>l
+
+" easy window resizing x2
+nnoremap <silent> <leader>+ :exe "resize " . (winheight(0) * 2)<cr>
+nnoremap <silent> <leader>- :exe "resize " . (winheight(0) * 1/2)<cr>
+
+" opens a new tab with the current buffer's path
+" super useful when editing files in the same directory
+nnoremap <leader>oe :e <C-R>=expand("%:p:h") . "/" <cr>
+nnoremap <leader>ot :tabe <C-R>=expand("%:p:h") . "/" <cr>
+nnoremap <leader>os :split <C-R>=expand("%:p:h") . "/" <cr>
+nnoremap <leader>ov :vsplit <C-R>=expand("%:p:h") . "/" <cr>
+nnoremap <leader>oc :e %<.c<cr>
+nnoremap <leader>oC :e %<.cc<cr>
+nnoremap <leader>oh :e %<.h<cr>
+nnoremap <leader>oH :e %<.hh<cr>
+
+" relative path (src/foo.txt)
+nnoremap <leader>cf :let @+=expand("%")<cr>
+" absolute path (/something/src/foo.txt)
+nnoremap <leader>cF :let @+=expand("%:p")<cr>
+" filename (foo.txt)
+nnoremap <leader>ct :let @+=expand("%:t")<cr>
+" directory name (/something/src)
+nnoremap <leader>ch :let @+=expand("%:p:h")<cr>
+
+" }}}
+" {{{ Functions
 
 " strip trailing whitespace (,ss)
 function! StripWhitespace()
@@ -257,200 +263,35 @@ function! StripWhitespace()
 endfunction
 noremap <leader>ss :call StripWhitespace()<CR>
 
-" specify the behavior when switching between buffers
-try
-  set switchbuf=useopen,usetab,newtab
-  set stal=2
-catch
-endtry
-
-" return to last edit position when opening files
-autocmd BufReadPost *
-      \ if line("'\"") > 0 && line("'\"") <= line("$") |
-      \   exe "normal! g`\"" |
-      \ endif
-
-" window movement shortcuts
-" move to the window in the direction shown, or create a new window
-function! WinMove(key)
-  let t:curwin = winnr()
-  exec "wincmd ".a:key
-  if (t:curwin == winnr())
-    if (match(a:key,'[jk]'))
-      wincmd v
-    else
-      wincmd s
-    endif
-    exec "wincmd ".a:key
-  endif
-endfunction
-
-" remember info about open buffers on close
-set viminfo^=%
 " }}}
-" {{{ Plugins
-" to ensure that this plugin works well with Tim Pope's fugitive
-" if you wanted to avoid loading EditorConfig for any remote files over ssh
-let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+" {{{ Autocommands
 
-" unite
-let g:unite_source_history_yank_enable=1
-call unite#filters#matcher_default#use(['matcher_fuzzy'])
-nnoremap <leader>t :Unite -buffer-name=files -start-insert file_rec/async:!<cr>
-nnoremap <leader>f :Unite -buffer-name=files -start-insert file<cr>
-nnoremap <leader>m :Unite -buffer-name=mru -start-insert file_mru<cr>
-nnoremap <leader>r :Unite -buffer-name=register -start-insert register<cr>
-nnoremap <leader>o :Unite -buffer-name=outline -start-insert outline<cr>
-nnoremap <leader>y :Unite -buffer-name=yank history/yank<cr>
-nnoremap <leader>b :Unite -buffer-name=buffer buffer<cr>
-
-" airline
-let g:airline#extensions#tabline#enabled = 1
-let g:airline_powerline_fonts = 1
-
-" supertab
-let g:SuperTabDefaultCompletionType = 'context'
-" }}}
-" {{{ Autocommand
 if has('autocmd') && !exists('autocommands_loaded')
   let autocommands_loaded = 1
-  autocmd FileType html setlocal ts=2 sts=2 sw=2 et indentkeys-=*<return>
-  autocmd FileType make setlocal ts=8 sts=8 sw=8 noet
-  autocmd FileType markdown,textile,gitcommit setlocal tw=0 wm=0 wrap spell
+
+  autocmd BufRead,BufNewFile Module set filetype=make
+  autocmd BufRead,BufNewFile .notes set filetype=markdown
+  autocmd BufRead,BufNewFile jrnl*.txt set filetype=journal
+
+  autocmd FileType ld setlocal ts=8 sts=8 sw=8 noet
+  autocmd FileType make setlocal ts=4 sts=4 sw=4 noet
+  autocmd FileType c,cpp setlocal ts=4 sts=4 sw=4 et
+  autocmd FileType markdown,textile,gitcommit setlocal spell
+  autocmd FileType gitcommit setlocal tw=72 cc=72
+  autocmd FileType gitrebase setlocal tw=87 cc=87
+  autocmd FileType todo setlocal spell ts=2 sts=2 sw=2 et nofoldenable
+  autocmd FileType journal setlocal spell spelllang=fr tw=80 cc=80
 endif
+
 "}}}
-" {{{ Maps
-" disable Ex mode
-noremap Q <NOP>
+" {{{ Command line
 
-" helpers for dealing with other people's code
-nmap \t4 :set ts=4 sts=4 sw=4 noet<cr>
-nmap \t2 :set ts=2 sts=2 sw=2 noet<cr>
-nmap \s4 :set ts=4 sts=4 sw=4 et<cr>
-nmap \s2 :set ts=2 sts=2 sw=2 et<cr>
-
-" word under cursor
-nnoremap * *<C-O>:%s///gn<CR>
-
-" jump to tags
-nnoremap <C-g> <C-]>
-
-" refactor all file
-noremap <leader>= ggVG=
-
-" wipout buffer
-nmap <silent> <leader><leader>b :bw<cr>
-
-" fold/Unfold map
-noremap <space> za
-
-" remap C-space to completion
-inoremap <C-Space> <C-x><C-o>
-inoremap <C-@> <C-Space>
-
-" clear highlighted search
-noremap <leader><space> :set hlsearch! hlsearch?<cr>
-
-" toggle paste mode
-map <leader>v :set paste!<cr>
-map <leader>V :set nopaste!<cr>
-
-" edit vim config
-map <leader>ev :e! ~/.vimrc<cr>
-" edit gitconfig
-map <leader>eg :e! ~/.gitconfig<cr>
-" edit tmux config
-map <leader>et :e! ~/.tmux.conf<cr>
-
-" enable . command in visual mode
-vnoremap . :normal .<cr>
-
-" smart way to move between windows
-map <C-j> <C-W>j
-map <C-k> <C-W>k
-map <C-h> <C-W>h
-map <C-l> <C-W>l
-nnoremap <silent> <leader><C-h> :call WinMove('h')<cr>
-nnoremap <silent> <leader><C-j> :call WinMove('j')<cr>
-nnoremap <silent> <leader><C-k> :call WinMove('k')<cr>
-nnoremap <silent> <leader><C-l> :call WinMove('l')<cr>
-
-" search for word under the cursor
-nnoremap <leader>/ "fyiw :/<c-r>f<cr>
-
-" save a file as root (,W)
-noremap <leader>W :w !sudo tee % > /dev/null<CR>
-
-" useful mappings for managing tabs
-map <leader>tn :tabnew<cr>
-map <leader>to :tabonly<cr>
-map <leader>tc :tabclose<cr>
-map <leader>tm :tabmove
-map <leader><leader>t :tabnext<cr>
-
-" fugitive Shortcuts
-nmap <leader>ge :Gedit<cr>
-nmap <silent> <leader>gc :Gcommit<cr>
-nmap <silent> <leader>gb :Gblame<cr>
-nmap <silent> <leader>gr :Gread<cr>
-nmap <silent> <leader>gs :Gstatus<cr>
-nmap <silent> <leader>gw :Gwrite<cr>
-
-" marked2 shortcuts
-nmap <leader>mo :MarkedOpen!<cr>
-nmap <leader>mq :MarkedQuit<cr>
-
-" switch between current and last buffer
-nmap <leader>. <c-^>
-
-" let 'tl' toggle between this and the last accessed tab
-let g:lasttab = 1
-nmap <leader>tl :exe "tabn ".g:lasttab<cr>
-au TabLeave * let g:lasttab = tabpagenr()
-
-" opens a new tab with the current buffer's path
-" super useful when editing files in the same directory
-map <leader>oe :e <C-R>=expand("%:p:h") . "/" <CR>
-map <leader>ot :tabe <C-R>=expand("%:p:h") . "/" <CR>
-map <leader>os :split <C-R>=expand("%:p:h") . "/" <CR>
-map <leader>ov :vsplit <C-R>=expand("%:p:h") . "/" <CR>
-
-" switch CWD to the directory of the open buffer
-map <leader>cd :cd %:p:h<cr>:pwd<cr>
-
-" remap VIM 0 to first non-blank character
-map 0 ^
-
-" tweak ESC to be 'jk' typed fast
-imap jk <ESC>
-
-" prompt for a command to run
-map <Leader>vp :VimuxPromptCommand<CR>
-
-" run last command executed by VimuxRunCommand
-map <leader>vl :VimuxRunLastCommand<CR>
-
-" inspect runner pane map
-map <leader>vi :VimuxInspectRunner<CR>
-
-" close vim tmux runner opened by VimuxRunCommand
-map <Leader>vq :VimuxCloseRunner<CR>
-
-" interrupt any command running in the runner pane map
-map <leader>vs :VimuxInterruptRunner<CR>
-" }}}
-" {{{ Misc
-" remove the Windows ^M - when the encodings gets messed up
-noremap <leader><leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
-" }}}
-" {{{ Command Line
 " smart mappings on the command line
-cno $h ~/
-cno $d ~/Desktop/
-cno $c ./
-cno $b ~/.bash.d/
-cno $w ~/Workspaces/
-cno $s ~/Sites/
+cnoremap $h ~/
+cnoremap $b ~/.bash.d/
+cnoremap $d ~/Desktop/
+cnoremap $p ~/Projects/
+cnoremap $w ~/Workspaces/
 
 " bash like keys for the command line
 cnoremap <C-A> <Home>
@@ -458,4 +299,5 @@ cnoremap <C-E> <End>
 cnoremap <C-K> <C-U>
 cnoremap <C-P> <Up>
 cnoremap <C-N> <Down>
-"}}}
+
+" }}}

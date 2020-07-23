@@ -34,71 +34,72 @@ Plug 'airblade/vim-gitgutter' " vim plugin which shows a git diff in the gutter 
 " tmux
 Plug 'benmills/vimux' " tmux integration for vim
 Plug 'christoomey/vim-tmux-navigator' " let vim open tmux buffer
-Plug 'wellle/tmux-complete.vim' " autocompletion for visible strings in panes
 Plug 'tmux-plugins/vim-tmux-focus-events' " autoread option work properly for terminal vim
+Plug 'wellle/tmux-complete.vim' " autocompletion for visible strings in panes
 
 " utilities
 Plug 'shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'neomake/neomake' " syntastic using neovim's job control functionality
-Plug 'aserebryakov/vim-todo-lists' " todo lists
+Plug 'neomake/neomake' " syntactic using
+Plug 'sbdchd/neoformat' " code formating with several backends
+Plug 'sakhnik/nvim-gdb', { 'do': ':!./install.sh \| UpdateRemotePlugins' } " gdb
 
 " enhancements
 Plug 'ervandew/supertab' " perform all your vim insert mode completions with Tab
-Plug 'tpope/vim-commentary' " comment stuff out
-Plug 'tpope/vim-ragtag' " endings for html, xml, etc. - enhances surround
-Plug 'tpope/vim-surround' " quoting/parenthesizing made simple
 Plug 'tpope/vim-repeat' " enable repeating supported plugin maps with '.'
 Plug 'tpope/vim-fugitive' " amazing git wrapper for vim
-Plug 'Raimondi/delimitMate' " automatic closing of quotes, parenthesis, brackets
-Plug 'vim-scripts/matchit.zip' " extended % matching
+Plug 'tpope/vim-commentary' " comment stuff out
+Plug 'tpope/vim-surround' " quoting/parenthesizing made simple
+Plug 'raimondi/delimitmate' " automatic closing of quotes, parenthesis, brackets
 Plug 'ntpeters/vim-better-whitespace' " highlights trailing whitespace
+Plug 'aserebryakov/vim-todo-lists' " todo lists
 
 " file searching
 Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim' " fuzzy file finder and so much more
-Plug 'mileszs/ack.vim' " search inside files using ack. Same as command line ack utility, but use :Ack
 
 " web development
-Plug 'mattn/emmet-vim', { 'for': 'html' } " emmet support for vim
-Plug 'othree/html5.vim', { 'for': 'html' } " html5 support
-Plug 'gregsexton/MatchTag', { 'for': 'html' } " match tags in html
-Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'html'] } " javascript support
-Plug 'leafgarland/typescript-vim', { 'for': 'typescript' } " typescript support
-Plug 'kchmck/vim-coffee-script', { 'for': 'typescript' } " coffeescript support
-Plug 'groenewege/vim-less', { 'for': 'less' } " less support
-Plug 'hail2u/vim-css3-syntax', { 'for': 'css' } " CSS3 syntax support
-Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' } " sass scss syntax support
+" Plug 'mattn/emmet-vim', { 'for': 'html' } " emmet support for vim
+" Plug 'othree/html5.vim', { 'for': 'html' } " html5 support
+" Plug 'gregsexton/MatchTag', { 'for': 'html' } " match tags in html
+" Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'html'] } " javascript support
+" Plug 'leafgarland/typescript-vim', { 'for': 'typescript' } " typescript support
+" Plug 'kchmck/vim-coffee-script', { 'for': 'typescript' } " coffeescript support
+" Plug 'groenewege/vim-less', { 'for': 'less' } " less support
+" Plug 'hail2u/vim-css3-syntax', { 'for': 'css' } " CSS3 syntax support
+" Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' } " sass scss syntax support
 
 " markdown
 Plug 'itspriddle/vim-marked', { 'for': 'markdown', 'on': 'MarkedOpen' } " open markdown files in Marked.app
 Plug 'tpope/vim-markdown', { 'for': 'markdown' } " markdown support
 
 " json
-Plug 'elzr/vim-json', { 'for': 'json' } " JSON support
+Plug 'elzr/vim-json', { 'for': 'json' } " Json support
 
 " python
-Plug 'klen/python-mode', { 'for': 'python' } " python-mode. PyLint, Rope, Pydoc, breakpoints from box
-Plug 'zchee/deoplete-jedi', { 'for': 'python' } " code completion for python
+" Plug 'klen/python-mode', { 'for': 'python' } " python-mode. PyLint, Rope, Pydoc, breakpoints from box
+Plug 'zchee/deoplete-jedi' " code completion for python
 
 " lua
-Plug 'tbastos/vim-lua', { 'for': 'lua' } " improved lua syntax and indentation
-
-" c/cpp
-Plug 'Shougo/neoinclude.vim', { 'for': ['c', 'cpp']} " completion for include files
-Plug 'Rip-Rip/clang_complete', { 'for': ['c', 'cpp']} " code completion for c/cpp
-Plug 'mfulz/cscope.nvim', { 'for': ['c', 'cpp']} " cscope wrapper for neovim
+" Plug 'tbastos/vim-lua', { 'for': 'lua' } " improved lua syntax and indentation
+" Plug 'xolox/vim-lua-ftplugin, { 'for': 'lua' } "file type plugin
 
 " go
-Plug 'fatih/vim-go', { 'for': 'go' } " development plugin
-Plug 'deoplete-plugins/deoplete-go', { 'for': 'go', 'do': 'make'} " code completion
-Plug 'jodosha/vim-godebug', { 'for': 'go' } " debugging plugin
+" Plug 'fatih/vim-go', { 'for': 'go' } " development plugin
+" Plug 'deoplete-plugins/deoplete-go', { 'for': 'go', 'do': 'make'} " code completion
+" Plug 'jodosha/vim-godebug', { 'for': 'go' } " debugging plugin
+
+" c/cpp
+Plug 'shougo/neoinclude.vim', { 'for': ['c', 'cpp']} " completion for includes
+Plug 'shougo/deoplete-clangx', { 'for': ['c', 'cpp']} " completion for C/C++
+" Plug 'roddehugo/cscope.nvim', { 'for': ['c', 'cpp']} " cscope wrapper
 
 call plug#end()
 
 " }}}
 " {{{ Configuration
 
-" Use Ag with Ack
-let g:ackprg = 'ag --nogroup --nocolor --column'
+" Python
+let g:python_host_prog = '/usr/bin/python2'
+let g:python3_host_prog = '/usr/local/bin/python3'
 
 " Supertab
 let g:SuperTabDefaultCompletionType = "<c-n>"
@@ -133,30 +134,19 @@ let g:vim_json_syntax_conceal = 0
 
 " FZF
 let g:fzf_layout = { 'down': '~30%' }
+command! -bang GFilesRecurse call fzf#vim#gitfiles('--recurse-submodules')
 
 " Deoplete.
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#auto_completion_start_length = 1
 let g:deoplete#enable_smart_case = 1
+let g:deoplete#sources#clang#libclang_path = '/Library/Developer/CommandLineTools/usr/lib/libclang.dylib'
+let g:deoplete#sources#clang#clang_header = '/Library/Developer/CommandLineTools/usr/lib/clang'
 
 " Cscope
 let g:cscope_dir = '~/.cscope'
 let g:cscope_config = '.cscope_config'
-let g:cscope_update_on_start = 1
-let g:inccomplete_showdirs = 1
-
-" Clang
-let g:clang_auto_select = 0
-let g:clang_complete_auto = 0
-" let g:clang_complete_macros = 1
-" let g:clang_complete_patterns = 1
-" let g:clang_conceal_snippets = 0
-let g:clang_make_default_keymappings = 0
-let g:clang_omnicppcomplete_compliance = 0
-let g:clang_snippets = 0
-let g:clang_trailing_placeholder = 0
-let g:clang_user_options = '-std=c++11'
-let g:clang_library_path = '/Library/Developer/CommandLineTools/usr/lib/libclang.dylib'
+let g:cscope_update_on_start = 0
 
 " Tmux complete
 let g:tmuxcomplete#trigger = ''
@@ -164,4 +154,8 @@ let g:tmuxcomplete#trigger = ''
 " Vim Todo List
 let g:VimTodoListsMoveItems = 0
 
-" }}}
+" Neoinclude
+if !exists('g:neoinclude#exts')
+    let g:neoinclude#exts = {}
+endif
+let g:neoinclude#exts.cpp = ['', 'hh', 'h', 'hpp', 'hxx']
