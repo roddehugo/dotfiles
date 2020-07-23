@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Print size of file or total size of a directory.
-function size() {
+function ds() {
   if du -b /dev/null > /dev/null 2>&1; then
     local arg=-sbh;
   else
