@@ -6,13 +6,17 @@ set background=dark
 colorscheme Tomorrow-Night
 
 syntax on " enable syntax highlighting
-filetype plugin indent on " let the filetype plugins do the work.
+filetype plugin indent on " let the filetype plugins do the work
+
+set exrc " enable local .nvimrc
+set secure " disallows the use of :autocmd, shell and write commands
 
 " }}}
 " {{{ System
 
 set viminfo^=% " remember info about open buffers on close
 
+set noshowmode " get rid of --INSERT-- supported by lightline
 set nocompatible " not compatible with vi
 set autoread " detect when a file is changed
 set hidden " current buffer can be put into background
@@ -38,9 +42,9 @@ set backupskip=/tmp/*,/private/tmp/*
 " {{{ Interface
 
 set laststatus=2 " always show status line
-set showtabline=2 " always show tab line
+set showtabline=1 " only show tab line when active
 set showcmd " display the number of characters and lines in visual mode
-set showmode " show the current mode
+set noshowmode " hide current mode, already displayed by status line
 set synmaxcol=180 " only syntax first n characters
 
 " ruler
@@ -87,8 +91,8 @@ set wrap " turn on line wrapping
 set wrapmargin=8 " wrap lines when coming within n characters from side
 set linebreak " set soft wrapping
 set showbreak=↪\  " show at breaking (with extra space)
-set textwidth=80 " set hard text wrapping (number of cols)
-set colorcolumn=80 " display wrapping column
+set textwidth=84 " set hard text wrapping (number of cols)
+set colorcolumn=84 " display wrapping column
 set formatoptions=tcrqj " format using textwidth, including comments and gq
 
 " highlighting
@@ -133,7 +137,7 @@ set completeopt+=longest " complete files like a shell
 set wildmenu " enhanced command line completion
 set wildmode=longest,full " complete files like a shell
 set pumheight=8 " max items in popup menu
-set wildignore=*.o,*~,*.pyc,.git\*,.hg\*,.svn\*,.meteor
+set wildignore=*.o,*.d,*~,*.pyc,.git\*,.hg\*,.svn\*,.meteor
 
 " code folding
 set foldenable " fold by default
@@ -176,9 +180,6 @@ noremap <silent> Q <nop>
 " enable . command in visual mode
 vnoremap . :normal .<cr>
 
-" remap VIM 0 to first non-blank character
-nnoremap 0 ^
-
 " tweak ESC to exit input and terminal mode
 inoremap jk <ESC>
 tnoremap jk <C-\><C-n>
@@ -204,9 +205,6 @@ noremap <leader>sp :set spell! spell?<cr>
 
 " toggle highlighted search
 noremap <leader>hl :set hlsearch! hlsearch?<cr>
-
-" wipeout buffer
-noremap <leader>bb :bw<cr>
 
 " fix trailing spaces in buffer
 noremap <leader>ss :StripWhitespace<cr>
@@ -245,7 +243,8 @@ noremap <leader>eb :e! ~/.bash.d/<cr>
 vnoremap <silent> < <gv
 vnoremap <silent> > >gv
 
-" moving up and down work as you would expect
+" moving work as you would expect
+nnoremap <silent> 0 ^
 nnoremap <silent> ^ g^
 nnoremap <silent> $ g$
 
@@ -276,10 +275,6 @@ noremap <C-j> <C-W>j
 noremap <C-k> <C-W>k
 noremap <C-h> <C-W>h
 noremap <C-l> <C-W>l
-nnoremap <silent> <leader><C-h> :call WinMove('h')<cr>
-nnoremap <silent> <leader><C-j> :call WinMove('j')<cr>
-nnoremap <silent> <leader><C-k> :call WinMove('k')<cr>
-nnoremap <silent> <leader><C-l> :call WinMove('l')<cr>
 
 " easy window resizing x2
 nnoremap <silent> <leader>+ :exe "resize " . (winheight(0) * 2)<cr>
@@ -292,7 +287,6 @@ nnoremap <leader>mq :MarkedQuit<cr>
 " opens a new tab with the current buffer's path
 " super useful when editing files in the same directory
 nnoremap <leader>oe :e <C-R>=expand("%:p:h") . "/" <cr>
-nnoremap <leader>ot :tabe <C-R>=expand("%:p:h") . "/" <cr>
 nnoremap <leader>os :split <C-R>=expand("%:p:h") . "/" <cr>
 nnoremap <leader>ov :vsplit <C-R>=expand("%:p:h") . "/" <cr>
 nnoremap <leader>oc :e %<.c<cr>
@@ -340,31 +334,16 @@ imap <c-x><c-l> <plug>(fzf-complete-line)
 " nmap <leader>ct :cs find t <C-R>=expand("<cword>")<cr><cr> " text string
 
 " relative path (src/foo.txt)
-nnoremap <leader>cf :let @+=expand("%")<cr>
+nnoremap <leader>fp :let @+=expand("%")<cr>
 " absolute path (/something/src/foo.txt)
-nnoremap <leader>cF :let @+=expand("%:p")<cr>
+nnoremap <leader>fP :let @+=expand("%:p")<cr>
 " filename (foo.txt)
-nnoremap <leader>ct :let @+=expand("%:t")<cr>
+nnoremap <leader>fn :let @+=expand("%:t")<cr>
 " directory name (/something/src)
-nnoremap <leader>ch :let @+=expand("%:p:h")<cr>
+nnoremap <leader>dn :let @+=expand("%:p:h")<cr>
 
 " }}}
 " {{{ Functions
-
-" window movement shortcuts
-" move to the window in the direction shown, or create a new window
-function! WinMove(key)
-  let t:curwin = winnr()
-  exec "wincmd ".a:key
-  if (t:curwin == winnr())
-    if (match(a:key,'[jk]'))
-      wincmd v
-    else
-      wincmd s
-    endif
-    exec "wincmd ".a:key
-  endif
-endfunction
 
 " insert today's date in journal format
 command! Today call Today()
@@ -375,124 +354,111 @@ endfunction
 " return to last edit position when opening files
 command! GotoLastKnownLine call GotoLastKnownLine()
 function! GotoLastKnownLine()
-  if line("'\"") > 0 && line("'\"") <= line("$")
-    exe "normal! g`\""
-  endif
+    if line("'\"") > 0 && line("'\"") <= line("$")
+        exe "normal! g`\""
+    endif
 endfunction
 
 " enable shortcuts of cscope if a database is loaded
 command! CScopeShortcuts call CScopeShortcuts()
 function! CScopeShortcuts()
-  if len(split(execute('cscope show'), '\n')) > 1
-    nmap ga <leader>ca
-    nmap gd <leader>cg
-    nmap gf <leader>cf
-    nmap gi <leader>ci
-    nmap gs <leader>cs
-  endif
+    if len(split(execute('cscope show'), '\n')) > 1
+        nmap ga <leader>ca
+        nmap gd <leader>cg
+        nmap gf <leader>cf
+        nmap gi <leader>ci
+        nmap gs <leader>cs
+    endif
 endfunction
-
-" enable shortcuts of LSP if a database is loaded
-command! LSPShortcuts call LSPShortcuts()
-function LSPShortcuts()
-  nnoremap <leader>ld :call LanguageClient#textDocument_definition()<CR>
-  nnoremap <leader>lt :call LanguageClient#textDocument_typeDefinition()<CR>
-  nnoremap <leader>lx :call LanguageClient#textDocument_references()<CR>
-  nnoremap <leader>lc :call LanguageClient#textDocument_completion()<CR>
-  nnoremap <leader>lh :call LanguageClient#textDocument_hover()<CR>
-  nnoremap <leader>ls :call LanguageClient#textDocument_documentSymbol()<CR>
-  nnoremap <leader>lm :call LanguageClient_contextMenu()<CR>
-endfunction()
 
 " command to fold everything except what you searched for
 command! -nargs=* Foldsearch
-      \ if <q-args> != '' |
-      \   exe "normal /".<q-args>."\<cr>" |
-      \ endif |
-      \ if @/ != '' |
-      \   setlocal
-      \     foldexpr=FoldRegex(v:lnum,@/,2)
-      \     foldmethod=expr
-      \     foldlevel=0 |
-      \ endif
+            \ if <q-args> != '' |
+            \   exe "normal /".<q-args>."\<cr>" |
+            \ endif |
+            \ if @/ != '' |
+            \   setlocal
+            \     foldexpr=FoldRegex(v:lnum,@/,2)
+            \     foldmethod=expr
+            \     foldlevel=0 |
+            \ endif
 
 function! FoldRegex(lnum,pat,context)
-  " get start/end positions for context lines
-  let startline=a:lnum-a:context
-  while startline < 1
-    let startline+=1
-  endwhile
-  let endline=a:lnum+a:context
-  while endline > line('$')
-    let endline-=1
-  endwhile
+    " get start/end positions for context lines
+    let startline=a:lnum-a:context
+    while startline < 1
+        let startline+=1
+    endwhile
+    let endline=a:lnum+a:context
+    while endline > line('$')
+        let endline-=1
+    endwhile
 
-  let returnval = 2
+    let returnval = 2
 
-  let pos=getpos('.')
+    let pos=getpos('.')
 
-  " search from current line to get matches ON the line
-  call cursor(a:lnum, 1)
-  let matchline=search(a:pat,'cW',endline)
-  if matchline==a:lnum
-    let returnval = 0
-  elseif matchline > 0
-    " if current line didn't match, there could have been a match within
-    " trailing context lines
-    let returnval = 1
-  else
-    " if no match at current line, search leading context lines for a match
-    call cursor(startline, 1)
-    let matchline=search(a:pat,'cW',a:lnum)
-    if matchline > 0
-      let returnval = 1
+    " search from current line to get matches ON the line
+    call cursor(a:lnum, 1)
+    let matchline=search(a:pat,'cW',endline)
+    if matchline==a:lnum
+        let returnval = 0
+    elseif matchline > 0
+        " if current line didn't match, there could have been a match within
+        " trailing context lines
+        let returnval = 1
+    else
+        " if no match at current line, search leading context lines for a match
+        call cursor(startline, 1)
+        let matchline=search(a:pat,'cW',a:lnum)
+        if matchline > 0
+            let returnval = 1
+        endif
     endif
-  endif
 
-  call setpos('.',pos)
+    call setpos('.',pos)
 
-  return returnval
+    return returnval
 endfun
 
 " }}}
 " {{{ Autocommands
 
 if has('autocmd') && !exists('autocommands_loaded')
-  let autocommands_loaded = 1
+    let autocommands_loaded = 1
 
-  " Cscope
-  " autocmd VimEnter * CScopeStart
-  " autocmd FileType c,cpp CScopeShortcuts
+    " Cscope
+    " autocmd VimEnter * CScopeStart
+    " autocmd FileType c,cpp CScopeShortcuts
 
-  " StripWhitespace
-  autocmd BufEnter * EnableStripWhitespaceOnSave
+    " StripWhitespace
+    autocmd BufEnter * EnableStripWhitespaceOnSave
 
-  autocmd BufReadPost * GotoLastKnownLine
-  autocmd BufWritePost * Neomake
-  " autocmd BufWritePost * Neoformat
+    autocmd BufReadPost * GotoLastKnownLine
+    autocmd BufWritePost * Neomake
 
-  autocmd BufRead,BufNewFile Module set filetype=make
-  autocmd BufRead,BufNewFile *.luaconf set filetype=lua
-  autocmd BufRead,BufNewFile .notes set filetype=markdown
-  autocmd BufRead,BufNewFile jrnl*.txt set filetype=journal
+    autocmd BufRead,BufNewFile Module set filetype=make
+    autocmd BufRead,BufNewFile .notes set filetype=markdown
+    autocmd BufRead,BufNewFile jrnl*.txt set filetype=journal
 
-  autocmd FileType ld setlocal ts=8 sts=8 sw=8 noet
-  autocmd FileType make setlocal ts=4 sts=4 sw=4 noet
-  autocmd FileType c,cpp setlocal ts=4 sts=4 sw=4 et
-  autocmd FileType markdown,textile setlocal spell
-  autocmd FileType gitcommit setlocal tw=72 cc=72 spell
-  autocmd FileType gitrebase setlocal tw=87 cc=87 nospell
-  autocmd FileType todo setlocal spell ts=2 sts=2 sw=2 et nofoldenable
-  autocmd FileType journal setlocal spell spelllang=fr tw=80 cc=80
+    autocmd FileType ld setlocal ts=8 sts=8 sw=8 noet
+    autocmd FileType make setlocal ts=4 sts=4 sw=4 noet
+    autocmd FileType c,cpp setlocal ts=4 sts=4 sw=4 et
+    autocmd FileType markdown,textile setlocal spell
+    autocmd FileType gitcommit setlocal tw=72 cc=72 spell
+    autocmd FileType gitrebase setlocal tw=87 cc=87 nospell
+    autocmd FileType todo setlocal spell ts=2 sts=2 sw=2 et nofoldenable
+    autocmd FileType journal setlocal spell spelllang=fr
 
-  autocmd TermOpen * setlocal nospell
+    autocmd TermOpen * setlocal nospell
 endif
 
 " }}}
 " {{{ Command line
 
-" packadd termdebug
+packadd termdebug
 let g:termdebug_wide = 1
+" let g:termdebugger = "arm-none-eabi-gdb"
 
 " smart mappings on the command line
 cnoremap $h ~/

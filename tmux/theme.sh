@@ -53,8 +53,6 @@ set -g @prefix_highlight_copy_mode_attr bg=default,fg=$tm_color_inactive
 
 # music
 tm_itunes="#[fg=$tm_color_music]#(osascript ~/Workspaces/applescripts/itunes.applescript)"
-#tm_rdio="#[fg=$tm_color_music]#(osascript ~/Workspaces/applescripts/rdio.applescript)"
-#tm_spotify="#[fg=$tm_color_music]#(osascript ~/Workspaces/applescripts/spotify.applescript)"
 
 # battery level
 tm_battery="#(battery -pte)"
@@ -66,4 +64,4 @@ tm_session_name="#[fg=$tm_color_feature,bold]$tm_icon #S"
 tm_prefix_highlight="#{prefix_highlight}"
 
 set -g status-left $tm_session_name' '
-set -g status-right $tm_itunes' '$tm_prefix_highlight' '$tm_date' '$tm_battery'  '$tm_host
+set -g status-right $tm_prefix_highlight' '$tm_date' '$tm_battery'  '$tm_host
