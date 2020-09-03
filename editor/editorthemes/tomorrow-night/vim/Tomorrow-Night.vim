@@ -299,7 +299,6 @@ if has("gui_running") || &t_Co == 88 || &t_Co == 256
 	call <SID>X("cStorageClass", s:purple, "", "")
 	call <SID>X("cConditional", s:purple, "", "")
 	call <SID>X("cRepeat", s:purple, "", "")
-	call <SID>X("cStatement", s:purple, "", "")
 
 	" PHP Highlighting
 	call <SID>X("phpVarSelector", s:red, "", "")
@@ -390,7 +389,6 @@ if has("gui_running") || &t_Co == 88 || &t_Co == 256
 	call <SID>X("luaRepeat", s:purple, "", "")
 	call <SID>X("luaCondStart", s:purple, "", "")
 	call <SID>X("luaCondElseif", s:purple, "", "")
-	call <SID>X("luaElse", s:purple, "", "")
 	call <SID>X("luaCond", s:purple, "", "")
 	call <SID>X("luaCondEnd", s:purple, "", "")
 
