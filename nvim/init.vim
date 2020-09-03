@@ -8,8 +8,8 @@ colorscheme Tomorrow-Night
 syntax on " enable syntax highlighting
 filetype plugin indent on " let the filetype plugins do the work
 
-set exrc " enable local .nvimrc
-set secure " disallows the use of :autocmd, shell and write commands
+" set exrc " enable local .nvimrc
+" set secure " disallows the use of :autocmd, shell and write commands
 
 " }}}
 " {{{ System
@@ -22,6 +22,7 @@ set hidden " current buffer can be put into background
 
 set history=1000 " change history length
 set undolevels=1000 " number of undo levels
+set undofile " restore undo between sessions
 
 set ttyfast " faster redrawing
 set clipboard=unnamed " use the OS clipboard by default
@@ -349,6 +350,16 @@ function! GotoLastKnownLine()
     endif
 endfunction
 
+" apply mappings only for buffers with supported filetypes
+command! LanguageClientShortcuts call LanguageClientShortcuts()
+function! LanguageClientShortcuts()
+    if has_key(g:LanguageClient_serverCommands, &filetype)
+        nmap <tab><tab> <Plug>(lcn-menu)
+        nmap <silent> K <Plug>(lcn-hover)
+        nmap <silent> gd <Plug>(lcn-definition)
+    endif
+endfunction
+
 " enable shortcuts of cscope if a database is loaded
 command! CScopeShortcuts call CScopeShortcuts()
 function! CScopeShortcuts()
@@ -441,8 +452,8 @@ endif
 " }}}
 " {{{ Command line
 
-packadd termdebug
-let g:termdebug_wide = 1
+" packadd termdebug
+" let g:termdebug_wide = 1
 " let g:termdebugger = "arm-none-eabi-gdb"
 
 " smart mappings on the command line

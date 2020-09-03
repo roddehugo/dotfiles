@@ -49,7 +49,6 @@ Plug 'tpope/vim-fugitive' " amazing git wrapper for vim
 Plug 'tpope/vim-obsession' " continuously updated session files
 Plug 'tpope/vim-repeat' " enable repeating supported plugin maps with '.'
 Plug 'tpope/vim-surround' " quoting/parenthesizing made simple
-Plug 'tpope/vim-vinegar' " enhances netrw
 Plug 'raimondi/delimitmate' " automatic closing of quotes, parenthesis, brackets
 Plug 'ntpeters/vim-better-whitespace' " highlights trailing whitespace
 Plug 'aserebryakov/vim-todo-lists' " todo lists
@@ -61,11 +60,13 @@ Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim' " fuzzy file finder and more
 Plug 'itspriddle/vim-marked', { 'for': 'markdown', 'on': 'MarkedOpen' } " open markdown files in Marked.app
 
 " python
-Plug 'zchee/deoplete-jedi' " code completion for python
+Plug 'zchee/deoplete-jedi', { 'for': 'python' } " code completion for python
 
 " c/cpp
-Plug 'shougo/neoinclude.vim', { 'for': ['c', 'cpp']} " completion for includes
-Plug 'shougo/deoplete-clangx', { 'for': ['c', 'cpp']} " completion for C/C++
+Plug 'vim-scripts/a.vim' " switch between source files and header files
+Plug 'octol/vim-cpp-enhanced-highlight' " enhance code highlight
+Plug 'shougo/neoinclude.vim', { 'for': ['c', 'cpp'] } " completion for includes
+Plug 'shougo/deoplete-clangx', { 'for': ['c', 'cpp'] } " completion for c and c++
 
 call plug#end()
 
@@ -92,11 +93,10 @@ let g:lightline = {
 let g:fzf_layout = { 'down': '~30%' }
 command! -bang GFilesRecurse call fzf#vim#gitfiles('--recurse-submodules')
 
-" Deoplete.
+" deoplete
 let g:deoplete#enable_at_startup = 1
-let g:deoplete#auto_completion_start_length = 1
-let g:deoplete#sources#clang#libclang_path = '/Library/Developer/CommandLineTools/usr/lib/libclang.dylib'
-let g:deoplete#sources#clang#clang_header = '/Library/Developer/CommandLineTools/usr/lib/clang'
+let g:deoplete#sources#clang#libclang_path = '/usr/local/opt/llvm/lib/libclang.dylib'
+let g:deoplete#sources#clang#clang_header = '/usr/local/opt/llvm/lib/clang'
 
 " tmux-complete
 let g:tmuxcomplete#trigger = ''

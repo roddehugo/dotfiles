@@ -5,6 +5,7 @@ PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
 
 # Directories to be prepended to PATH
 declare -a dirs_to_prepend=(
+  '/usr/local/opt/llvm/bin' # Add brewed LLVM
   '/usr/local/opt/openssl/bin' # Add brewed OpenSSL
   '/usr/local/opt/qt/bin' # Add brewed Qt
 )
