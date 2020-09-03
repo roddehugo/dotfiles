@@ -59,17 +59,10 @@ Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim' " fuzzy file finder and more
 
 " markdown
 Plug 'itspriddle/vim-marked', { 'for': 'markdown', 'on': 'MarkedOpen' } " open markdown files in Marked.app
-Plug 'tpope/vim-markdown', { 'for': 'markdown' } " markdown support
-
-" json
-Plug 'elzr/vim-json', { 'for': 'json' } " Json support
 
 " python
 Plug 'zchee/deoplete-jedi' " code completion for python
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' } " PyLint, Rope, Pydoc, breakpoints from box.
-
-" lua
-Plug 'tbastos/vim-lua', { 'for': 'lua' } " improved lua syntax and indentation
 
 " c/cpp
 Plug 'shougo/neoinclude.vim', { 'for': ['c', 'cpp']} " completion for includes
@@ -80,11 +73,11 @@ call plug#end()
 " }}}
 " {{{ Configuration
 
-" Supertab
+" supertab
 let g:SuperTabDefaultCompletionType = "<c-n>"
 let g:SuperTabContextDefaultCompletionType = "<c-n>"
 
-" Lightline
+" lightline
 let g:lightline = {
             \ 'colorscheme': 'Tomorrow_Night',
             \ 'active': {
@@ -107,8 +100,8 @@ let g:deoplete#auto_completion_start_length = 1
 let g:deoplete#sources#clang#libclang_path = '/Library/Developer/CommandLineTools/usr/lib/libclang.dylib'
 let g:deoplete#sources#clang#clang_header = '/Library/Developer/CommandLineTools/usr/lib/clang'
 
-" Tmux complete
+" tmux-complete
 let g:tmuxcomplete#trigger = ''
 
-" Vim Todo lists
+" vim-todo-lists
 let g:VimTodoListsMoveItems = 0
