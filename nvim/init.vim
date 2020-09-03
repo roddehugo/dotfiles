@@ -16,7 +16,6 @@ set secure " disallows the use of :autocmd, shell and write commands
 
 set viminfo^=% " remember info about open buffers on close
 
-set noshowmode " get rid of --INSERT-- supported by lightline
 set nocompatible " not compatible with vi
 set autoread " detect when a file is changed
 set hidden " current buffer can be put into background
@@ -295,10 +294,10 @@ nnoremap <leader>oh :e %<.h<cr>
 nnoremap <leader>oH :e %<.hh<cr>
 
 " vimux runner
-noremap <Leader>vp :VimuxPromptCommand<cr>
+noremap <leader>vp :VimuxPromptCommand<cr>
 noremap <leader>vr :VimuxRunLastCommand<cr>
 noremap <leader>vi :VimuxInspectRunner<cr>
-noremap <Leader>vq :VimuxCloseRunner<cr>
+noremap <leader>vq :VimuxCloseRunner<cr>
 noremap <leader>vc :VimuxInterruptRunner<cr>
 
 " fuzzy searching
@@ -306,6 +305,8 @@ nnoremap <silent> <leader>c :Commits<cr>
 nnoremap <silent> <leader>C :BCommits<cr>
 nnoremap <silent> <leader>f :GFilesRecurse<cr>
 nnoremap <silent> <leader>F :Files<cr>
+nnoremap <silent> <leader>l :BLines<cr>
+nnoremap <silent> <leader>L :Lines<cr>
 nnoremap <silent> <leader>g :GFiles?<cr>
 nnoremap <silent> <leader>G :Rg<cr>
 nnoremap <silent> <leader>b :Buffers<cr>
@@ -317,21 +318,10 @@ xmap <leader><tab> <plug>(fzf-maps-x)
 omap <leader><tab> <plug>(fzf-maps-o)
 
 " insert mode completion
-imap <c-x><c-k> <plug>(fzf-complete-word)
-imap <c-x><c-f> <plug>(fzf-complete-path)
-imap <c-x><c-j> <plug>(fzf-complete-file-ag)
-imap <c-x><c-l> <plug>(fzf-complete-line)
-
-" cscope searching
-" nmap <leader>ca :cs find a <C-R>=expand("<cword>")<cr><cr> " assignement
-" nmap <leader>cc :cs find c <C-R>=expand("<cword>")<cr><cr> " fct calling
-" nmap <leader>cd :cs find d <C-R>=expand("<cword>")<cr><cr> " fct called by
-" nmap <leader>ce :cs find e <C-R>=expand("<cword>")<cr><cr> " egrep
-" nmap <leader>cf :cs find f <C-R>=expand("<cfile>")<cr><cr> " file
-" nmap <leader>cg :cs find g <C-R>=expand("<cword>")<cr><cr> " definition
-" nmap <leader>ci :cs find i <C-R>=expand("<cfile>")<cr><cr> " files including
-" nmap <leader>cs :cs find s <C-R>=expand("<cword>")<cr><cr> " C symbol
-" nmap <leader>ct :cs find t <C-R>=expand("<cword>")<cr><cr> " text string
+imap <C-x><C-k> <plug>(fzf-complete-word)
+imap <C-x><C-f> <plug>(fzf-complete-path)
+imap <C-x><C-j> <plug>(fzf-complete-file)
+imap <C-x><C-l> <plug>(fzf-complete-line)
 
 " relative path (src/foo.txt)
 nnoremap <leader>fp :let @+=expand("%")<cr>
@@ -363,11 +353,12 @@ endfunction
 command! CScopeShortcuts call CScopeShortcuts()
 function! CScopeShortcuts()
     if len(split(execute('cscope show'), '\n')) > 1
-        nmap ga <leader>ca
-        nmap gd <leader>cg
-        nmap gf <leader>cf
-        nmap gi <leader>ci
-        nmap gs <leader>cs
+        nmap ga :cs find a <C-R>=expand("<cword>")<cr><cr> " assignement
+        nmap gc :cs find c <C-R>=expand("<cword>")<cr><cr> " fct calling
+        nmap gd :cs find g <C-R>=expand("<cword>")<cr><cr> " definition
+        nmap gf :cs find f <C-R>=expand("<cfile>")<cr><cr> " file
+        nmap gi :cs find i <C-R>=expand("<cfile>")<cr><cr> " files including
+        nmap gs :cs find s <C-R>=expand("<cword>")<cr><cr> " C symbol
     endif
 endfunction
 
@@ -427,13 +418,7 @@ endfun
 if has('autocmd') && !exists('autocommands_loaded')
     let autocommands_loaded = 1
 
-    " Cscope
-    " autocmd VimEnter * CScopeStart
-    " autocmd FileType c,cpp CScopeShortcuts
-
-    " StripWhitespace
     autocmd BufEnter * EnableStripWhitespaceOnSave
-
     autocmd BufReadPost * GotoLastKnownLine
     autocmd BufWritePost * Neomake
 
