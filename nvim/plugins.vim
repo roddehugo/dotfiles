@@ -54,8 +54,8 @@ Plug 'raimondi/delimitmate' " automatic closing of quotes, parenthesis, brackets
 Plug 'ntpeters/vim-better-whitespace' " highlights trailing whitespace
 Plug 'aserebryakov/vim-todo-lists' " todo lists
 
-" file searching
-Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim' " fuzzy file finder and so much more
+" fuzzy searching
+Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim' " fuzzy file finder and more
 
 " markdown
 Plug 'itspriddle/vim-marked', { 'for': 'markdown', 'on': 'MarkedOpen' } " open markdown files in Marked.app
@@ -96,7 +96,7 @@ let g:lightline = {
             \ },
             \ }
 
-" FZF
+" fzf
 let g:fzf_layout = { 'down': '~30%' }
 command! -bang GFilesRecurse call fzf#vim#gitfiles('--recurse-submodules')
 
