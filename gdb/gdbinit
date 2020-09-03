@@ -12,6 +12,9 @@ end
 define stlink
  target extended-remote :4242
 end
+define jlink
+ target extended-remote :2331
+end
 define split
  layout src
  focus cmd
