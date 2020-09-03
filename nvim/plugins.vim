@@ -62,7 +62,6 @@ Plug 'itspriddle/vim-marked', { 'for': 'markdown', 'on': 'MarkedOpen' } " open m
 
 " python
 Plug 'zchee/deoplete-jedi' " code completion for python
-Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' } " PyLint, Rope, Pydoc, breakpoints from box.
 
 " c/cpp
 Plug 'shougo/neoinclude.vim', { 'for': ['c', 'cpp']} " completion for includes
