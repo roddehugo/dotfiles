@@ -1,0 +1,70 @@
+" Interface
+set showmode " show the current mode
+set showcmd " display the number of characters and lines in visual mode
+set number " show line numbers
+set numberwidth=3 " set gutter width to n cols
+set clipboard+=unnamed
+
+" Behavior
+set scrolloff=5 " keep n lines below and above cursor.
+set nostartofline " don't reset cursor to start of line when moving around.
+set magic " set magic on, for regex
+set ignorecase " case insensitive searching
+set smartcase " case-sensitive if expression contains a capital letter
+set hlsearch " highlight search results
+set incsearch " set incremental search, like modern browsers
+set gdefault " add the g flag to search/replace by default
+set lazyredraw " don't redraw while executing macros
+set autoindent " automatically set indent of new line
+set smartindent " automatically inserts one extra level of indentation
+set cindent " like smartindent but stricter and more customisable
+
+" Emulated Plugins
+set surround
+set multiple-cursors
+set commentary
+set ideajoin
+
+" Mappings
+let mapleader=","
+
+" Idea actions
+map <leader>d :action Debug<CR>
+map <leader>r :action RenameElement<CR>
+map <leader>c :action Stop<CR>
+map <leader>z :action ToggleDistractionFreeMode<CR>
+
+" use Q for formatting the current paragraph (or visual selection)
+vmap Q gq
+nmap Q gqap
+
+" refactor all file
+nmap =f ggVG=
+
+" enable . command in visual mode
+vnoremap . :normal .<cr>
+
+" remap VIM 0 to first non-blank character
+nnoremap 0 ^
+
+" fold/unfold map
+noremap <space> za
+noremap <c-space> zA
+
+" switch between current and last buffer
+nnoremap <leader>; <c-^>
+
+" keep selection after indentation
+vnoremap <silent> < <gv
+vnoremap <silent> > >gv
+
+" moving up and down work as you would expect
+nnoremap <silent> ^ g^
+nnoremap <silent> $ g$
+
+" smart way to move between windows
+noremap <C-j> <C-W>j
+noremap <C-k> <C-W>k
+noremap <C-h> <C-W>h
+noremap <C-l> <C-W>l
+
