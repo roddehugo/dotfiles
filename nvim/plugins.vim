@@ -95,8 +95,8 @@ command! -bang GFilesRecurse call fzf#vim#gitfiles('--recurse-submodules')
 
 " deoplete
 let g:deoplete#enable_at_startup = 1
-let g:deoplete#sources#clang#libclang_path = '/usr/local/opt/llvm/lib/libclang.dylib'
 let g:deoplete#sources#clang#clang_header = '/usr/local/opt/llvm/lib/clang'
+let g:deoplete#sources#clang#libclang_path = '/usr/local/opt/llvm/lib/libclang.dylib'
 
 " tmux-complete
 let g:tmuxcomplete#trigger = ''
