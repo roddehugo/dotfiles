@@ -16,6 +16,5 @@ define jlink
  target extended-remote :2331
 end
 define split
- layout src
- focus cmd
+ tui enable
 end

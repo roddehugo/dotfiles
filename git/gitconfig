@@ -159,6 +159,10 @@
 [mergetool "vimdiff"]
   cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
 
+[status]
+  # Show additional information about submodules
+  submoduleSummary = true
+
 [rebase]
   # Automatically squash fixup commits
   autosquash = true
@@ -166,6 +170,8 @@
 [push]
   # Push the current branch to update a branch with the same name on the receiving end
   default = current
+  # Verify whether currently referenced submodule commits need to be pushed too
+  recurseSubmodules = on-demand
 
 [pull]
   # Automatically rebase when pulling commits
@@ -184,17 +190,14 @@
   editor = subl
   historybrowser = gitk
 
-[cola]
-  spellcheck = true
-  fontdiff = Monaco,12,-1,5,50,0,0,0,0,0
-  blameviewer = git gui blame
-  boldheaders = true
-
 [filter "lfs"]
   clean = git-lfs clean -- %f
   smudge = git-lfs smudge -- %f
   process = git-lfs filter-process
   required = true
+
+[color]
+  ui = auto
 
 [color "branch"]
   current = yellow reverse
