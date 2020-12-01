@@ -83,7 +83,7 @@ set inccommand=nosplit
 
 " movements
 set backspace=indent,eol,start " make backspace behave in a sane manner
-set nostartofline " don’t reset cursor to start of line when moving around.
+set nostartofline " don't reset cursor to start of line when moving around.
 set scrolloff=5 " keep n lines below and above cursor.
 
 " line breaking/wrapping
@@ -117,7 +117,6 @@ set visualbell
 " indentation
 set autoindent " automatically set indent of new line
 set smartindent " automatically inserts one extra level of indentation
-set cindent " like smartindent but stricter and more customisable
 
 " toggle invisible characters
 set list
@@ -221,9 +220,6 @@ noremap =j :%!python -m json.tool<cr>
 " refactor with clang-format file
 noremap =c :py3file /usr/local/share/clang/clang-format.py<cr>
 
-" save a file as root (,W)
-noremap <silent> <leader>W :w !sudo tee -S % > /dev/null<cr>
-
 " switch CWD to the directory of the open buffer
 noremap <silent> <leader>cd :cd %:p:h<cr>:pwd<cr>
 
@@ -276,10 +272,6 @@ noremap <C-k> <C-W>k
 noremap <C-h> <C-W>h
 noremap <C-l> <C-W>l
 
-" easy window resizing x2
-nnoremap <silent> <leader>+ :exe "resize " . (winheight(0) * 2)<cr>
-nnoremap <silent> <leader>- :exe "resize " . (winheight(0) * 1/2)<cr>
-
 " marked2 shortcuts
 nnoremap <leader>mo :MarkedOpen!<cr>
 nnoremap <leader>mq :MarkedQuit<cr>
@@ -289,10 +281,6 @@ nnoremap <leader>mq :MarkedQuit<cr>
 nnoremap <leader>oe :e <C-R>=expand("%:p:h") . "/" <cr>
 nnoremap <leader>os :split <C-R>=expand("%:p:h") . "/" <cr>
 nnoremap <leader>ov :vsplit <C-R>=expand("%:p:h") . "/" <cr>
-nnoremap <leader>oc :e %<.c<cr>
-nnoremap <leader>oC :e %<.cc<cr>
-nnoremap <leader>oh :e %<.h<cr>
-nnoremap <leader>oH :e %<.hh<cr>
 
 " vimux runner
 noremap <leader>vp :VimuxPromptCommand<cr>
@@ -347,16 +335,6 @@ command! GotoLastKnownLine call GotoLastKnownLine()
 function! GotoLastKnownLine()
     if line("'\"") > 0 && line("'\"") <= line("$")
         exe "normal! g`\""
-    endif
-endfunction
-
-" apply mappings only for buffers with supported filetypes
-command! LanguageClientShortcuts call LanguageClientShortcuts()
-function! LanguageClientShortcuts()
-    if has_key(g:LanguageClient_serverCommands, &filetype)
-        nmap <tab><tab> <Plug>(lcn-menu)
-        nmap <silent> K <Plug>(lcn-hover)
-        nmap <silent> gd <Plug>(lcn-definition)
     endif
 endfunction
 
@@ -431,7 +409,6 @@ if has('autocmd') && !exists('autocommands_loaded')
 
     autocmd BufEnter * EnableStripWhitespaceOnSave
     autocmd BufReadPost * GotoLastKnownLine
-    autocmd BufWritePost * Neomake
 
     autocmd BufRead,BufNewFile Module set filetype=make
     autocmd BufRead,BufNewFile .notes set filetype=markdown

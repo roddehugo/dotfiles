@@ -36,7 +36,7 @@ Plug 'tmux-plugins/vim-tmux-focus-events' " autoread option work properly for te
 Plug 'wellle/tmux-complete.vim' " autocompletion for visible strings in panes
 
 " utilities
-Plug 'neomake/neomake' " syntactic
+Plug 'neomake/neomake' " asynchronous linting and make framework
 Plug 'sbdchd/neoformat' " code formating with several backends
 Plug 'sheerun/vim-polyglot' " a solid language pack for Vim
 Plug 'shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -95,8 +95,6 @@ command! -bang GFilesRecurse call fzf#vim#gitfiles('--recurse-submodules')
 
 " deoplete
 let g:deoplete#enable_at_startup = 1
-let g:deoplete#sources#clang#clang_header = '/usr/local/opt/llvm/lib/clang'
-let g:deoplete#sources#clang#libclang_path = '/usr/local/opt/llvm/lib/libclang.dylib'
 
 " tmux-complete
 let g:tmuxcomplete#trigger = ''
