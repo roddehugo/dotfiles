@@ -2,5 +2,7 @@
 
 # Recursive git command in subfolders
 function git-recursive() {
-  find . -type d -name '.git' | while read dir ; do sh -c "cd $dir/../ && echo \"\ngit status: ${dir//\.git/}\" && git $@" ; done
+  find . -type d -name '.git' | sort | while read -r dir; do
+    sh -c "echo \"\ngit status: ${dir//\.git/}\" && git -C $dir/.. ${@}"
+  done
 }
