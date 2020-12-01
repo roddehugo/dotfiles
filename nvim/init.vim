@@ -257,30 +257,32 @@ imap <silent> <left> <nop>
 imap <silent> <right> <nop>
 
 " scroll the viewport faster
-nnoremap <silent> <C-e> 3<C-e>
-nnoremap <silent> <C-y> 3<C-y>
+noremap <silent> <C-e> 3<C-e>
+noremap <silent> <C-y> 3<C-y>
 
 " helpers for dealing with other people's code
+nnoremap \t8 :set ts=8 sts=8 sw=8 noet<cr>
 nnoremap \t4 :set ts=4 sts=4 sw=4 noet<cr>
 nnoremap \t2 :set ts=2 sts=2 sw=2 noet<cr>
+nnoremap \s8 :set ts=8 sts=8 sw=8 et<cr>
 nnoremap \s4 :set ts=4 sts=4 sw=4 et<cr>
 nnoremap \s2 :set ts=2 sts=2 sw=2 et<cr>
 
 " smart way to move between windows
-noremap <C-j> <C-W>j
-noremap <C-k> <C-W>k
-noremap <C-h> <C-W>h
-noremap <C-l> <C-W>l
+nnoremap <C-j> <C-W>j
+nnoremap <C-k> <C-W>k
+nnoremap <C-h> <C-W>h
+nnoremap <C-l> <C-W>l
 
 " marked2 shortcuts
-nnoremap <leader>mo :MarkedOpen!<cr>
-nnoremap <leader>mq :MarkedQuit<cr>
+noremap <leader>mo :MarkedOpen!<cr>
+noremap <leader>mq :MarkedQuit<cr>
 
 " opens a new tab with the current buffer's path
 " super useful when editing files in the same directory
-nnoremap <leader>oe :e <C-R>=expand("%:p:h") . "/" <cr>
-nnoremap <leader>os :split <C-R>=expand("%:p:h") . "/" <cr>
-nnoremap <leader>ov :vsplit <C-R>=expand("%:p:h") . "/" <cr>
+noremap <leader>oe :e <C-R>=expand("%:p:h") . "/" <cr>
+noremap <leader>os :split <C-R>=expand("%:p:h") . "/" <cr>
+noremap <leader>ov :vsplit <C-R>=expand("%:p:h") . "/" <cr>
 
 " vimux runner
 noremap <leader>vp :VimuxPromptCommand<cr>
@@ -290,16 +292,16 @@ noremap <leader>vq :VimuxCloseRunner<cr>
 noremap <leader>vc :VimuxInterruptRunner<cr>
 
 " fuzzy searching
-nnoremap <silent> <leader>c :Commits<cr>
-nnoremap <silent> <leader>C :BCommits<cr>
-nnoremap <silent> <leader>f :GFilesRecurse<cr>
-nnoremap <silent> <leader>F :Files<cr>
-nnoremap <silent> <leader>l :BLines<cr>
-nnoremap <silent> <leader>L :Lines<cr>
-nnoremap <silent> <leader>g :GFiles?<cr>
-nnoremap <silent> <leader>G :Rg<cr>
-nnoremap <silent> <leader>b :Buffers<cr>
-nnoremap <silent> <leader>t :Tags<cr>
+noremap <silent> <leader>c :BCommits<cr>
+noremap <silent> <leader>C :Commits<cr>
+noremap <silent> <leader>f :GFilesRecurse<cr>
+noremap <silent> <leader>F :Files<cr>
+noremap <silent> <leader>l :BLines<cr>
+noremap <silent> <leader>L :Lines<cr>
+noremap <silent> <leader>g :GFiles?<cr>
+noremap <silent> <leader>G :Rg<cr>
+noremap <silent> <leader>b :Buffers<cr>
+noremap <silent> <leader>t :Tags<cr>
 
 " mapping selecting mappings
 nmap <leader><tab> <plug>(fzf-maps-n)
@@ -313,13 +315,13 @@ imap <C-x><C-j> <plug>(fzf-complete-file)
 imap <C-x><C-l> <plug>(fzf-complete-line)
 
 " relative path (src/foo.txt)
-nnoremap <leader>fp :let @+=expand("%")<cr>
+noremap <leader>fp :let @+=expand("%")<cr>
 " absolute path (/something/src/foo.txt)
-nnoremap <leader>fP :let @+=expand("%:p")<cr>
+noremap <leader>fP :let @+=expand("%:p")<cr>
 " filename (foo.txt)
-nnoremap <leader>fn :let @+=expand("%:t")<cr>
+noremap <leader>fn :let @+=expand("%:t")<cr>
 " directory name (/something/src)
-nnoremap <leader>dn :let @+=expand("%:p:h")<cr>
+noremap <leader>dn :let @+=expand("%:p:h")<cr>
 
 " }}}
 " {{{ Functions
