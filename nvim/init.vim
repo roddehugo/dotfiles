@@ -72,7 +72,7 @@ set guicursor+=n-v-c:block-nCursor
 set guicursor+=a:blinkon0
 
 " always activate spell corrections
-set spell
+set nospell
 
 " splits
 set splitbelow
