@@ -28,6 +28,7 @@ Plug 'joshdick/onedark.vim'
 " editor
 Plug 'itchyny/lightline.vim' " light and configurable statusline/tabline plugin
 Plug 'airblade/vim-gitgutter' " git diff in the gutter and stages/reverts hunks
+Plug 'lambdalisue/suda.vim' " fix :w !sudo tee % > /dev/null trick on neovim.
 
 " tmux
 Plug 'benmills/vimux' " tmux integration for vim
