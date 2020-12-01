@@ -57,3 +57,6 @@ export GOPATH=$HOME/Workspaces/go
 
 # Tell Espressif toolchain where to find the SDK
 export IDF_PATH=/usr/local/Espressif/esp-rtos-sdk
+
+# Add CTRL-j / CTRL-k for navigating fzf
+export FZF_DEFAULT_OPTS='--bind=ctrl-j:down,ctrl-k:up'
