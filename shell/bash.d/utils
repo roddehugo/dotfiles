@@ -4,7 +4,7 @@
 function e_header() {
   printf "\n${bold}${purple}==========  %s  ==========${reset}\n" "$@"
 }
-function e_arrow() {
+function e_step() {
   printf "➜ $@\n"
 }
 function e_info() {
