@@ -1,8 +1,6 @@
 --recurse=yes
 --exclude=.git
 --exclude=.svn
+--exclude=.hg
 --exclude=vendor/*
 --exclude=node_modules/*
---exclude=db/*
---exclude=log/*
---exclude=obj/*
