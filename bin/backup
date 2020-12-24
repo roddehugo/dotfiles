@@ -1,90 +1,42 @@
 #!/usr/bin/env bash
 
-# Disc backup script
-# Requires rsync 3
+set -euo pipefail
 
-# Ask for the administrator password upfront
-# sudo -v
+source ~/.dotfiles/shell/bash.d/colors
+source ~/.dotfiles/shell/bash.d/utils
 
-# IMPORTANT: Make sure you update the `DST` variable to match the name of the
-# destination backup drive
+today=$(date +"%Y%m%d")
+tmpd=$(mktemp -d -t backup)
+dest="/Volumes/LaCie Secure/Backups/$today"
 
-DOTFILES_DIRECTORY="$HOME/.dotfiles"
-SRC="$HOME/"
-DST="${1:-/Volumes/HUGO RODDE/Backups/}"
-EXCLUDE="$DOTFILES_DIRECTORY/bin/backupignore"
+confirm()
+{
+  # Ask before potentially overwriting files
+  seek_confirmation \
+    "Warning: This step may overwrite your existing backup files.\nContinue?"
+  if ! is_confirmed
+  then
+    exit 1
+  fi
+}
 
-cd $DOTFILES_DIRECTORY
+archive()
+{
+  e_step "Archiving directories..."
+  test -d "$tmpd"
+  mkdir -p "$dest"
+  while read -r -u 10 d
+  do
+    if [ -n "$d" ] && [ -d ~/"$d" ]
+    then
+      tarfile="$tmpd/$d.tgz"
+      e_info "  $d -> $tarfile"
+      tar c --strip-components 3 --exclude-from "$2" ~/"$d" |\
+        pv -trb | pigz > "$tarfile"
+      mv "$tarfile" "$dest/"
+    fi
+  done 10< "$1"
+  e_success "OK"
+}
 
-source ./shell/bash.d/colors
-source ./shell/bash.d/utils
-source ./shell/bash.d/functions/pip
-
-# Ask before potentially overwriting files
-seek_confirmation "Warning: This step may overwrite your existing backup files. Continue?"
-
-if ! is_confirmed; then
-  exit 0
-fi
-
-if [[ ! -d $DOTFILES_DIRECTORY/installed ]]; then
-  mkdir $DOTFILES_DIRECTORY/installed
-fi
-
-e_info "Backing up brew..."
-
-# Bakcup list of applications installed
-ls -l /Applications/ | grep .app | sed 's/\.app//g' | sed 's/ \( \)*/ /g' | cut -d' ' -f9- > $DOTFILES_DIRECTORY/installed/Applicationsfile
-find /Applications -path '*Contents/_MASReceipt/receipt' -maxdepth 4 -print |\sed 's#.app/Contents/_MASReceipt/receipt#.app#g; s#/Applications/##' | sed 's/\.app//g' > $DOTFILES_DIRECTORY/installed/AppStorefile
-brew tap  | awk '{print $1}' > $DOTFILES_DIRECTORY/installed/Tapfile
-brew list  | awk '{print $1}' > $DOTFILES_DIRECTORY/installed/Brewfile
-brew cask list  | awk '{print $1}' > $DOTFILES_DIRECTORY/installed/Caskfile
-
-[[ $? ]] && e_success "Done"
-
-e_info "Backing up pip..."
-
-# Backup list of pip 2.7 and pip 3 packages
-gpip list --format=legacy | awk '{print $1}' > $DOTFILES_DIRECTORY/installed/Pipfile
-gpip3 list --format=legacy | awk '{print $1}'> $DOTFILES_DIRECTORY/installed/Pip3file
-
-[[ $? ]] && e_success "Done"
-
-e_info "Backing up rsync..."
-
-if [[ ! -r "$SRC" ]]; then
-  e_error "Source $SRC not readable - Cannot start the sync process"
-  exit 1
-fi
-
-if [[ ! -w "$DST" ]]; then
-  e_error "Destination $DST not writeable - Cannot start the sync process"
-  exit 1
-fi
-
-
-# --acls                   update the destination ACLs to be the same as the source ACLs
-# --archive                turn on archive mode (recursive copy + retain attributes)
-# --delete                 delete any files that have been deleted locally
-# --delete-excluded        delete any files (on DST) that are part of the list of excluded files
-# --exclude-from           reference a list of files to exclude
-# --hard-links             preserve hard-links
-# --one-file-system        don't cross device boundaries (ignore mounted volumes)
-# --sparse                 handle sparse files efficiently
-# --verbose                increase verbosity
-# --xattrs                 update the remote extended attributes to be the same as the local ones
-
-rsync  --acls \
-  --archive \
-  --delete \
-  --delete-excluded \
-  --exclude-from="$EXCLUDE" \
-  --hard-links \
-  --one-file-system \
-  --sparse \
-  --verbose \
-  --xattrs \
-  --quiet \
-  "$SRC" "$DST"
-
-[[ $? ]] && e_success "Done"
+confirm && archive "${1:-backup-include}" "${2:-backup-exclude}"
