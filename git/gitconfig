@@ -57,9 +57,7 @@
   # `git di $number` shows the diff between the state `$number` revisions ago and the current state
   din = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
   # Pull in remote changes for the current repository and init/update its submodules
-  plu = !"git pull && git submodule init && git submodule update"
-  # Pull in remote changes for the current repository and all its submodules
-  pls = !"git pull && git submodule foreach git pull"
+  plu = !"git pull && git submodule update --init --recursive"
   # Set upstream remote branch
   upstr = !"f() { git branch --set-upstream-to=origin/$1 $1; }; f"
   # I know what you did yesterday - great for follow-ups
@@ -139,6 +137,7 @@
   # Detect copies as well as renames
   renames = copies
   tool = vimdiff
+  submodule = log
 
 [difftool]
   # Wait for confirmation after each difftool invocation
@@ -180,8 +179,11 @@
 [fetch]
   # Remove deleted branch upstream on local repository
   prune = true
-  # Fetch remote tags
+  # Fetch remote tags, and prune from upstream
   tags = true
+  pruneTags = true
+  # Verify whether currently referenced submodule commits need to be pushed too
+  recurseSubmodules = on-demand
 
 [grep]
   lineNumber = true

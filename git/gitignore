@@ -1,10 +1,14 @@
 # JetBrains
 .idea/
 
+# Ctags
+tags
+
 # CScope
 .cscope_config
 
 # Clang
+.clang
 .clang_complete
 
 # GDB
