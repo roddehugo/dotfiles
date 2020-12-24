@@ -50,11 +50,11 @@ function prompt_update() {
       else
         r="↓";
       fi;
-      remote=" [${r}${BASH_REMATCH[2]}]";
+      remote=" [${r}${BASH_REMATCH[2]}] ";
     elif [[ ${git_status} =~ ${diverge_pattern} ]]; then
-      remote=" [↑${BASH_REMATCH[1]}↓${BASH_REMATCH[2]}]";
+      remote=" [↑${BASH_REMATCH[1]}↓${BASH_REMATCH[2]}] ";
     else
-      remote=""
+      remote=" "
     fi;
 
     branch="$(git symbolic-ref --quiet --short HEAD 2> /dev/null || \
@@ -68,15 +68,11 @@ function prompt_update() {
     branch="";
   fi;
 
-  if [[ -z "$remote" && "$status" == " ✔" ]]; then
-    gitLength=$((${#branch}+${#status}));
-  else
-    gitLength=$((${#branch}+${#status}+${#remote}));
-  fi
+  gitLength=$((${#branch}+${#status}+${#remote}));
 
   # Check if we're in a virtualenv
   if [[ -n "$VIRTUAL_ENV" ]]; then
-    venv="$(basename "${VIRTUAL_ENV}")";
+    venv="$(basename "${VIRTUAL_ENV}") ";
   else
     venv="";
   fi;
@@ -101,14 +97,14 @@ function prompt_date() {
 # Prompt virtualenv
 function prompt_venv() {
   if [[ -n "$VIRTUAL_ENV" ]]; then
-    echo -e "${orange}${venv}${reset} "
+    echo -e "${orange}${venv}${reset}"
   fi;
 }
 
 # Prompt git
 function prompt_git() {
   if is_git_repository; then
-    echo -e "${purple}${branch}${tan}${status}${cyan}${remote}${reset} ";
+    echo -e "${purple}${branch}${tan}${status}${cyan}${remote}${reset}";
   fi;
 }
 
@@ -125,7 +121,7 @@ function prompt_command() {
 
 function prompt_align() {
   prompt_update;
-  local offset=48;
+  local offset=49;
 
   PLEFT="\[${blue}\]${shortPWD}\[${reset}\]";
   PRIGHT="\$(prompt_venv)\$(prompt_git)\$(prompt_date)\[${reset}\]";
