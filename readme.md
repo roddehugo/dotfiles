@@ -1,4 +1,4 @@
-# dotfiles [![Build Status](https://jenkins.favrodd.com/job/dotfiles/badge/icon)](https://jenkins.favrodd.com/job/dotfiles/)
+# dotfiles
 
 ### OS X
 
