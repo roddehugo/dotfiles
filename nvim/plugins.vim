@@ -26,6 +26,7 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'joshdick/onedark.vim'
 
 " editor
+Plug 'editorconfig/editorconfig-vim' " maintain consistent coding styles
 Plug 'itchyny/lightline.vim' " light and configurable statusline/tabline plugin
 Plug 'airblade/vim-gitgutter' " git diff in the gutter and stages/reverts hunks
 Plug 'lambdalisue/suda.vim' " fix :w !sudo tee % > /dev/null trick on neovim.
@@ -68,11 +69,15 @@ Plug 'vim-scripts/a.vim' " switch between source files and header files
 Plug 'octol/vim-cpp-enhanced-highlight' " enhance code highlight
 Plug 'shougo/neoinclude.vim', { 'for': ['c', 'cpp'] } " completion for includes
 Plug 'shougo/deoplete-clangx', { 'for': ['c', 'cpp'] } " completion for c and c++
+Plug 'deoplete-plugins/deoplete-tag', { 'for': ['c', 'cpp'] } " completion for ctags
 
 call plug#end()
 
 " }}}
 " {{{ Configuration
+
+" editorconfig
+let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 " supertab
 let g:SuperTabDefaultCompletionType = "<c-n>"

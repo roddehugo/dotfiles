@@ -411,6 +411,7 @@ if has('autocmd') && !exists('autocommands_loaded')
 
     autocmd BufEnter * EnableStripWhitespaceOnSave
     autocmd BufReadPost * GotoLastKnownLine
+    autocmd BufWritePost * Neomake
 
     autocmd BufRead,BufNewFile Module set filetype=make
     autocmd BufRead,BufNewFile .notes set filetype=markdown
