@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# Temporary file edition
+function tmp() {
+    $EDITOR $(mktemp)
+}
