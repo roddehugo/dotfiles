@@ -9,14 +9,6 @@
   t = "!f() { git log --oneline --graph --decorate --branches ${@}; }; f"
   # View the current working tree status using the short format
   st = status -sb
-  # Branch
-  br = branch
-  # Clone a repository including all submodules
-  cr = clone --recursive
-  # Commit
-  ci = commit
-  # Cherry-pick
-  cp = cherry-pick
   # Commit all changes
   ca = !"git add -A && git commit -m"
   # Commit all modified changes
@@ -36,6 +28,8 @@
   remotes = remote -v
   # Get the commit referenced by a tag
   tagref = rev-list --abbrev-commit -n 1
+  # Get the commit stat
+  stat = show --stat
   # Amend the currently staged files to the latest commit
   amend = commit --amend --reuse-message=HEAD
   # Fixup the currently staged files to the specified commit
@@ -129,9 +123,10 @@
   # http://michael-kuehnel.de/git/2014/11/21/git-mac-osx-and-german-umlaute.html
   precomposeunicode = false
 
-  legacyheaders = false
-
   pager = less -+e
+
+[init]
+  defaultBranch = master
 
 [diff]
   # Detect copies as well as renames
