@@ -32,6 +32,7 @@ alias activate='source venv/bin/activate'
 # Because it's so much nicer
 alias g="git"
 alias edit="$EDITOR"
+alias view="nvim -R"
 
 # Update commands
 alias up-osx='sudo softwareupdate -i -a'
