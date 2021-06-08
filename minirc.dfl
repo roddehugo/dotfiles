@@ -1,0 +1,9 @@
+# Machine-generated file - use setup menu in minicom to change parameters.
+pu port             /dev/cu.usbserial-A603YGUX
+pu escape-key       ^A
+pu backspace        DEL
+pu rtscts           No 
+pu sfcolor          BLACK
+pu sbcolor          BLUE
+pu sound            No
+pu histlines        5000
