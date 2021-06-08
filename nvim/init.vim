@@ -62,6 +62,15 @@ set numberwidth=3 " set gutter width to n cols
 set shortmess=atTI
 
 " }}}
+" {{{ Netrw
+
+let g:netrw_banner = 0 " remove banner
+let g:netrw_preview = 1 " prefer vertical preview split
+let g:netrw_liststyle = 3 " use tree list view
+let g:netrw_altv = 1 " prefer right preview split
+" let g:netrw_winsize = 30 " width of the directory explorer
+
+" }}}
 " {{{ Behavior
 
 " switch cursor to line in insert mode
