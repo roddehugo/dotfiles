@@ -44,6 +44,7 @@
     </rules>
   </Objective-C-extensions>
   <codeStyleSettings language="ObjectiveC">
+    <option name="RIGHT_MARGIN" value="100" />
     <option name="KEEP_CONTROL_STATEMENT_IN_ONE_LINE" value="false" />
     <option name="KEEP_BLANK_LINES_IN_DECLARATIONS" value="1" />
     <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
@@ -65,6 +66,7 @@
     <option name="BINARY_OPERATION_SIGN_ON_NEXT_LINE" value="true" />
     <option name="ASSIGNMENT_WRAP" value="1" />
     <option name="WRAP_ON_TYPING" value="1" />
+    <option name="SOFT_MARGINS" value="85" />
     <indentOptions>
       <option name="CONTINUATION_INDENT_SIZE" value="4" />
       <option name="LABEL_INDENT_ABSOLUTE" value="true" />
