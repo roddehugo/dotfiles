@@ -420,7 +420,7 @@ if has('autocmd') && !exists('autocommands_loaded')
     autocmd FileType ld setlocal ts=8 sts=8 sw=8 noet
     autocmd FileType make setlocal ts=4 sts=4 sw=4 noet
     autocmd FileType c,cpp setlocal ts=4 sts=4 sw=4 et cinoptions=t0,g-.5s
-    autocmd FileType markdown,textile setlocal spell
+    autocmd FileType markdown,textile,tex setlocal spell
     autocmd FileType gitcommit setlocal tw=72 cc=72 spell
     autocmd FileType gitrebase setlocal tw=87 cc=87 nospell
     autocmd FileType todo setlocal spell ts=2 sts=2 sw=2 et nofoldenable
