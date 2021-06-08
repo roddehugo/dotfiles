@@ -24,18 +24,28 @@ _completemarks() {
 }
 complete -F _completemarks jump unmark
 
+# Add completion for SSH hosts
+_completehosts() {
+  local curw=${COMP_WORDS[COMP_CWORD]}
+  local config_hosts known_hosts
+  if [ -e "$HOME/.ssh/config" ]
+  then
+    config_hosts=$(grep "^Host" ~/.ssh/config | grep -v "[?*]" | cut -d " " -f2- | tr ' ' '\n')
+  fi
+  if [ -e "$HOME/.ssh/known_hosts" ]
+  then
+    known_hosts=$(cut -f 1 -d ' ' ~/.ssh/known_hosts | sed -e s/,.*//g | uniq | grep -v ':')
+  fi
+  wordlist=$(echo "${config_hosts[@]}" "${known_hosts[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' ')
+  COMPREPLY=($(compgen -W '${wordlist[@]}' -- "$curw"))
+}
+complete -F _completehosts ssh scp sftp
+
 # Enable pip command autocompletion for `gpip3` alias as well
 complete -o "default" -o "nospace" -F _pip gpip3
 
 # Enable git command autocompletion for 'g' as well
-complete -o default -o nospace -F _git g
-
-# Enable Tab completion to select options
-# bind 'set show-all-if-ambiguous on'
-# bind 'TAB:menu-complete'
-
-# Add tab completion for SSH hostnames based on ~/.ssh/config, ignoring wildcards
-[ -e "$HOME/.ssh/config" ] && complete -o "default" -o "nospace" -W "$(grep "^Host" ~/.ssh/config | grep -v "[?*]" | cut -d " " -f2- | tr ' ' '\n')" scp sftp ssh;
+__git_complete g __git_main
 
 # Add tab completion for `defaults read|write NSGlobalDomain`
 # You could just use `-g` instead, but I like being explicit
