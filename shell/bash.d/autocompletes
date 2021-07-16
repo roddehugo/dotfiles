@@ -39,7 +39,7 @@ _completehosts() {
   wordlist=$(echo "${config_hosts[@]}" "${known_hosts[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' ')
   COMPREPLY=($(compgen -W '${wordlist[@]}' -- "$curw"))
 }
-complete -F _completehosts ssh scp sftp
+complete -F _completehosts ssh
 
 # Enable pip command autocompletion for `gpip3` alias as well
 complete -o "default" -o "nospace" -F _pip gpip3
