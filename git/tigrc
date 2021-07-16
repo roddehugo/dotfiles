@@ -25,4 +25,4 @@ bind main + !git push --set-upstream origin +%(branch)
 # Custom refresh mode
 set refresh-mode = auto
 set main-view-id = yes
-set main-view-id-width = 8
+set main-view-id-width = 7
