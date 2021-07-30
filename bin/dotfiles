@@ -213,6 +213,7 @@ mirrorfiles() {
     link "ssh"                          ".ssh"
     link "tmux/tmux.conf"               ".tmux.conf"
     link "tmux/theme.sh"                ".tmux/theme.sh"
+    link "journal/config"               ".jrnl_config"
 }
 
 post_mirrorfiles() {
