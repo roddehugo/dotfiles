@@ -6,7 +6,6 @@ source ~/.dotfiles/shell/bash.d/colors
 source ~/.dotfiles/shell/bash.d/utils
 
 today=$(date +"%Y%m%d")
-tmpd=$(mktemp -d -t backup)
 dest="/Volumes/LaCie Secure/Backups/$today"
 
 include=~/.dotfiles/bin/backup-include
@@ -26,17 +25,15 @@ confirm()
 archive()
 {
   e_step "Archiving directories..."
-  test -d "$tmpd"
   mkdir -p "$dest"
   while read -r -u 10 d
   do
     if [ -n "$d" ] && [ -d ~/"$d" ]
     then
-      tarfile="$tmpd/$d.tgz"
+      tarfile="$dest/$d.tgz"
       e_info "  $d -> $tarfile"
       tar c --strip-components 3 --exclude-from "$2" ~/"$d" |\
         pv -trb | pigz > "$tarfile"
-      [ -f "$tarfile" ] && mv -v "$tarfile" "$dest/"
     fi
   done 10< "$1"
   e_success "OK"
