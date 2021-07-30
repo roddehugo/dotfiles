@@ -9,6 +9,9 @@ today=$(date +"%Y%m%d")
 tmpd=$(mktemp -d -t backup)
 dest="/Volumes/LaCie Secure/Backups/$today"
 
+include=~/.dotfiles/bin/backup-include
+exclude=~/.dotfiles/bin/backup-exclude
+
 confirm()
 {
   # Ask before potentially overwriting files
@@ -33,10 +36,10 @@ archive()
       e_info "  $d -> $tarfile"
       tar c --strip-components 3 --exclude-from "$2" ~/"$d" |\
         pv -trb | pigz > "$tarfile"
-      mv "$tarfile" "$dest/"
+      [ -f "$tarfile" ] && mv -v "$tarfile" "$dest/"
     fi
   done 10< "$1"
   e_success "OK"
 }
 
-confirm && archive "${1:-backup-include}" "${2:-backup-exclude}"
+confirm && archive "${include}" "${exclude}"

@@ -1,4 +1,7 @@
 $RECYCLE.BIN/
+desktop.ini
 .Spotlight-*/
 .Trashes/
 .Trash/
+.DS_Store
+.localized
