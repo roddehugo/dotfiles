@@ -31,8 +31,10 @@ alias activate='source venv/bin/activate'
 
 # Because it's so much nicer
 alias g="git"
+alias d='dirs -v'
 alias edit="$EDITOR"
 alias view="nvim -R"
+alias tree="tree -a -I '.git|.svn|node_modules|.venv|__pycache__|*.pyc' --dirsfirst"
 
 # Update commands
 alias up-osx='sudo softwareupdate -i -a'
@@ -60,14 +62,6 @@ alias ls="ls -h $colorflag"
 # Sort files with increasing version numbers.
 alias lv="ls | sort --version-sort"
 unset colorflag
-
-# Shortcut to remove all with force
-alias rmf='rm -rf'
-
-# Folder manipulation
-alias md='mkdir -p'
-alias rd='rmdir'
-alias d='dirs -v | head -10'
 
 # Always use color output for `grep` and ignore directories.
 grepflags='--color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'

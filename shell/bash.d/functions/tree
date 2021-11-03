@@ -2,5 +2,6 @@
 
 # Shorthand for tree with hidden files and color enabled
 function t() {
-  tree -aC -I '.git|.svn|node_modules|bower_components|venv' --dirsfirst "$@" | less -FRNX;
+  TREEIGNORE=".git|.svn|node_modules|.venv|__pycache__|*.pyc"
+  tree -aC -I "$TREEIGNORE" --dirsfirst "$@" | less -FRNX;
 }
