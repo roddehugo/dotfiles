@@ -69,6 +69,7 @@ let g:netrw_preview = 1 " prefer vertical preview split
 let g:netrw_liststyle = 3 " use tree list view
 let g:netrw_altv = 1 " prefer right preview split
 " let g:netrw_winsize = 30 " width of the directory explorer
+" noremap <unique> <C-p> <Plug>NetrwRefresh
 
 " }}}
 " {{{ Behavior
@@ -324,13 +325,13 @@ imap <C-x><C-j> <plug>(fzf-complete-file)
 imap <C-x><C-l> <plug>(fzf-complete-line)
 
 " relative path (src/foo.txt)
-noremap <leader>fp :let @+=expand("%")<cr>
+noremap <leader>p :let @+=expand("%")<cr>
 " absolute path (/something/src/foo.txt)
-noremap <leader>fP :let @+=expand("%:p")<cr>
+noremap <leader>P :let @+=expand("%:p")<cr>
 " filename (foo.txt)
-noremap <leader>fn :let @+=expand("%:t")<cr>
+noremap <leader>n :let @+=expand("%:t")<cr>
 " directory name (/something/src)
-noremap <leader>dn :let @+=expand("%:p:h")<cr>
+noremap <leader>d :let @+=expand("%:p:h")<cr>
 
 " }}}
 " {{{ Functions
@@ -432,6 +433,7 @@ if has('autocmd') && !exists('autocommands_loaded')
     autocmd FileType markdown,textile,tex setlocal spell
     autocmd FileType gitcommit setlocal tw=72 cc=72 spell
     autocmd FileType gitrebase setlocal tw=87 cc=87 nospell
+    autocmd FileType gitcommit,gitrebase exec 'norm gg'
     autocmd FileType todo setlocal spell ts=2 sts=2 sw=2 et nofoldenable
     autocmd FileType journal setlocal spell spelllang=fr
 

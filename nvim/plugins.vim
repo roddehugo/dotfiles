@@ -62,7 +62,8 @@ Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim' " fuzzy file finder and more
 Plug 'itspriddle/vim-marked', { 'for': 'markdown', 'on': 'MarkedOpen' } " open markdown files in Marked.app
 
 " python
-Plug 'zchee/deoplete-jedi', { 'for': 'python' } " code completion for python
+Plug 'zchee/deoplete-jedi', { 'for': 'python' } " code completion
+Plug 'davidhalter/jedi-vim', { 'for': 'python' } " code jump to definition
 
 " c/cpp
 Plug 'vim-scripts/a.vim' " switch between source files and header files
@@ -75,6 +76,9 @@ call plug#end()
 
 " }}}
 " {{{ Configuration
+
+" netrw
+let g:netrw_list_hide= '.*\.swp$,.*\.pyc,__pycache__,.*\.egg-info'
 
 " editorconfig
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
@@ -99,11 +103,23 @@ let g:lightline = {
 let g:fzf_layout = { 'down': '~30%' }
 command! -bang GFilesRecurse call fzf#vim#gitfiles('--recurse-submodules')
 
+" pynvim
+let g:python_host_prog = '/usr/bin/python'
+let g:python3_host_prog = '/usr/local/bin/python3'
+
 " deoplete
 let g:deoplete#enable_at_startup = 1
+
+" neomake
+let g:neomake_python_enabled_makers = ['flake8']
 
 " tmux-complete
 let g:tmuxcomplete#trigger = ''
 
 " vim-todo-lists
 let g:VimTodoListsMoveItems = 0
+
+" jedi-vim
+let g:jedi#auto_initialization = 0
+let g:jedi#completions_enabled = 0
+let g:jedi#use_splits_not_buffers = "right"
