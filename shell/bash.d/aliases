@@ -27,7 +27,7 @@ alias projects='cd ~/Projects'
 alias icloud='cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/'
 
 # Python virtualenv
-alias activate='source venv/bin/activate'
+alias activate='. .venv/bin/activate'
 
 # Because it's so much nicer
 alias g="git"

@@ -72,7 +72,8 @@ function prompt_update() {
 
   # Check if we're in a virtualenv
   if [[ -n "$VIRTUAL_ENV" ]]; then
-    venv="$(basename "${VIRTUAL_ENV}") ";
+    venv="$(basename "${VIRTUAL_ENV}")"
+    venv="${venv##.} ";
   else
     venv="";
   fi;
