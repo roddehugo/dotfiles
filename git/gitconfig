@@ -4,9 +4,9 @@
 
 [alias]
   # View abbreviated SHA, description, and history graph of the latest 30 commits
-  l = "!f() { git log --oneline --graph --decorate -n ${1:-30} ${@:2}; }; f"
+  l = !"f() { git log --oneline --graph --decorate -n ${1:-30} ${@:2}; }; f"
   # Show git history as a tree
-  t = "!f() { git log --oneline --graph --decorate --branches ${@}; }; f"
+  t = !"f() { git log --oneline --graph --decorate --branches ${@}; }; f"
   # View the current working tree status using the short format
   st = status -sb
   # Commit all changes
@@ -14,18 +14,17 @@
   # Commit all modified changes
   cu = !"git add -u && git commit -m"
   # Switch to a branch, creating it if necessary
-  co = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
+  co = !"f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
   # Switch to develop but fetch first
-  cod = "!f() { git fetch && git checkout develop; }; f"
+  cod = !"f() { git fetch && git checkout develop; }; f"
   # Switch to master but fetch first
-  com = "!f() { git fetch && git checkout master; }; f"
-  # Initialize a repository with an empty commit
-  initialize = !"git init && git commit --allow-empty -m 'Initial empty commit'"
+  com = !"f() { git fetch && git checkout master; }; f"
   # Show verbose output about patches, tags, branches or remotes
   patches = log -p
   tags = tag -l
   branches = branch -a
   remotes = remote -v
+  versions = tag -l --sort=-v:refname 'v*'
   # Get the commit referenced by a tag
   tagref = rev-list --abbrev-commit -n 1
   # Get the commit stat
@@ -40,16 +39,16 @@
   undo = reset --soft HEAD^
   # Commit staged changes reusing previous commit message.
   redo = commit -C ORIG_HEAD
+  # Show commit titles only in mardown list format
+  changelog = !"f() { git log --oneline --format='%s' ${@} | tail -r; }; f"
   # Split a Git commit and preserve message. Option '-p' for patch edition.
-  split-head = "!f() { git reset --soft @~ && git reset $@ && git commit -C ORIG_HEAD; }; f"
-  # Remove branches that have already been merged with master
-  dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
-  # Show the diff between the latest commit and the current state
-  di = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
+  split-head = !"f() { git reset --soft @~ && git reset $@ && git commit -C ORIG_HEAD; }; f"
   # Show the diff between staged work and last HEAD
-  ds = diff --staged
-  # `git di $number` shows the diff between the state `$number` revisions ago and the current state
-  din = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
+  ds = !"git diff --staged"
+  # Remove branches that have already been merged with master
+  dm = !"git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+  # Show the diff between the state ref and the current state
+  di = !"d() { git diff --patch-with-stat $1; }; git diff-index --quiet HEAD -- || clear; d"
   # Pull in remote changes for the current repository and init/update its submodules
   plu = !"git pull && git submodule update --init --recursive"
   # Set upstream remote branch
@@ -57,31 +56,33 @@
   # I know what you did yesterday - great for follow-ups
   logme = !"f() { git log ${@:3} ${2:---oneline} --since \"${1:-'1 day ago'}\" --author $(git config --get user.email); }; f"
   # Credit an author on the latest commit
-  credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
+  credit = !"f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
   # List contributors with number of commits
   contributors = shortlog --summary --numbered
   # Interactive rebase with the given number of latest commits
-  reb = "!r() { git rebase -i HEAD~\"${@}\"; }; r"
+  reb = !"r() { git rebase -i HEAD~\"${@}\"; }; r"
   # Reset with given number of latest commits
-  res = "!r() { git reset HEAD~\"${@}\"; }; r"
+  res = !"r() { git reset HEAD~\"${@}\"; }; r"
   # Find branches containing commit
-  fb = "!f() { git branch -a --contains $1; }; f"
+  fb = !"f() { git branch -a --contains $1; }; f"
   # Find tags containing commit
-  ft = "!f() { git describe --always --contains $1; }; f"
+  ft = !"f() { git describe --always --contains $1; }; f"
   # Find commits by source code
-  fc = "!f() { git log --pretty=format:'%C(yellow)%h%Creset %s %Cred%d%Creset' --decorate -S$1; }; f"
+  fc = !"f() { git log --pretty=format:'%C(yellow)%h%Creset %s %Cred%d%Creset' --decorate -S$1; }; f"
   # Find commits by commit message
-  fm = "!f() { git log --pretty=format:'%C(yellow)%h%Creset %s %Cred%d%Creset' --decorate --date=short --grep=$1; }; f"
+  fm = !"f() { git log --pretty=format:'%C(yellow)%h%Creset %s %Cred%d%Creset' --decorate --date=short --grep=$1; }; f"
   # Find commits made by a contributor the last day
-  fp = "!f() { git log --since '1 day ago' --online --author $1; }; f"
+  fp = !"f() { git log --since '1 day ago' --online --author $1; }; f"
   # Fetch Github Pull Requests
-  pr = "!f() { git fetch origin refs/pull/$1/head:pr/$1 && git checkout pr/$1; }; f"
+  pr = !"f() { git fetch origin refs/pull/$1/head:pr/$1 && git checkout pr/$1; }; f"
   # Fetch Gitlab Merge Requests
-  mr = "!f() { git fetch origin merge-requests/$2/head:mr/$2 && git checkout mr/$2; }; f"
+  mr = !"f() { git fetch origin merge-requests/$2/head:mr/$2 && git checkout mr/$2; }; f"
   # WIP
   wip = !"f() { git ca \"wip [skip ci]: $1\"; }; f"
   # Refresh master after a merge
-  refresh = "!f() { git com && git plu && git dm; }; f"
+  refresh = !"f() { git com && git plu && git dm; }; f"
+  # Initialize a repository with an empty commit
+  initialize = !"f() { git init && ([ $# -eq 0 ] && true || git config \"${@}\") && git commit --allow-empty -m 'Initial empty commit'; }; f"
   # Displays all refs with committerdate
   springcleaning = for-each-ref --sort=-committerdate --format='%(refname:short) %(committerdate:short)'
   # Update commit date '--use-commit-date' will compute the new date wrt. the commit being amended
@@ -100,6 +101,10 @@
   }; f"
   # Update commit author
   set-author = !"f() { git commit --allow-empty --amend --no-edit --author=\"${@}\"; }; f"
+  # Increment patch version
+  inc-patch = !"f() { git versions | head -1 | awk -vprefix=v -F. '{gsub(prefix,\"\"); $3+=1; print prefix$1\".\"$2\".\"$3}'; }; f"
+  inc-minor = !"f() { git versions | head -1 | awk -vprefix=v -F. '{gsub(prefix,\"\"); $2+=1;$3=0; print prefix$1\".\"$2\".\"$3}'; }; f"
+  inc-major = !"f() { git versions | head -1 | awk -vprefix=v -F. '{gsub(prefix,\"\"); $1+=1;$2=$3=0; print prefix$1\".\"$2\".\"$3}'; }; f"
 
 [apply]
   # Detect whitespace errors when applying a patch
