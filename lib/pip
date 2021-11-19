@@ -10,6 +10,7 @@ run_pip() {
       'setuptools'
       'virtualenv'
       'ipython'
+      'pynvim'
     )
 
     # Install packages globally and quietly

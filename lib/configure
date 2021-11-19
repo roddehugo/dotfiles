@@ -6,7 +6,7 @@ configure_mysql() {
     mysql.server start
     mysql -uroot -e "CREATE USER '$(whoami)'@'localhost';"
     mysql -uroot -e "GRANT ALL PRIVILEGES ON *.* TO '$(whoami)'@'localhost' WITH GRANT OPTION;"
-    mysql_secure_installation -u$(whoami)
+    mysql_secure_installation -u"$(whoami)"
     mysql -uroot -e "DROP USER 'root'@'localhost';"
     if type_exists 'brew'; then
       brew pin mysql
@@ -17,19 +17,11 @@ configure_mysql() {
 configure_postgres() {
   if type_exists 'psql'; then
     e_header "Configuring Postgres"
-    read -s -p "Enter new password for $(whoami): " password
+    read -rsp "Enter new password for $(whoami): " password
     psql postgres -c "ALTER USER postgres PASSWORD '$password';"
     if type_exists 'brew'; then
       brew pin postgres
     fi
-  fi
-}
-
-configure_heroku() {
-  if type_exists 'heroku'; then
-    e_header "Configuring Heroku"
-    heroku update
-    heroku login
   fi
 }
 
@@ -38,8 +30,5 @@ run_configure() {
   [[ $? ]] && e_success "Done"
 
   configure_postgres
-  [[ $? ]] && e_success "Done"
-
-  configure_heroku
   [[ $? ]] && e_success "Done"
 }
