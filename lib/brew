@@ -124,7 +124,6 @@ brew_formulae() {
 brew_cask() {
   local -a casks=(
     'alfred'
-    'anaconda'
     'arduino'
     'balenaetcher'
     'betterzip'
@@ -140,6 +139,7 @@ brew_cask() {
     'java'
     'kobo'
     'librecad'
+    'miniconda'
     'osxfuse'
     'processing'
     'protonvpn'
