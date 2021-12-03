@@ -49,7 +49,6 @@ source ./lib/pip
 source ./lib/configure
 
 source ./shell/bash.d/colors
-source ./shell/bash.d/exports
 source ./shell/bash.d/utils
 
 # Options
@@ -62,10 +61,6 @@ for opt in $@; do
         -*|--*) e_warning "Error: invalid option $opt"; run_help; exit 1 ;;
     esac
 done
-
-# Prepare /usr/local directory
-mkdir -p /usr/local
-sudo chown -R $(whoami) /usr/local
 
 install_powerline_fonts() {
     # Install and update packages
@@ -97,7 +92,7 @@ install_brew() {
         # Check for Homebrew
         if ! type_exists 'brew'; then
             e_header "Installing Homebrew"
-            ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+            bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
             e_header "Updating Homebrew"
             brew update
             brew doctor
@@ -173,19 +168,19 @@ link() {
 
 pre_mirrorfiles() {
     # Create tmux folders
-    [[ ! -d ~/.tmux/plugins ]] && mkdir -p ~/.tmux/plugins
-    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    [[ -d ~/.tmux/plugins ]] || mkdir -p ~/.tmux/plugins
+    [[ -d ~/.tmux/plugins/tpm ]] || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
     # Do the same for vim
-    [[ ! -d ~/.vim/undo ]]    && mkdir -p ~/.vim/undo
-    [[ ! -d ~/.vim/swaps ]]   && mkdir -p ~/.vim/swaps
-    [[ ! -d ~/.vim/colors ]]  && mkdir -p ~/.vim/colors
-    [[ ! -d ~/.vim/bundle ]]  && mkdir -p ~/.vim/bundle
-    [[ ! -d ~/.vim/backups ]] && mkdir -p ~/.vim/backups
-    git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+    [[ -d ~/.vim/undo ]]    || mkdir -p ~/.vim/undo
+    [[ -d ~/.vim/swaps ]]   || mkdir -p ~/.vim/swaps
+    [[ -d ~/.vim/colors ]]  || mkdir -p ~/.vim/colors
+    [[ -d ~/.vim/backups ]] || mkdir -p ~/.vim/backups
+    [[ -d ~/.vim/bundle ]]  || mkdir -p ~/.vim/bundle
+    [[ -d ~/.vim/bundle/Vundle.vim ]] || git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
     # And neovim
-    [[ ! -d ~/.config/nvim ]] && mkdir -p ~/.config/nvim
+    [[ -d ~/.config/nvim ]] || mkdir -p ~/.config/nvim
 }
 
 mirrorfiles() {

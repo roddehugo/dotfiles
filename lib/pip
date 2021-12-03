@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 run_pip() {
-  if type_exists 'pip'; then
+  if type_exists 'python3'; then
     e_header "Installing pip modules"
 
     # List of pip packages
@@ -14,10 +14,10 @@ run_pip() {
     )
 
     # Install packages globally and quietly
-    gpip install --upgrade $( printf "%s " "${packages[@]}" )
+    python3 -m pip install --upgrade $( printf "%s " "${packages[@]}" )
     [[ $? ]] && e_success "Done"
   else
-    e_warn "pip not found. Skipping."
+    e_warning "python3 not found. Skipping."
     exit 0
   fi
 }

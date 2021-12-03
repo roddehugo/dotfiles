@@ -40,7 +40,6 @@ brew_formulae() {
     'dfu-util'
     'docker'
     'docker-compose'
-    'docker-machine'
     'doctl'
     'docutils'
     'ffmpeg'
@@ -73,7 +72,6 @@ brew_formulae() {
     'ngrep'
     'nmap'
     'node'
-    'numpy'
     'open-completion'
     'openssl@1.1'
     'parallel'
@@ -128,38 +126,30 @@ brew_cask() {
     'balenaetcher'
     'betterzip'
     'cheatsheet'
-    'crosspack-avr'
     'dash'
     'dropbox'
     'easyeda'
-    'fritzing'
     'gcc-arm-embedded'
     'hex-fiend'
     'iterm2'
-    'java'
     'kobo'
     'librecad'
     'miniconda'
-    'osxfuse'
-    'processing'
+    'macfuse'
     'protonvpn'
     'provisionql'
-    'psequel'
     'qlcolorcode'
     'qlimagesize'
     'qlmarkdown'
     'qlprettypatch'
     'qlstephen'
     'qlvideo'
-    'qt-creator'
     'quicklook-csv'
     'quicklook-json'
-    'quik'
     'sequel-pro'
     'skype'
     'spectacle'
     'sqlitemanager'
-    'suspicious-package'
     'suspicious-package'
     'transmission'
     'tripmode'
@@ -167,7 +157,6 @@ brew_cask() {
     'vagrant'
     'virtualbox'
     'vlc'
-    'webpquicklook'
     'webpquicklook'
     'wireshark'
   )
@@ -210,7 +199,7 @@ run_softwares() {
     # Remove outdated versions from the Cellar
     brew cleanup
   else
-    e_warn "Homebrew not found. Brew packages installation skipped."
+    e_warning "Homebrew not found. Brew packages installation skipped."
     exit 0
   fi
 }

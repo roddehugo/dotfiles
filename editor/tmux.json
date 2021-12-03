@@ -1,12 +1,6 @@
 {
-  "Ansi 5 Color" : {
-    "Red Component" : 0.75323194265365601,
-    "Color Space" : "sRGB",
-    "Blue Component" : 0.78127235174179077,
-    "Alpha Component" : 1,
-    "Green Component" : 0.65371012687683105
-  },
-  "Set Local Environment Vars" : false,
+  "Thin Strokes" : 3,
+  "ASCII Ligatures" : false,
   "Working Directory" : "\/Users\/hugo",
   "Prompt Before Closing 2" : false,
   "Selected Text Color" : {
@@ -92,17 +86,17 @@
         "class" : "iTermStatusBarJobComponent",
         "configuration" : {
           "knobs" : {
-            "base: compression resistance" : 1,
+            "maxwidth" : 1.7976931348623157e+308,
             "base: priority" : 5,
+            "minwidth" : 0,
+            "base: compression resistance" : 1,
             "shared text color" : {
               "Red Component" : 0.90000000000000002,
               "Color Space" : "sRGB",
               "Blue Component" : 0.63,
               "Alpha Component" : 1,
               "Green Component" : 0.79200000000000004
-            },
-            "minwidth" : 0,
-            "maxwidth" : 1.7976931348623157e+308
+            }
           },
           "layout advanced configuration dictionary value" : {
             "algorithm" : 0
@@ -113,18 +107,18 @@
         "class" : "iTermStatusBarGitComponent",
         "configuration" : {
           "knobs" : {
-            "base: compression resistance" : 1,
+            "maxwidth" : 1.7976931348623157e+308,
             "iTermStatusBarGitComponentPollingIntervalKey" : 2,
             "base: priority" : 5,
+            "base: compression resistance" : 1,
+            "minwidth" : 0,
             "shared text color" : {
               "Red Component" : 0.84600001573562622,
               "Color Space" : "sRGB",
               "Blue Component" : 0.62999999523162842,
               "Alpha Component" : 1,
               "Green Component" : 0.89999997615814209
-            },
-            "minwidth" : 0,
-            "maxwidth" : 1.7976931348623157e+308
+            }
           },
           "layout advanced configuration dictionary value" : {
             "algorithm" : 0
@@ -249,6 +243,7 @@
   },
   "Disable Smcup Rmcup" : true,
   "Name" : "tmux",
+  "Guid" : "D1B6B092-6768-4DEB-93DA-7FD6B72E0808",
   "Blinking Cursor" : false,
   "Ansi 1 Color" : {
     "Red Component" : 0.84407895803451538,
@@ -257,7 +252,6 @@
     "Alpha Component" : 1,
     "Green Component" : 0.48615175485610962
   },
-  "Guid" : "D1B6B092-6768-4DEB-93DA-7FD6B72E0808",
   "Ansi 8 Color" : {
     "Red Component" : 0.14901961386203766,
     "Color Space" : "sRGB",
@@ -347,6 +341,12 @@
   "Unicode Normalization" : 0,
   "Visual Bell" : false,
   "Custom Directory" : "No",
-  "Thin Strokes" : 3,
-  "ASCII Ligatures" : false
+  "Ansi 5 Color" : {
+    "Red Component" : 0.75323194265365601,
+    "Color Space" : "sRGB",
+    "Blue Component" : 0.78127235174179077,
+    "Alpha Component" : 1,
+    "Green Component" : 0.65371012687683105
+  },
+  "Set Local Environment Vars" : false
 }

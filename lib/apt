@@ -51,7 +51,7 @@ run_softwares() {
     # Erase old downloaded archive files
     sudo apt-get -y clean
   else
-    e_warn "Apt not found. Apt packages installation skipped."
+    e_warning "Apt not found. Apt packages installation skipped."
     exit 0
   fi
 }
