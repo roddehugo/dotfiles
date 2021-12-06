@@ -174,7 +174,12 @@ install_packages() {
 
 link() {
     # Force create/replace the symlink.
-    [ ! -e "${DOTFILES_DIRECTORY}/$1" || ln -fsv "${DOTFILES_DIRECTORY}/$1" ~/"$2"
+    if [[ -e "${DOTFILES_DIRECTORY}/$1" ]]; then
+        if [[ -d ~/"$2" && ! -L ~/"$2" ]]; then
+            rm -r ~/"$2"
+        fi
+        ln -fsnv "${DOTFILES_DIRECTORY}/$1" ~/"$2"
+    fi
 }
 
 pre_mirrorfiles() {
@@ -228,13 +233,17 @@ post_mirrorfiles() {
     # Install vim plugins
     if type_exists 'vim'; then
         vim +PluginInstall +qall
-        ln -sf ~/.vim/{bundle/vim-colorschemes/,}colors
+        if [[ ! -e ~/.vim/colors ]]; then
+            ln -sf ~/.vim/{bundle/vim-colorschemes/,}colors
+        fi
     fi
 
     # Install neovim plugins
     if type_exists 'nvim'; then
         nvim +UpdateRemotePlugins +PlugInstall +qall
-        ln -sf ~/.config/nvim/{plugged/vim-colorschemes/,}colors
+        if [[ ! -e ~/.config/nvim/colors ]]; then
+            ln -sf ~/.config/nvim/{plugged/vim-colorschemes/,}colors
+        fi
     fi
 
     # Add brew bash shell to the list of allowed shells
@@ -242,9 +251,6 @@ post_mirrorfiles() {
         sudo bash -c 'echo /usr/local/bin/bash >> /etc/shells'
         chsh -s /usr/local/bin/bash
     fi
-
-    # Finally source bash_profile
-    source ~/.bash_profile
 }
 
 # Ask before potentially overwriting files

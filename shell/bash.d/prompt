@@ -2,135 +2,160 @@
 
 # Set terminal title
 function set_title() {
-  echo -e "\[\033]0;\w\007\]";
+  echo -e "\[\033]0;\w\007\]"
 }
 
 # Set a few globals to compute prompt string length
 function prompt_update() {
-  if is_git_repository; then
-    git_status="$(git status 2> /dev/null)";
-    remote_pattern="Your branch is (behind|ahead) of .* by ([0-9]*) commit(s)?";
-    diverge_pattern="and have ([0-9]*) and ([0-9]*) different commits"
+  local repo_info rev_parse_exit_code
+  repo_info="$(git rev-parse --git-dir \
+      --is-inside-git-dir --is-inside-work-tree --short HEAD 2>/dev/null)"
+  rev_parse_exit_code="$?"
 
-    # Ensure the index is up to date.
-    git update-index --really-refresh -q &>/dev/null;
+  __ps1_status=""
+  __ps1_remote=""
+  __ps1_branch=""
 
-    # Set status according to previous checks
-    if [[ ${git_status} =~ "nothing to commit" ]]; then
-      status=" ✔";
-    else
-      s="";
-      # Check for unstaged changes.
-      if ! $(git diff-files --quiet --ignore-submodules --); then
-        s+="●";
-      fi;
+  if [ -n "$repo_info" ]; then
+    local short_sha=""
+    if [ "$rev_parse_exit_code" -eq 0 ]; then
+      short_sha="${repo_info##*$'\n'}"
+      repo_info="${repo_info%$'\n'*}"
+    fi
+    local inside_worktree="${repo_info##*$'\n'}"
+    repo_info="${repo_info%$'\n'*}"
+    local inside_gitdir="${repo_info##*$'\n'}"
+    local g="${repo_info%$'\n'*}"
 
-      # Check for uncommitted changes in the index.
-      if ! $(git diff --quiet --ignore-submodules --cached); then
-        s+="+";
-      fi;
-
-      # Check for untracked files.
-      if [ -n "$(git ls-files --others --exclude-standard)" ]; then
-        s+="?";
-      fi;
-
-      # Check for stashed files
-      if $(git rev-parse --verify refs/stash &>/dev/null); then
-        s+="⚑";
-      fi;
-
-      status=" [${s}]";
-    fi;
-
-    # Check for diverged branches and set remote
-    if [[ ${git_status} =~ ${remote_pattern} ]]; then
-      if [[ ${BASH_REMATCH[1]} == "ahead" ]]; then
-        r="↑";
+    if [ "$inside_worktree" == "true" ] && [ "$inside_gitdir" == "false" ]; then
+      local b=""
+      if [ -h "$g/HEAD" ]; then
+        # It is a symlink symbolic ref
+        b="$(git symbolic-ref HEAD 2>/dev/null)"
       else
-        r="↓";
-      fi;
-      remote=" [${r}${BASH_REMATCH[2]}] ";
-    elif [[ ${git_status} =~ ${diverge_pattern} ]]; then
-      remote=" [↑${BASH_REMATCH[1]}↓${BASH_REMATCH[2]}] ";
-    else
-      remote=" "
-    fi;
+        local head=""
+        if [ -r "$g/HEAD" ]; then
+          read head < "$g/HEAD"
+        fi
+        # Is it a symbolic ref?
+        b="${head#ref: }"
+        if [ "$head" == "$b" ]; then
+          b="$(git describe --tags --exact-match HEAD 2>/dev/null)"
+        fi
+        b="${b##refs/heads/}"
+      fi
 
-    branch="$(git symbolic-ref --quiet --short HEAD 2> /dev/null || \
-      git rev-parse --short HEAD 2> /dev/null || \
-      echo '(unknown)')";
+      if [ -z "$b" ]; then
+        __ps1_branch=" $short_sha"
+      else
+        __ps1_branch=" $b"
+      fi
 
-    unset git_status;
+      local s=""
+      # Check for unstaged changes
+      git diff --no-ext-diff --quiet || s+="●"
+      # Check for uncommitted changes in the index
+      git diff --no-ext-diff --cached --quiet || s+="+"
+      # Check for untracked files
+      ! git ls-files --others --exclude-standard --directory \
+          --no-empty-directory --error-unmatch -- ':/*' &>/dev/null || s+="?"
+
+      if [ -z "$s" ]; then
+        __ps1_status=" ✓"
+      else
+        __ps1_status=" [${s}]"
+      fi
+
+      local ahead behind
+      # Check for diverged branches and set remote
+      while IFS=$'\t' read -r ahead behind; do
+        local r=""
+        if [ -n "$ahead" ] && [ "$ahead" -gt 0 ]; then
+          r+="↑$ahead"
+        fi
+        if [ -n "$behind" ] && [ "$behind" -gt 0 ]; then
+          r+="↓$behind"
+        fi
+      done <<<"$(git rev-list --count --left-right "@{upstream}"..HEAD 2>/dev/null)"
+
+      if [ -n "$r" ]; then
+        __prompt_remote=" [$r]"
+      fi
+    fi
+  fi
+
+  # Check if we're in a virtual environment
+  if [ -n "$VIRTUAL_ENV" ]; then
+    __ps1_venv="$(basename "${VIRTUAL_ENV}")"
+    __ps1_venv=" ${__ps1_venv##.}"
   else
-    status="";
-    remote="";
-    branch="";
-  fi;
+    __ps1_venv=""
+  fi
 
-  gitLength=$((${#branch}+${#status}+${#remote}));
+  __ps1_cwd="$(dirs)"
+  __ps1_cols="$(tput cols)"
+  __ps1_now=" [$(date +"%d.%H%M")]"
 
-  # Check if we're in a virtualenv
-  if [[ -n "$VIRTUAL_ENV" ]]; then
-    venv="$(basename "${VIRTUAL_ENV}")"
-    venv="${venv##.} ";
-  else
-    venv="";
-  fi;
-
-  now="[$(date +"%d.%H%M")]"
-  rightLength=$((${#venv}+${gitLength}+${#now}));
-
-  shortPWD=${PWD/${HOME}/"~"};
-  if (( $(($(tput cols)-${rightLength}-${#shortPWD})) < 5 )); then
-    shortPWD="$(basename "${PWD}")";
-  fi;
-
-  leftLength=$((${#shortPWD}));
-  totalLength=$((${leftLength}+${rightLength}))
+  __ps1_llen="$(( ${#__ps1_cwd} ))"
+  __ps1_rlen="$(( ${#__ps1_venv} + ${#__ps1_branch} + ${#__ps1_status} + ${#__ps1_remote} + ${#__ps1_now} ))"
+  if [ "$(( __ps1_cols - __ps1_rlen - __ps1_llen ))" -lt 10 ]; then
+    __ps1_cwd="$(basename "$__ps1_cwd")"
+    __ps1_llen="$(( ${#__ps1_cwd} ))"
+  fi
 }
 
-# Prompt short day and time.
+# Prompt short day and time
 function prompt_date() {
-  echo -e "${yellow}${now}${reset}"
+  echo -e "\[${yellow}\]${__ps1_now}\[${reset}\]"
 }
 
-# Prompt virtualenv
+# Prompt virtual environment
 function prompt_venv() {
-  if [[ -n "$VIRTUAL_ENV" ]]; then
-    echo -e "${orange}${venv}${reset}"
-  fi;
+  echo -e "\[${orange}\]${__ps1_venv}\[${reset}\]"
 }
 
-# Prompt git
+# Prompt git status
 function prompt_git() {
-  if is_git_repository; then
-    echo -e "${purple}${branch}${tan}${status}${cyan}${remote}${reset}";
-  fi;
+  echo -e "\[${purple}\]${__ps1_branch}\[${tan}\]${__ps1_status}\[${cyan}\]${__ps1_remote}\[${reset}\]"
+}
+
+# Prompt current working directory
+function prompt_cwd() {
+  echo -e "\[${blue}\]${__ps1_cwd}\[${reset}\]"
 }
 
 # Prompt command prompt
-function prompt_command() {
-  local p=""
-  if [[ "$(whoami)" == "root" ]]; then
-    p="\[${red}\]▶";
+function prompt_cmd() {
+  if [[ "$EUID" -eq 0 ]]; then
+    echo -e "\[${red}\]▶\[${reset}\] "
   else
-    p="\[${violet}\]❯";
-  fi;
-  echo -e "${p} \[${reset}\]";
+    echo -e "\[${violet}\]❯\[${reset}\] "
+  fi
+}
+
+# Prompt spaces between left and right status
+function prompt_spaces() {
+  __ps1_offset="${__ps1_offset:-1}"
+  local total="$(( __ps1_cols - __ps1_offset - __ps1_rlen - __ps1_llen ))"
+  local spaces=""
+  while [ "$total" -gt 0 ]; do
+    total="$(( total - 1 ))"
+    spaces="$spaces "
+  done
+  echo -e "$spaces"
 }
 
 function prompt_align() {
-  prompt_update;
-  local offset=49;
+  prompt_update
 
-  PLEFT="\[${blue}\]${shortPWD}\[${reset}\]";
-  PRIGHT="\$(prompt_venv)\$(prompt_git)\$(prompt_date)\[${reset}\]";
+  local PCMD="$(prompt_cmd)"
+  local PLEFT="$(prompt_cwd)"
+  local PRIGHT="$(prompt_venv)$(prompt_git)$(prompt_date)"
+  local PSPACES="$(prompt_spaces)"
 
-  PS1=$(printf "%s%*s\r%s\n%s" "$(set_title)" "$(($(tput cols)+${offset}-${rightLength}))" "$PRIGHT" "$PLEFT" "$(prompt_command)");
+  PS1="$(printf "\r%s%s%s\n%s" "$PLEFT" "$PSPACES" "$PRIGHT" "$PCMD")"
+  PS2="\[${cyan}\]→\[$reset\] "
 }
-PROMPT_COMMAND=prompt_align
-export PS1;
 
-PS2="\[${cyan}\]→ \[${reset}\]";
-export PS2;
+PROMPT_COMMAND=prompt_align
+export PS1 PS2

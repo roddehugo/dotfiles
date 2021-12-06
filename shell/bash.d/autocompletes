@@ -6,7 +6,7 @@ _load_completions() {
     [ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
 
     # Load completion installed in this repository
-    local dir=$HOME/.bash.d/completions
+    local dir="$HOME"/.bash.d/completions
     if [ -d "$dir" ] && [ -x "$dir" ]; then
         for i in $(LC_ALL=C command ls "$dir"); do
             [ -f "$dir/$i" ] && . "$dir/$i"
@@ -23,6 +23,3 @@ _completemarks() {
   return 0
 }
 complete -F _completemarks jump unmark
-
-# Enable git command autocompletion for 'g' as well
-__git_complete g __git_main

@@ -2,7 +2,6 @@
 
 pacman_update() {
   pacman -Syu
-  pacman -Su
 }
 
 pacman_upgrade() {
@@ -33,7 +32,6 @@ pacman_upgrade() {
     'openssl'
     'python'
     'python-pip'
-    'readline'
     'rsync'
     'sed'
     'sqlite'
@@ -43,8 +41,8 @@ pacman_upgrade() {
     'vim'
     'wget'
   )
-  pacman -SUu --needed $( printf "%s " "${groups[@]}" )
-  pacman -SUu --needed $( printf "%s " "${packages[@]}" )
+  pacman -Syu --needed $( printf "%s " "${groups[@]}" )
+  pacman -Syu --needed $( printf "%s " "${packages[@]}" )
 }
 
 run_softwares() {
