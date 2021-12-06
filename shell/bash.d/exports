@@ -7,7 +7,7 @@ export INPUTRC=$HOME/.inputrc
 export DOTFILES_DIRECTORY=$HOME/.dotfiles
 
 # Make neovim the default editor
-export EDITOR="nvim"
+export EDITOR="vim"
 
 # Larger bash history (allow 32^3 entries; default is 500)
 export HISTSIZE=32768
@@ -24,9 +24,6 @@ export LC_ALL="en_US.UTF-8"
 # Make new shells get the history lines from all previous
 # shells instead of the default "last window closed" history
 export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
-
-# Pip should only run if there is a virtualenv currently activated
-export PIP_REQUIRE_VIRTUALENV=true
 
 # Highlight section titles in manual pages
 export LESS_TERMCAP_md="${yellow}"

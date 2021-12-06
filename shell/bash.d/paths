@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Reset PATH on top
-PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
+# PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
 
 # Directories to be prepended to PATH
 declare -a dirs_to_prepend=(

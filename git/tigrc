@@ -1,5 +1,5 @@
 # Custom key mappings.
-bind generic 0 !@sh -c "printf '%s' '%(commit)' | pbcopy"
+bind generic 0 !@sh -c "printf '%s' '%(commit)' | clip"
 bind generic - !git wip
 
 bind status N !@git add --intent-to-add %(file)

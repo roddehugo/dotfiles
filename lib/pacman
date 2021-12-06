@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+
+pacman_update() {
+  pacman -Syu
+  pacman -Su
+}
+
+pacman_upgrade() {
+  # https://packages.msys2.org/queue
+  local -a groups=(
+    'base'
+    'base-devel'
+    'compression'
+  )
+  
+  local -a packages=(
+    'bash'
+    'bash-completion'
+    'binutils'
+    'clang'
+    'cmake'
+    'coreutils'
+    'cscope'
+    'ctags'
+    'curl'
+    'gcc'
+    'gdb'
+    'git'
+    'gnupg'
+    'gnutls'
+    'grep'
+    'make'
+    'openssl'
+    'python'
+    'python-pip'
+    'readline'
+    'rsync'
+    'sed'
+    'sqlite'
+    'tig'
+    'tmux'
+    'tree'
+    'vim'
+    'wget'
+  )
+  pacman -SUu --needed $( printf "%s " "${groups[@]}" )
+  pacman -SUu --needed $( printf "%s " "${packages[@]}" )
+}
+
+run_softwares() {
+  if type_exists 'pacman'; then
+    e_header "Updating pacman"
+    pacman_update
+    [[ $? ]] && e_success "Done"
+
+    e_header "Updating pacman modules"
+    pacman_upgrade
+    [[ $? ]] && e_success "Done"
+  else
+    e_warn "pacman not found. Skipping."
+    exit 0
+  fi
+}

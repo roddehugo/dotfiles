@@ -111,7 +111,7 @@
   whitespace = fix
 
 [core]
-  editor = nvim
+  editor = vim
   pager = less -+e
 
   # Use custom `.gitignore` and `.gitattributes`
@@ -138,24 +138,11 @@
   tool = vimdiff
   submodule = log
 
-[difftool]
-  # Wait for confirmation after each difftool invocation
-  prompt = true
-
-[difftool "vimdiff"]
-  cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
-
 [merge]
   # Include summaries of merged commits in newly created merge commit messages
   log = true
   diffstat = true
   tool = vimdiff
-
-[mergetool]
-  prompt = true
-
-[mergetool "vimdiff"]
-  cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
 
 [status]
   # Show additional information about submodules
