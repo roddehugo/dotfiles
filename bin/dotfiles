@@ -4,14 +4,16 @@
 set -e
 
 platform='unknown'
-unamestr=$(uname)
+unamestr="$(uname)"
 
-if [[ "$unamestr" == 'Linux' ]]; then
-    platform='linux'
-elif [[ "$unamestr" == 'Darwin' ]]; then
+if [[ "$unamestr" == 'Darwin' ]]; then
     platform='osx'
+elif [[ "$unamestr" == 'Linux' ]]; then
+    platform='linux'
+elif [[ "$unamestr" =~ 'MSYS' ]]; then
+    platform='msys2'
 else
-    printf "Unknown plateform!\n"
+    echo "Unknown plateform $unamestr!"
     exit 1
 fi
 
@@ -20,33 +22,38 @@ DOTFILES_TARBALL_PATH="https://github.com/roddehugo/dotfiles/tarball/$platform"
 DOTFILES_GIT_REMOTE="git@github.com:roddehugo/dotfiles.git"
 
 # If missing, download and extract the dotfiles repository
-if [[ ! -d $DOTFILES_DIRECTORY ]]; then
-    if [[ $platform == 'osx' && -d ~/Library/Mobile\ Documents/com~apple~CloudDocs/dotfiles ]]; then
-        printf "Symlinking dotfiles...\n"
-        ln -sf ~/Library/Mobile\ Documents/com~apple~CloudDocs/dotfiles $DOTFILES_DIRECTORY
+if [[ ! -d "$DOTFILES_DIRECTORY" ]]; then
+    if [[ "$platform" == 'osx' && -d ~/Library/Mobile\ Documents/com~apple~CloudDocs/dotfiles ]]; then
+        echo "Symlinking dotfiles..."
+        ln -sf ~/Library/Mobile\ Documents/com~apple~CloudDocs/dotfiles "$DOTFILES_DIRECTORY"
     else
-        printf "Downloading dotfiles...\n"
-        mkdir $DOTFILES_DIRECTORY
+        echo "Downloading dotfiles..."
+        mkdir "$DOTFILES_DIRECTORY"
         # Get the tarball
-        curl -fsSLo ~/dotfiles.tar.gz $DOTFILES_TARBALL_PATH
+        curl -fsSLo ~/dotfiles.tar.gz "$DOTFILES_TARBALL_PATH"
         # Extract to the dotfiles directory
-        tar -zxf ~/dotfiles.tar.gz --strip-components 1 -C $DOTFILES_DIRECTORY
+        tar -zxf ~/dotfiles.tar.gz --strip-components 1 -C "$DOTFILES_DIRECTORY"
         # Remove the tarball
         rm -rf ~/dotfiles.tar.gz
     fi
 fi
 
-cd $DOTFILES_DIRECTORY
+cd "$DOTFILES_DIRECTORY"
 
-if [[ $platform == 'osx' ]]; then
+if [[ "$platform" == 'osx' ]]; then
     source ./lib/brew
-else
+    source ./lib/configure
+elif [[ "$platform" == 'linux' ]]; then
     source ./lib/apt
+elif [[ "$platform" == 'msys2' ]]; then
+    source ./lib/pacman
+else
+    echo "Unknown plateform $unamestr!"
+    exit 1
 fi
 
 source ./lib/help
 source ./lib/pip
-source ./lib/configure
 
 source ./shell/bash.d/colors
 source ./shell/bash.d/utils
@@ -75,14 +82,18 @@ install_powerline_fonts() {
         # Extract to the fonts directory
         tar -zxf /tmp/fonts.tar.gz --strip-components 1 -C /tmp/fonts
         # Install fonts
-        /tmp/fonts/install.sh
+	if [[ "$platform" == 'msys2' ]]; then
+          /tmp/fonts/install.ps1
+        else
+          /tmp/fonts/install.sh
+	fi
         # Remove files
-        rm -rf /tmp/fonts{/,.tar.gz}
+        rm -rf /tmp/fonts/ /tmp/fonts.tar.gz
     fi
 }
 
 install_brew() {
-    if [[ $platform == 'osx' ]]; then
+    if [[ "$platform" == 'osx' ]]; then
         # Before relying on Homebrew, check that packages can be compiled
         if ! type_exists 'gcc'; then
             e_header "Installing the XCode Command Line Tools"
@@ -104,10 +115,12 @@ install_git() {
     # Check for git
     if ! type_exists 'git'; then
         e_header "Installing Git"
-        if [[ $platform == 'osx' ]]; then
+        if [[ "$platform" == 'osx' ]]; then
             brew install git
-        else
+        elif [[ "$platfom" == 'linux' ]]; then
             sudo apt-get install -y git
+        elif [[ "$platfom" == 'msys2' ]]; then
+            pacman -SU git
         fi
     fi
 }
@@ -117,15 +130,15 @@ init_git() {
     if ! is_git_repository; then
         e_header "Initializing git repository"
         git init
-        git remote add origin $DOTFILES_GIT_REMOTE
-        git fetch origin $platform
+        git remote add origin "$DOTFILES_GIT_REMOTE"
+        git fetch origin "$platform"
         # Reset the index and working tree to the fetched HEAD
         # (submodules are cloned in the subsequent sync step)
         git reset --hard FETCH_HEAD
         # Remove any untracked files
         git clean -fd
         # Checkout to the $platform branch
-        git checkout $platform
+        git checkout "$platform"
         # Remove useless master branch
         git branch -D master
     fi
@@ -140,7 +153,7 @@ sync_remote() {
         # Stash working directory just in case
         git stash
         # Pull down the latest changes
-        git pull --rebase origin $platform
+        git pull --rebase origin "$platform"
         # Update submodules
         git submodule update --recursive --init --quiet
     fi
@@ -156,14 +169,12 @@ install_packages() {
         run_softwares
         # Install Pip packages
         run_pip
-        # Configure installed packages
-        run_configure
     fi
 }
 
 link() {
     # Force create/replace the symlink.
-    ln -fs ${DOTFILES_DIRECTORY}/$1 ~/$2
+    [ ! -e "${DOTFILES_DIRECTORY}/$1" || ln -fsv "${DOTFILES_DIRECTORY}/$1" ~/"$2"
 }
 
 pre_mirrorfiles() {
@@ -194,6 +205,7 @@ mirrorfiles() {
     link "git/gitignore"                ".gitignore"
     link "git/tigrc"                    ".tigrc"
     link "minicom/minirc.dfl"           ".minirc.dfl"
+    link "minicom/minirc.dfl"           ".minirc.dfl"
     link "nvim/init.vim"                ".config/nvim/init.vim"
     link "nvim/plugins.vim"             ".config/nvim/plugins.vim"
     link "shell/bash.d"                 ".bash.d"
@@ -202,6 +214,7 @@ mirrorfiles() {
     link "shell/bashrc"                 ".bashrc"
     link "shell/curlrc"                 ".curlrc"
     link "shell/hushlogin"              ".hushlogin"
+    link "shell/minttyrc"               ".minttyrc"
     link "shell/inputrc"                ".inputrc"
     link "shell/wgetrc"                 ".wgetrc"
     link "vim/vimrc"                    ".vimrc"
@@ -224,10 +237,11 @@ post_mirrorfiles() {
         ln -sf ~/.config/nvim/{plugged/vim-colorschemes/,}colors
     fi
 
-    # Add the new shell to the list of allowed shells
-    sudo bash -c 'echo /usr/local/bin/bash >> /etc/shells'
-    # Change to the new shell
-    chsh -s /usr/local/bin/bash
+    # Add brew bash shell to the list of allowed shells
+    if [ -f "/usr/local/bin/bash" ]; then
+        sudo bash -c 'echo /usr/local/bin/bash >> /etc/shells'
+        chsh -s /usr/local/bin/bash
+    fi
 
     # Finally source bash_profile
     source ~/.bash_profile
@@ -252,12 +266,12 @@ else
     exit 1
 fi
 
-if [[ $platform == 'osx' ]]; then
+if [[ "$platform" == 'osx' ]]; then
     # Ask before potentially overwriting OS X defaults
     seek_confirmation "Warning: This step may modify your OS X system defaults. Continue?"
 
     if is_confirmed; then
-        source $DOTFILES_DIRECTORY/bin/osxdefaults
+        source "$DOTFILES_DIRECTORY"/bin/osxdefaults
         e_success "OS X settings updated! You may need to restart."
     else
         e_info "Skipped OS X settings update."
