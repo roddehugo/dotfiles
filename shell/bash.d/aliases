@@ -61,7 +61,7 @@ alias lv="ls | sort --version-sort"
 unset colorflag
 
 # Always use color output for `grep` and ignore directories.
-grepflags='--color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'
+grepflags='--color=auto --exclude-dir={.bzr,.git,.hg,.svn,.venv,venv}'
 alias grep="grep $grepflags"
 alias egrep="egrep $grepflags"
 alias fgrep="fgrep $grepflags"
@@ -71,11 +71,11 @@ unset grepflags
 alias ack="ack --ignore-dir=obj/ --ignore-dir=lib/"
 
 # Tmux aliases
-alias tstart='tmux start-server'
 alias ta='tmux attach'
 alias tat='tmux attach -t'
 alias tls='tmux list-sessions'
 alias tns='tmux new-session -s'
+alias tstart='tmux start-server'
 
 # Print path directories
 alias path='echo -e ${PATH//:/\\n}'
@@ -87,7 +87,7 @@ alias ttop='top -R -F -s 10 -o rsize'
 alias week='date +%V'
 
 # Stopwatch
-alias timer='e_header "Timer started. Stop with Ctrl-D." && date && time cat && date'
+alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date'
 
 # Intuitive map function
 # For example, to list all directories that contain a certain file:
