@@ -1,0 +1,16 @@
+ThemeFile=base16-tomorrow-night-256
+CursorType=block
+CursorBlinks=no
+FontHeight=10
+Font=Cascadia Code
+FontSmoothing=full
+Locale=en_US
+Charset=UTF-8
+ScrollbackLines=100000
+Language=@
+Term=xterm-256color
+BellType=0
+BellTaskbar=no
+AltFnShortcuts=yes
+CtrlShiftShortcuts=yes
+Scrollbar=none
