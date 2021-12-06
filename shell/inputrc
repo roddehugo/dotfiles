@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Don't ring bell on completion
+set bell-style none
+
 # Make Tab autocomplete regardless of filename case
 set completion-ignore-case on
 
@@ -8,11 +11,6 @@ set show-all-if-ambiguous on
 
 # Immediately add a trailing slash when autocompleting symlinks to directories
 set mark-symlinked-directories on
-
-# Use the text that has already been typed as the prefix for searching through
-# commands (i.e. more intelligent Up/Down behavior)
-"\e[B": history-search-forward
-"\e[A": history-search-backward
 
 # Do not autocomplete hidden files unless the pattern explicitly begins with a dot
 set match-hidden-files off
@@ -44,3 +42,8 @@ set convert-meta off
 # Use Alt+← and Alt+→ to move between words.
 "\e[1;9D": backward-word
 "\e[1;9C": forward-word
+
+# Use the text that has already been typed as the prefix for searching through
+# commands (i.e. more intelligent Up/Down behavior)
+"\e[B": history-search-forward
+"\e[A": history-search-backward
