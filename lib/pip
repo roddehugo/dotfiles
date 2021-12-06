@@ -11,6 +11,7 @@ run_pip() {
       'virtualenv'
       'ipython'
       'pynvim'
+      'jedi'
     )
 
     # Install packages globally and quietly
