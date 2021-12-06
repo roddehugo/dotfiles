@@ -112,6 +112,7 @@
 
 [core]
   editor = nvim
+  pager = less -+e
 
   # Use custom `.gitignore` and `.gitattributes`
   excludesfile = ~/.gitignore
@@ -127,8 +128,6 @@
   # Prevent showing files whose names contain non-ASCII symbols as unversioned.
   # http://michael-kuehnel.de/git/2014/11/21/git-mac-osx-and-german-umlaute.html
   precomposeunicode = false
-
-  pager = less -+e
 
 [init]
   defaultBranch = master
@@ -187,10 +186,6 @@
 
 [grep]
   lineNumber = true
-
-[gui]
-  editor = subl
-  historybrowser = gitk
 
 [filter "lfs"]
   clean = git-lfs clean -- %f
