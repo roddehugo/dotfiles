@@ -1,18 +1,23 @@
 " vim:foldmethod=marker:foldlevel=0
 " {{{ General
 
+set background=dark
+colorscheme Tomorrow-Night
+
 syntax on " enable syntax highlighting
 filetype plugin indent on " let the filetype plugins do the work.
 
 " }}}
 " {{{ System
 
+set viminfo^=% " remember info about open buffers on close
+
 set nocompatible " not compatible with vi
 set autoread " detect when a file is changed
 set hidden " current buffer can be put into background
 
-set history=1000 " change history length
-set undolevels=1000 " number of undo levels
+set history=9999 " change history length
+set undolevels=9999 " number of undo levels
 
 set ttyfast " optimize for fast terminal connections
 set clipboard=unnamed " use the OS clipboard by default
@@ -34,9 +39,9 @@ set backupskip=/tmp/*,/private/tmp/*
 " {{{ Interface
 
 set laststatus=2 " always show status line
-set showtabline=2 " always show tab line
+set showtabline=1 " only show tab line when active
 set showcmd " display the number of characters and lines in visual mode
-set showmode " show the current mode
+set noshowmode " hide current mode, already displayed by status line
 set synmaxcol=180 " only syntax first n characters
 
 " ruler
@@ -54,10 +59,24 @@ set numberwidth=3 " set gutter width to n cols
 set shortmess=atTI
 
 " }}}
+" {{{ Netrw
+
+let g:netrw_banner = 0 " remove banner
+let g:netrw_preview = 1 " prefer vertical preview split
+let g:netrw_liststyle = 3 " use tree list view
+let g:netrw_altv = 1 " prefer right preview split
+" let g:netrw_winsize = 30 " width of the directory explorer
+" noremap <unique> <C-p> <Plug>NetrwRefresh
+
+" }}}
 " {{{ Behavior
 
 " always activate spell corrections
 set spell
+
+" splits
+set splitbelow
+set splitright
 
 " movements
 set backspace=indent,eol,start " make backspace behave in a sane manner
@@ -69,13 +88,15 @@ set wrap " turn on line wrapping
 set wrapmargin=8 " wrap lines when coming within n characters from side
 set linebreak " set soft wrapping
 set showbreak=↪\  " show at breaking (with extra space)
-set textwidth=80 " set hard text wrapping (number of cols)
-set colorcolumn=80 " display wrapping column
-set formatoptions=tcrq " format using textwidth, including comments and gq
+set textwidth=84 " set hard text wrapping (number of cols)
+set colorcolumn=84 " display wrapping column
+set formatoptions=tcrqj " format using textwidth, including comments and gq
 
 " highlighting
 set cursorline " highlight position of cursor
 set showmatch " highlight matching brace
+set mat=0 " how many tenths of a second to blink
+match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$' " highlight conflicts
 
 " search
 set magic " set magic on, for regex
@@ -93,7 +114,6 @@ set visualbell
 " indentation
 set autoindent " automatically set indent of new line
 set smartindent " automatically inserts one extra level of indentation
-set cindent " like smartindent but stricter and more customisable
 
 " toggle invisible characters
 set list
@@ -122,6 +142,25 @@ set foldcolumn=1 " sets the width for a gutter column
 set foldmethod=indent " fold based on indent
 set foldnestmax=6 " deepest fold
 
+" cscope tags
+" a: places where this symbol is assigned a value
+" c: functions calling this function
+" d: functions called by this function
+" e: this egrep pattern
+" f: this file
+" g: this definition
+" i: files #including this file
+" s: this C symbol
+" t: this text string
+set cscopetag " always search cscope database on ctags commands
+set csverb " always display info when new database added
+set csto=0 " always search cscope and then ctags
+set cspc=3 " how many components of a file's path to display
+" '+' indicates that results must be appended to quickfix window,
+" '-' implies previous results clearance, '0' or absence - don't use quickfix
+" set cscopequickfix=a-,c-,d-,e-,f-,g-,i-,s-,t-
+" set nocsverb " no verbosity for the default loading
+
 " }}}
 " {{{ Mappings
 
@@ -147,6 +186,18 @@ noremap <c-space> zA
 " switch between current and last buffer
 nnoremap <leader>; <c-^>
 
+" toggle highlight of current line
+noremap <leader>cl :set cursorline! cursorline?<cr>
+
+" toggle special characters display
+noremap <leader>li :set list! list?<cr>
+
+" toggle spelling
+noremap <leader>sp :set spell! spell?<cr>
+
+" toggle highlighted search
+noremap <leader>hl :set hlsearch! hlsearch?<cr>
+
 " fix trailing spaces in buffer
 noremap <leader>ss :StripWhitespace<cr>
 
@@ -159,14 +210,20 @@ noremap =f ggVG=
 " refactor json file
 noremap =j :%!python -m json.tool<cr>
 
-" save a file as root (,W)
-noremap <silent> <leader>W :w !sudo tee -S % > /dev/null<cr>
-
 " switch CWD to the directory of the open buffer
 noremap <silent> <leader>cd :cd %:p:h<cr>:pwd<cr>
 
 " create parent directories
 noremap <silent> <leader>md :call mkdir(expand('%:h'), 'p')<cr>
+
+" edit vim config
+noremap <leader>ev :e! ~/.vimrc<cr>
+" edit git config
+noremap <leader>eg :e! ~/.gitconfig<cr>
+" edit tmux config
+noremap <leader>et :e! ~/.tmux.conf<cr>
+" edit bash config
+noremap <leader>eb :e! ~/.bash.d/<cr>
 
 " keep selection after indentation
 vnoremap <silent> < <gv
@@ -193,8 +250,10 @@ nnoremap <silent> <C-e> 3<C-e>
 nnoremap <silent> <C-y> 3<C-y>
 
 " helpers for dealing with other people's code
+nnoremap \t8 :set ts=8 sts=8 sw=8 noet<cr>
 nnoremap \t4 :set ts=4 sts=4 sw=4 noet<cr>
 nnoremap \t2 :set ts=2 sts=2 sw=2 noet<cr>
+nnoremap \s8 :set ts=8 sts=8 sw=8 et<cr>
 nnoremap \s4 :set ts=4 sts=4 sw=4 et<cr>
 nnoremap \s2 :set ts=2 sts=2 sw=2 et<cr>
 
@@ -204,18 +263,80 @@ noremap <C-k> <C-W>k
 noremap <C-h> <C-W>h
 noremap <C-l> <C-W>l
 
-" easy window resizing x2
-nnoremap <silent> <leader>+ :exe "resize " . (winheight(0) * 2)<cr>
-nnoremap <silent> <leader>- :exe "resize " . (winheight(0) * 1/2)<cr>
-
 " opens a new tab with the current buffer's path
 " super useful when editing files in the same directory
 nnoremap <leader>oe :e <C-R>=expand("%:p:h") . "/" <cr>
 nnoremap <leader>os :split <C-R>=expand("%:p:h") . "/" <cr>
 nnoremap <leader>ov :vsplit <C-R>=expand("%:p:h") . "/" <cr>
 
+" vimux runner
+noremap <leader>vp :VimuxPromptCommand<cr>
+noremap <leader>vr :VimuxRunLastCommand<cr>
+noremap <leader>vi :VimuxInspectRunner<cr>
+noremap <leader>vq :VimuxCloseRunner<cr>
+noremap <leader>vc :VimuxInterruptRunner<cr>
+
+" fuzzy searching
+noremap <silent> <leader>c :BCommits<cr>
+noremap <silent> <leader>C :Commits<cr>
+noremap <silent> <leader>f :GFilesRecurse<cr>
+noremap <silent> <leader>F :Files<cr>
+noremap <silent> <leader>l :BLines<cr>
+noremap <silent> <leader>L :Lines<cr>
+noremap <silent> <leader>g :GFiles?<cr>
+noremap <silent> <leader>G :Rg<cr>
+noremap <silent> <leader>b :Buffers<cr>
+noremap <silent> <leader>t :Tags<cr>
+
+" mapping selecting mappings
+nmap <leader><tab> <plug>(fzf-maps-n)
+xmap <leader><tab> <plug>(fzf-maps-x)
+omap <leader><tab> <plug>(fzf-maps-o)
+
+" insert mode completion
+imap <C-x><C-k> <plug>(fzf-complete-word)
+imap <C-x><C-f> <plug>(fzf-complete-path)
+imap <C-x><C-j> <plug>(fzf-complete-file)
+imap <C-x><C-l> <plug>(fzf-complete-line)
+
+" relative path (src/foo.txt)
+noremap <leader>p :let @+=expand("%")<cr>
+" absolute path (/something/src/foo.txt)
+noremap <leader>P :let @+=expand("%:p")<cr>
+" filename (foo.txt)
+noremap <leader>n :let @+=expand("%:t")<cr>
+" directory name (/something/src)
+noremap <leader>d :let @+=expand("%:p:h")<cr>
+
 " }}}
 " {{{ Functions
+
+" insert today's date in journal format
+command! Today call Today()
+function! Today()
+    exec "put =strftime('%m/%d/%a')"
+endfunction
+
+" return to last edit position when opening files
+command! GotoLastKnownLine call GotoLastKnownLine()
+function! GotoLastKnownLine()
+    if line("'\"") > 0 && line("'\"") <= line("$")
+        exe "normal! g`\""
+    endif
+endfunction
+
+" enable shortcuts of cscope if a database is loaded
+command! CScopeShortcuts call CScopeShortcuts()
+function! CScopeShortcuts()
+    if len(split(execute('cscope show'), '\n')) > 1
+        nmap ga :cs find a <C-R>=expand("<cword>")<cr><cr> " assignement
+        nmap gc :cs find c <C-R>=expand("<cword>")<cr><cr> " fct calling
+        nmap gd :cs find g <C-R>=expand("<cword>")<cr><cr> " definition
+        nmap gf :cs find f <C-R>=expand("<cfile>")<cr><cr> " file
+        nmap gi :cs find i <C-R>=expand("<cfile>")<cr><cr> " files including
+        nmap gs :cs find s <C-R>=expand("<cword>")<cr><cr> " C symbol
+    endif
+endfunction
 
 " strip trailing whitespace (,ss)
 function! StripWhitespace()
@@ -225,7 +346,6 @@ function! StripWhitespace()
   call setpos('.', save_cursor)
   call setreg('/', old_query)
 endfunction
-noremap <leader>ss :call StripWhitespace()<CR>
 
 " }}}
 " {{{ Autocommands
@@ -233,18 +353,23 @@ noremap <leader>ss :call StripWhitespace()<CR>
 if has('autocmd') && !exists('autocommands_loaded')
   let autocommands_loaded = 1
 
+  autocmd BufEnter * EnableStripWhitespaceOnSave
+  autocmd BufReadPost * GotoLastKnownLine
+  autocmd BufWritePost * Neomake
+
   autocmd BufRead,BufNewFile Module set filetype=make
   autocmd BufRead,BufNewFile .notes set filetype=markdown
   autocmd BufRead,BufNewFile jrnl*.txt set filetype=journal
 
   autocmd FileType ld setlocal ts=8 sts=8 sw=8 noet
   autocmd FileType make setlocal ts=4 sts=4 sw=4 noet
-  autocmd FileType c,cpp setlocal ts=4 sts=4 sw=4 et
-  autocmd FileType markdown,textile,gitcommit setlocal spell
-  autocmd FileType gitcommit setlocal tw=72 cc=72
-  autocmd FileType gitrebase setlocal tw=87 cc=87
+  autocmd FileType c,cpp setlocal ts=4 sts=4 sw=4 et cinoptions=t0,g-.5s
+  autocmd FileType markdown,textile,tex setlocal spell
+  autocmd FileType gitcommit setlocal tw=72 cc=72 spell
+  autocmd FileType gitrebase setlocal tw=87 cc=87 nospell
+  autocmd FileType gitcommit,gitrebase exec 'norm gg'
   autocmd FileType todo setlocal spell ts=2 sts=2 sw=2 et nofoldenable
-  autocmd FileType journal setlocal spell spelllang=fr tw=80 cc=80
+  autocmd FileType journal setlocal spell spelllang=fr
 endif
 
 "}}}
@@ -265,3 +390,111 @@ cnoremap <C-P> <Up>
 cnoremap <C-N> <Down>
 
 " }}}
+" {{{ Plugin Manager
+
+" check whether vim-plug is installed and install it if necessary
+let data_dir = has('nvim') ? '~/.config/nvim' : '~/.vim'
+let plugpath = data_dir . '/autoload/plug.vim'
+if empty(glob(plugpath))
+  silent execute '!curl -fLo '.plugpath.' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+" }}}
+" {{{ Plugins
+call plug#begin(data_dir . '/plugged')
+
+" editor
+Plug 'editorconfig/editorconfig-vim' " maintain consistent coding styles
+Plug 'itchyny/lightline.vim' " light and configurable statusline/tabline plugin
+Plug 'airblade/vim-gitgutter' " git diff in the gutter and stages/reverts hunks
+
+" tmux
+Plug 'benmills/vimux' " tmux integration for vim
+Plug 'christoomey/vim-tmux-navigator' " let vim open tmux buffer
+Plug 'tmux-plugins/vim-tmux-focus-events' " autoread option work properly for terminal vim
+Plug 'wellle/tmux-complete.vim' " autocompletion for visible strings in panes
+
+" utilities
+Plug 'neomake/neomake' " asynchronous linting and make framework
+Plug 'sbdchd/neoformat' " code formating with several backends
+Plug 'sheerun/vim-polyglot' " a solid language pack for Vim
+Plug 'Shougo/deoplete.nvim' " dark powered asynchronous completion framework
+Plug 'roxma/nvim-yarp' " compatibility layer for vim8 to mimic neovim
+Plug 'roxma/vim-hug-neovim-rpc'
+
+" enhancements
+Plug 'ervandew/supertab' " perform all your vim insert mode completions with Tab
+Plug 'tpope/vim-commentary' " comment stuff out
+Plug 'tpope/vim-dispatch' " asynchronous build and test dispatcher
+Plug 'tpope/vim-fugitive' " amazing git wrapper for vim
+Plug 'tpope/vim-obsession' " continuously updated session files
+Plug 'tpope/vim-repeat' " enable repeating supported plugin maps with '.'
+Plug 'tpope/vim-surround' " quoting/parenthesizing made simple
+Plug 'raimondi/delimitmate' " automatic closing of quotes, parenthesis, brackets
+Plug 'ntpeters/vim-better-whitespace' " highlights trailing whitespace
+Plug 'aserebryakov/vim-todo-lists' " todo lists
+
+" fuzzy searching
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim' " fuzzy file finder and more
+
+" python
+Plug 'zchee/deoplete-jedi', { 'for': 'python' } " code completion
+Plug 'davidhalter/jedi-vim', { 'for': 'python' } " code jump to definition
+
+" c/cpp
+Plug 'vim-scripts/a.vim', { 'for': ['c', 'cpp' ] } " switch between source files and header files
+Plug 'octol/vim-cpp-enhanced-highlight', { 'for': ['c', 'cpp' ] } " enhance code highlight
+Plug 'shougo/neoinclude.vim', { 'for': ['c', 'cpp'] } " completion for includes
+Plug 'shougo/deoplete-clangx', { 'for': ['c', 'cpp'] } " completion for c and c++
+Plug 'deoplete-plugins/deoplete-tag', { 'for': ['c', 'cpp'] } " completion for ctags
+
+call plug#end()
+" }}}
+" {{{ Configuration
+
+" netrw
+let g:netrw_list_hide= '.*\.swp$,.*\.pyc,__pycache__,.*\.egg-info'
+
+" editorconfig
+let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+
+" supertab
+let g:SuperTabDefaultCompletionType = "<c-n>"
+let g:SuperTabContextDefaultCompletionType = "<c-n>"
+
+" lightline
+let g:lightline = {
+            \ 'colorscheme': 'Tomorrow_Night',
+            \ 'active': {
+            \   'left': [ [ 'mode', 'paste' ],
+            \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+            \ },
+            \ 'component_function': {
+            \   'gitbranch': 'FugitiveHead'
+            \ },
+            \ }
+
+" fzf
+let g:fzf_layout = { 'down': '~30%' }
+command! -bang GFilesRecurse call fzf#vim#gitfiles('--recurse-submodules')
+
+" deoplete
+let g:deoplete#enable_at_startup = 1
+
+" neomake
+let g:neomake_python_enabled_makers = ['flake8']
+
+" tmux-complete
+let g:tmuxcomplete#trigger = ''
+
+" vim-todo-lists
+let g:VimTodoListsMoveItems = 0
+
+" jedi-vim
+let g:jedi#auto_initialization = 0
+let g:jedi#completions_enabled = 0
+let g:jedi#use_splits_not_buffers = "right"
+
+"}}}
