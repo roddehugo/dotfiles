@@ -76,10 +76,10 @@ function prompt_update() {
         if [ -n "$behind" ] && [ "$behind" -gt 0 ]; then
           r+="↓$behind"
         fi
-      done <<<"$(git rev-list --count --left-right "@{upstream}"..HEAD 2>/dev/null)"
+      done <<<"$(git rev-list --count --left-right "@{upstream}"...HEAD 2>/dev/null)"
 
       if [ -n "$r" ]; then
-        __prompt_remote=" [$r]"
+        __ps1_remote=" [$r]"
       fi
     fi
   fi
