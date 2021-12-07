@@ -2,7 +2,7 @@
 
 # Set terminal title
 function set_title() {
-  echo -e "\[\033]0;\w\007\]"
+  echo -ne "\e]0;Terminal\a"
 }
 
 # Set a few globals to compute prompt string length
@@ -146,6 +146,7 @@ function prompt_spaces() {
 }
 
 function prompt_align() {
+  set_title
   prompt_update
 
   local PCMD="$(prompt_cmd)"
