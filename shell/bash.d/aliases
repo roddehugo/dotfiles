@@ -23,7 +23,7 @@ alias workspaces='cd ~/Workspaces'
 alias projects='cd ~/Projects'
 
 # Python virtualenv
-alias activate='[ -e .venv/bin/activate ] && . .venv/bin/activate'
+alias activate='[ -e .venv/Scripts/activate ] && . .venv/Scripts/activate'
 
 # Because it's so much nicer
 alias g="git"

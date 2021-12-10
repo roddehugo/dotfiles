@@ -23,5 +23,27 @@ load_dotfiles() {
   done
 }
 
+load_ssh_agent()
+{
+  local keys env state
+  keys=(~/.ssh/*.pub)
+
+  env=~/.ssh/agent.env
+  [ ! -r "$env" ] || . "$env" >/dev/null
+  ssh-add -l >/dev/null 2>&1
+  state="$?"
+
+  if [ ! "$SSH_AUTH_SOCK" ] || [ "$state" == "2" ]; then
+    (umask 077; ssh-agent > "$env")
+    . "$env" >/dev/null
+    ssh-add "${keys[@]%%.pub}"
+  elif [ "$SSH_AUTH_SOCK" ] && [ "$state" == "1" ]; then
+    ssh-add "${keys[@]%%.pub}"
+  fi
+}
+
 load_dotfiles
 unset load_dotfiles
+
+load_ssh_agent
+unset load_ssh_agent

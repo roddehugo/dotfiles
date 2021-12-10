@@ -68,13 +68,13 @@ function prompt_update() {
 
       local ahead behind
       # Check for diverged branches and set remote
-      while IFS=$'\t' read -r ahead behind; do
+      while IFS=$'\t' read -r behind ahead; do
         local r=""
-        if [ -n "$ahead" ] && [ "$ahead" -gt 0 ]; then
-          r+="↑$ahead"
-        fi
         if [ -n "$behind" ] && [ "$behind" -gt 0 ]; then
           r+="↓$behind"
+        fi
+        if [ -n "$ahead" ] && [ "$ahead" -gt 0 ]; then
+          r+="↑$ahead"
         fi
       done <<<"$(git rev-list --count --left-right "@{upstream}"...HEAD 2>/dev/null)"
 
